@@ -16,6 +16,18 @@
   "events": [],
   "tariffs": [
     {
+      "cat": "Micro-Degrado (Bonus)",
+      "items": [
+        { "n":"L'Idratato","p":10},{ "n":"Lo spazzino","p":15},{ "n":"Il ladro di fuoco","p":15},{ "n":"Vampiro solare","p":30},{ "n":"Follower a Scrocco","p":30},{ "n":"Alchimista Low-Cost","p":20},{ "n":"Il Segugio delle Mance","p":20},{ "n":"Il DJ del Bagagliaio","p":20},{ "n":"Il Camaleonte","p":20},{ "n":"Bombolone Tattico","p":25},{ "n":"L'Elenchista","p":25},{ "n":"Fotobomber Seriale","p":25}
+      ]
+    },
+    {
+      "cat": "Goliardia di Sangue (Bonus)",
+      "items": [
+        { "n":"Il Fluidificatore Sociale","p":30}
+      ]
+    },
+    {
       "cat": "Macelleria Carnale (Bonus)",
       "items": [
         { "n": "Il Rompighiaccio", "p": 30 }, { "n": "Colonialismo", "p": 50 }, { "n": "Il Martire", "p": 60 }, { "n": "Corsa per la Vita", "p": 80 }, { "n": "Sfida alla Morte", "p": 100 }, { "n": "Esibizionismo", "p": 100 }, { "n": "Il Miracolo", "p": 150 }, { "n": "MILF Hunter", "p": 250 }, { "n": "La Doppietta", "p": 300 }
