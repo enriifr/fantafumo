@@ -1,0 +1,132 @@
+{
+  "players": [
+    {
+      "id": "barilla",
+      "name": "barilla",
+      "status": "W-06: Rapitore di Cuori"
+    },
+    {
+      "id": "rom",
+      "name": "rom",
+      "status": "Predatore Supremo"
+    },
+    {
+      "id": "hasa",
+      "name": "hasa",
+      "status": "Miracolato del Tutto in Nero"
+    },
+    {
+      "id": "tommaso",
+      "name": "tommaso",
+      "status": "Galleggia sull'Alcol"
+    },
+    {
+      "id": "cinti",
+      "name": "cinti",
+      "status": "Amnesico Sereno"
+    },
+    {
+      "id": "davide",
+      "name": "davide",
+      "status": "Esibizionista Fuori Sede"
+    },
+    {
+      "id": "enri",
+      "name": "enri",
+      "status": "Ex Recluta Traumatizzata"
+    },
+    {
+      "id": "abdul",
+      "name": "abdul",
+      "status": "Caduto nell'Abisso"
+    },
+    {
+      "id": "ryan",
+      "name": "ryan",
+      "status": "Fantasma Ignorato"
+    },
+    {
+      "id": "bikelife",
+      "name": "bikelife",
+      "status": "Pericolo Pubblico"
+    },
+    {
+      "id": "benny",
+      "name": "benny",
+      "status": "L-01: Castrazione Biologica"
+    },
+    {
+      "id": "heru",
+      "name": "heru",
+      "status": "L-03: Il Guinzaglio Corto"
+    }
+  ],
+  "events": [
+    {
+      "playerId": "barilla",
+      "points": 250,
+      "reason": "MILF Hunter (Valore Base)",
+      "date": "04 giu 2026, 00:53"
+    },
+    {
+      "playerId": "barilla",
+      "points": 0,
+      "reason": "L'Indulto dei Disperati (Forza Maggiore) (Valore Base)",
+      "date": "04 giu 2026, 00:54"
+    },
+    {
+      "playerId": "barilla",
+      "points": 0,
+      "reason": "Franchigia dei Vigliacchi (1° Pacco) (Valore Base)",
+      "date": "04 giu 2026, 00:54"
+    },
+    {
+      "playerId": "barilla",
+      "points": -150,
+      "reason": "Il Verme Seriale (2° Pacco) (Valore Base)",
+      "date": "04 giu 2026, 00:54"
+    },
+    {
+      "playerId": "barilla",
+      "points": "W",
+      "reason": "W-02: Il Martirio Legale (GAME OVER STATUS)",
+      "date": "04 giu 2026, 00:55"
+    },
+    {
+      "playerId": "rom",
+      "points": 100,
+      "reason": "Roulette Russa Telefonica (Vinta) (Valore Base)",
+      "date": "04 giu 2026, 00:56"
+    },
+    {
+      "playerId": "rom",
+      "points": 100,
+      "reason": "Roulette Russa Telefonica (Vinta) (Valore Base)",
+      "date": "04 giu 2026, 00:56"
+    },
+    {
+      "playerId": "rom",
+      "points": 100,
+      "reason": "Roulette Russa Telefonica (Vinta) (Valore Base)",
+      "date": "04 giu 2026, 00:56"
+    },
+    {
+      "playerId": "rom",
+      "points": 100,
+      "reason": "Roulette Russa Telefonica (Vinta) (Valore Base)",
+      "date": "04 giu 2026, 00:56"
+    },
+    {
+      "playerId": "hasa",
+      "points": -40,
+      "reason": "Il Poveraccio [CS] (Valore Base)",
+      "date": "04 giu 2026, 01:06"
+    },
+    {
+      "playerId": "tommaso",
+      "points": "L",
+      "reason": "L-01: Castrazione Biologica Totale (GAME OVER STATUS)",
+      "date": "04 giu 2026, 01:06"
+    }
+  ]
+}

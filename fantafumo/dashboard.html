@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FantaFumo - Classifica Ufficiale</title>
+    <!-- Includo Chart.js per i grafici -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #09090b; --card-bg: #18181b; --text-main: #fafafa;
+            --accent-red: #ef4444; --accent-green: #22c55e; --accent-gold: #eab308;
+            --border: #27272a;
+        }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 20px;
+            display: flex; flex-direction: column; height: 100vh; box-sizing: border-box;
+        }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 28px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-main); }
+        
+        .btn-link { padding: 10px 20px; background: #27272a; color: white; border: 1px dashed #52525b; font-size: 13px; font-weight: bold; border-radius: 6px; }
+        .btn-link.connected { background: #14532d; border-color: var(--accent-green); color: var(--accent-green); }
+
+        .leaderboard-grid { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; overflow-y: auto; padding-right: 10px; }
+        
+        .player-row { 
+            display: flex; align-items: center; justify-content: space-between; 
+            background: var(--card-bg); border: 1px solid var(--border); cursor: pointer;
+            padding: 15px 25px; border-radius: 8px; transition: transform 0.2s;
+        }
+        .player-row:hover { transform: translateX(5px); border-color: #52525b; }
+        
+        .player-row.pos-0 { border-left: 6px solid var(--accent-gold); background: linear-gradient(90deg, #2e2a0f 0%, var(--card-bg) 30%); }
+        .player-row.pos-1 { border-left: 6px solid #a1a1aa; background: linear-gradient(90deg, #222225 0%, var(--card-bg) 30%); }
+        .player-row.pos-2 { border-left: 6px solid #b45309; background: linear-gradient(90deg, #2c1a0e 0%, var(--card-bg) 30%); }
+        
+        .player-row.status-W { border-left: 6px solid var(--accent-green) !important; background: linear-gradient(90deg, #143a1e 0%, var(--card-bg) 30%) !important; }
+        .player-row.status-L { border-left: 6px solid #991b1b !important; background: linear-gradient(90deg, #3b1111 0%, var(--card-bg) 30%) !important; }
+
+        .left-info { display: flex; align-items: center; gap: 20px; }
+        .rank { font-size: 24px; font-weight: 900; color: #71717a; width: 40px; }
+        .player-name { font-size: 22px; font-weight: 700; }
+        
+        .score-zone { display: flex; align-items: center; gap: 15px; }
+        .badge { font-size: 11px; font-weight: 900; padding: 4px 8px; border-radius: 4px; text-transform: uppercase; }
+        .badge.win { background: var(--accent-green); color: black; }
+        .badge.lose { background: var(--accent-red); color: white; }
+        
+        .score { font-size: 28px; font-weight: 900; }
+        .score.positive { color: var(--accent-green); }
+        .score.negative { color: var(--accent-red); }
+
+        .ticker-zone { background: #09090b; border-top: 2px solid var(--border); padding-top: 15px; margin-top: 20px; height: 100px; display: flex; flex-direction: column; gap: 5px; }
+        .ticker-title { font-size: 11px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        .ticker-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .ticker-item { background: var(--card-bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+
+        /* Stili Modal per Dettaglio Giocatore */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--card-bg); width: 90%; max-width: 600px; border-radius: 12px; border: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 20px; max-height: 85vh; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .modal-title { font-size: 24px; font-weight: 900; text-transform: uppercase; margin: 0; }
+        .close-btn { background: none; border: none; color: #a1a1aa; font-size: 28px; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { color: white; }
+        .modal-body { overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+        
+        .chart-container { width: 100%; height: 250px; background: #09090b; border-radius: 8px; border: 1px solid var(--border); padding: 10px; box-sizing: border-box; }
+        .tx-list { display: flex; flex-direction: column; gap: 8px; }
+        .tx-item { background: #27272a; padding: 12px; border-radius: 6px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🏆 CLASSIFICA GENERALE FANTAFUMO</h1>
+        <div class="btn-link connected">🟢 Live Server Attivo</div>
+    </div>
+
+    <div class="leaderboard-grid" id="leaderboard">
+        <div style="color:gray; text-align:center; padding-top:50px; font-size:18px;">Attesa dati dal server locale...</div>
+    </div>
+
+    <div class="ticker-zone">
+        <div class="ticker-title">⚡ Ultimi Reati a Registro:</div>
+        <div class="ticker-container" id="ticker">
+            <div style="color:gray; font-size:12px;">Nessun dato.</div>
+        </div>
+    </div>
+
+    <!-- Modale Dettaglio Giocatore -->
+    <div class="modal-overlay" id="playerModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalPlayerName">Nome Giocatore</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="chart-container">
+                    <canvas id="playerChartCanvas"></canvas>
+                </div>
+                <div class="tx-list" id="modalTxList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dbData = { players: [], events: [] };
+        let playerChartInstance = null; // Riferimento al grafico corrente
+
+        async function checkFileChanges() {
+            try {
+                const response = await fetch('/fantafumo_data.json', { cache: 'no-store' });
+                if (!response.ok) throw new Error('File non trovato');
+                
+                const newData = await response.json();
+                
+                if (JSON.stringify(newData) !== JSON.stringify(dbData)) {
+                    dbData = newData;
+                    compilaClassifica();
+                }
+            } catch (e) {
+                console.error("Errore nel recupero dati dal server locale:", e);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            checkFileChanges(); 
+            setInterval(checkFileChanges, 2000); 
+        });
+
+        function compilaClassifica() {
+            const container = document.getElementById('leaderboard');
+            container.innerHTML = '';
+
+            const leaderboardData = dbData.players.map(player => {
+                let score = 0;
+                let status = null; 
+
+                const playerEvents = dbData.events.filter(e => e.playerId === player.id);
+                playerEvents.forEach(e => {
+                    if (typeof e.points === 'number') { score += e.points; } 
+                    else if (e.points === 'W') { status = 'W'; } 
+                    else if (e.points === 'L') { status = 'L'; }
+                });
+
+                return { ...player, score, status };
+            });
+
+            leaderboardData.sort((a, b) => {
+                if (a.status === 'W' && b.status !== 'W') return -1;
+                if (b.status === 'W' && a.status !== 'W') return 1;
+                if (a.status === 'L' && b.status !== 'L') return 1;
+                if (b.status === 'L' && a.status !== 'L') return -1;
+                return b.score - a.score;
+            });
+
+            leaderboardData.forEach((player, index) => {
+                const row = document.createElement('div');
+                
+                let extraClass = `pos-${index}`;
+                if (player.status) extraClass = `status-${player.status}`;
+
+                row.className = `player-row ${extraClass}`;
+                
+                // Associa il click sulla riga all'apertura del modale
+                row.onclick = () => openPlayerModal(player);
+
+                let badgeHTML = '';
+                let scoreClass = player.score >= 0 ? 'positive' : 'negative';
+                let scoreDisplay = (player.score > 0 ? '+' : '') + player.score;
+
+                if (player.status === 'W') {
+                    badgeHTML = `<span class="badge win">Vittoria Totale</span>`;
+                    scoreDisplay = "🏆";
+                } else if (player.status === 'L') {
+                    badgeHTML = `<span class="badge lose">Squalificato</span>`;
+                    scoreDisplay = "💀";
+                }
+
+                row.innerHTML = `
+                    <div class="left-info">
+                        <div class="rank">#${index + 1}</div>
+                        <div class="player-name">${player.name}</div>
+                    </div>
+                    <div class="score-zone">
+                        ${badgeHTML}
+                        <div class="score ${scoreClass}">${scoreDisplay}</div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            const tickerContainer = document.getElementById('ticker');
+            tickerContainer.innerHTML = '';
+            
+            const recentEvents = [...dbData.events].reverse().slice(0, 6);
+            if(recentEvents.length === 0) return;
+
+            recentEvents.forEach(ev => {
+                const pName = dbData.players.find(p => p.id === ev.playerId)?.name || "Ignoto";
+                const pt = typeof ev.points === 'number' ? (ev.points > 0 ? `+${ev.points}` : ev.points) : ev.points;
+                const tick = document.createElement('div');
+                tick.className = 'ticker-item';
+                tick.innerHTML = `<strong>${pName}</strong>: <span style="color:gray">${ev.reason}</span> (<strong>${pt}</strong>)`;
+                tickerContainer.appendChild(tick);
+            });
+        }
+
+        function openPlayerModal(player) {
+            document.getElementById('modalPlayerName').innerText = `Storico: ${player.name}`;
+            const txListContainer = document.getElementById('modalTxList');
+            txListContainer.innerHTML = '';
+
+            const pEvents = dbData.events.filter(e => e.playerId === player.id);
+            
+            let currentScore = 0;
+            let chartLabels = ['Inizio'];
+            let chartData = [0];
+
+            if (pEvents.length === 0) {
+                txListContainer.innerHTML = '<div style="color:gray; text-align:center; padding: 20px;">Nessuna transazione a registro.</div>';
+            } else {
+                pEvents.forEach((ev, index) => {
+                    // Costruzione Grafico
+                    if (typeof ev.points === 'number') {
+                        currentScore += ev.points;
+                    }
+                    chartLabels.push(`Ev #${index + 1}`);
+                    chartData.push(currentScore);
+
+                    // Costruzione Lista Transazioni
+                    let ptShow = typeof ev.points === 'number' ? (ev.points > 0 ? `+${ev.points}` : ev.points) : ev.points;
+                    let colorBase = 'gray';
+                    if(typeof ev.points === 'number') {
+                        if(ev.points > 0) colorBase = 'var(--accent-green)';
+                        else if(ev.points < 0) colorBase = 'var(--accent-red)';
+                    } else { colorBase = 'var(--accent-gold)'; }
+
+                    const txItem = document.createElement('div');
+                    txItem.className = 'tx-item';
+                    txItem.innerHTML = `
+                        <div style="display:flex; flex-direction:column;">
+                            <span>${ev.reason}</span>
+                            <span style="font-size:10px; color:#71717a; margin-top:2px;">${ev.date}</span>
+                        </div>
+                        <strong style="color:${colorBase}; font-size: 16px;">${ptShow}</strong>
+                    `;
+                    // Inserisce in cima alla lista (i più recenti in alto)
+                    txListContainer.prepend(txItem); 
+                });
+            }
+
+            // Selezione Colore in base allo stato
+            let themeColor = '#a1a1aa'; // default
+            if (player.status === 'W') themeColor = '#eab308'; // Oro
+            else if (player.status === 'L') themeColor = '#991b1b'; // Rosso Scuro
+            else if (player.score > 0) themeColor = '#22c55e'; // Verde
+            else if (player.score < 0) themeColor = '#ef4444'; // Rosso
+
+            // Disegna il Grafico
+            if (playerChartInstance) { playerChartInstance.destroy(); }
+            
+            const ctx = document.getElementById('playerChartCanvas').getContext('2d');
+            playerChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Andamento Punti',
+                        data: chartData,
+                        borderColor: themeColor,
+                        backgroundColor: themeColor + '33', // 20% trasparenza per l'area sotto
+                        fill: true,
+                        tension: 0.3, // Smussa le linee
+                        borderWidth: 3,
+                        pointBackgroundColor: themeColor,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            grid: { color: '#27272a' },
+                            ticks: { color: '#a1a1aa' }
+                        },
+                        x: { display: false } // Nasconde le etichette sull'asse x per pulizia
+                    }
+                }
+            });
+
+            // Mostra il Modale
+            document.getElementById('playerModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('playerModal').style.display = 'none';
+        }
+
+        // Chiudi il modale se si clicca fuori dallo stesso
+        window.onclick = function(event) {
+            const modal = document.getElementById('playerModal');
+            if (event.target === modal) { closeModal(); }
+        }
+    </script>
+</body>
+</html>
