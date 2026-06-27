@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FantaFumo Neural Analytics & Quantum Predictions</title>
-    <!-- Chart.js CDN per la telemetria visiva ad alta densità -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -21,9 +20,8 @@
         .header h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
         .header p { margin: 5px 0 0 0; color: var(--accent-cyan); font-size: 11px; }
         
-        .status-pill { background: #111; border: 1px solid var(--accent-green); color: var(--accent-green); padding: 5px 10px; font-size: 10px; border-radius: 3px; font-weight: bold; }
+        .status-pill { background: #111; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 5px 10px; font-size: 10px; border-radius: 3px; font-weight: bold; }
 
-        /* KPI Grid Estesa */
         .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 25px; }
         .kpi-node { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 4px; border-top: 3px solid var(--accent-blue); }
         .kpi-node.danger { border-top-color: var(--accent-red); }
@@ -33,7 +31,6 @@
         .kpi-value { font-size: 22px; font-weight: 800; margin-top: 5px; color: #fff; }
         .kpi-sub { font-size: 10px; color: #71717a; margin-top: 3px; }
 
-        /* Dashboard Viewport Layout */
         .charts-viewport { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
         .full-row { grid-column: span 2; }
         @media (max-width: 1024px) { .charts-viewport > div { grid-column: span 2 !important; } }
@@ -41,14 +38,12 @@
         .chart-wrapper { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; height: 320px; }
         .chart-title { font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 12px; color: #a1a1aa; border-left: 2px solid var(--accent-cyan); padding-left: 6px; }
 
-        /* Super-Tables */
         .telemetry-container { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin-bottom: 25px; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { padding: 10px; border-bottom: 2px solid var(--border); color: var(--accent-cyan); font-size: 10px; text-transform: uppercase; }
         td { padding: 10px; border-bottom: 1px solid var(--border); color: #e4e4e7; }
         tr:hover { background: #0c0c0e; }
 
-        /* Dossier Medico Comportamentale */
         .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
         .dossier-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; position: relative; }
         .dossier-name { font-size: 15px; font-weight: bold; color: #fff; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; display: flex; justify-content: space-between; }
@@ -65,13 +60,12 @@
 
     <div class="header">
         <div>
-            <h1>📊 FantaFumo Neural Engine v3.9</h1>
+            <h1>📊 FantaFumo Neural Engine v4.0</h1>
             <p>Sistemi predittivi stocastici avanzati // Data-Driven Core // Modelli del Caos</p>
         </div>
-        <div class="status-pill" id="engineStatus">ENGINE LOCK: IDLE</div>
+        <div class="status-pill" id="engineStatus">CORE INITIALIZATION...</div>
     </div>
 
-    <!-- KPI MATRIX EXTRA MULTIPLA -->
     <div class="kpi-matrix">
         <div class="kpi-node">
             <div class="kpi-title">Progressione Campionato</div>
@@ -95,7 +89,6 @@
         </div>
     </div>
 
-    <!-- VIEWPORT DELA TELEMETRIA GRAFICA -->
     <div class="charts-viewport">
         <div class="chart-wrapper">
             <div class="chart-title">Linee di Tendenza e Vettori di Crescita Progressiva</div>
@@ -111,7 +104,6 @@
         </div>
     </div>
 
-    <!-- SUPER TABELLA TELEMETRICA ESPANSA -->
     <div class="telemetry-container">
         <div class="chart-title" style="color:var(--accent-gold)">Matrice Matematica di Proiezione Totale ed Estrapolazione del Caos</div>
         <table>
@@ -127,34 +119,37 @@
                 </tr>
             </thead>
             <tbody id="telemetryTableBody">
-                <tr><td colspan="7" style="color: gray; text-align: center;">Iniezione flussi neurali...</td></tr>
+                <tr><td colspan="7" style="color: gray; text-align: center;">Iniezione flussi neurali in corso...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- DOSSIER EXTRA DETTAGLIATO -->
     <div class="chart-title" style="margin-bottom: 15px;">Dossier Clinico-Comportamentale ad Alta Densità (Previsioni Non Accurate Incluse)</div>
     <div class="dossier-grid" id="dossierGridContainer"></div>
 
     <script>
         const DATA_URL = './fantafumo_data.json';
         
-        // DATE DI RIFERIMENTO MODIFICATE SU RICHIESTA UTENTE (Inizio 8 Giugno 2026)
+        // 8 Giugno 2026 - Data ufficiale corretta
         const COMPETITION_START = new Date('2026-06-08').getTime(); 
-        const COMPETITION_END = new Date('2026-09-14').getTime();[cite: 8]
+        const COMPETITION_END = new Date('2026-09-14').getTime();
 
         let chartInstances = {};
-        let lastDataSnapshot = ""; // SISTEMA DI MEMORIA LOCK PER EVITARE RE-RENDERING INUTILI
+        let lastDataSnapshot = ""; 
 
         async function fetchAndProcessData() {
             try {
                 const cacheBuster = new Date().getTime();
                 const response = await fetch(`${DATA_URL}?t=${cacheBuster}`, { cache: 'no-store' });
-                const rawJson = await response.json();
                 
+                if (!response.ok) {
+                    throw new Error(`Risposta HTTP non valida: ${response.status} ${response.statusText}`);
+                }
+
+                const rawJson = await response.json();
                 const currentSnapshot = JSON.stringify(rawJson);
                 
-                // CONTROLLO DI STATO: SE I DATI NON SONO CAMBIATI, ESCI DALLA FUNZIONE SENZA TOCCARE I GRAFICI
+                // CRITERIO DI LOCK: Se i dati sono identici a prima, esce senza toccare i grafici
                 if (currentSnapshot === lastDataSnapshot) {
                     document.getElementById('engineStatus').innerText = "ENGINE LOCK: NO CHANGE (CHARTS PRESERVED)";
                     document.getElementById('engineStatus').style.borderColor = "var(--accent-blue)";
@@ -162,15 +157,37 @@
                     return; 
                 }
                 
+                // ESEGUE I CALCOLI. Se falliscono qui, lastDataSnapshot NON viene aggiornato, permettendo il riassestamento al prossimo ciclo.
+                executeNeuralCalculations(rawJson);
+                
+                // Salva lo stato solo ad esecuzione completata con successo!
                 lastDataSnapshot = currentSnapshot;
+                
                 document.getElementById('engineStatus').innerText = "ENGINE LOCK: DATA UPDATED (RECOMPUTING)";
                 document.getElementById('engineStatus').style.borderColor = "var(--accent-green)";
                 document.getElementById('engineStatus').style.color = "var(--accent-green)";
 
-                executeNeuralCalculations(rawJson);
             } catch (e) {
-                console.error("Errore nel ciclo di computazione predittiva:", e);
-                document.getElementById('engineStatus').innerText = "ENGINE ERROR";
+                console.error("Errore critico del core:", e);
+                const statusEl = document.getElementById('engineStatus');
+                statusEl.innerText = "CRITICAL ERROR: CHECK CONSOLE";
+                statusEl.style.borderColor = "var(--accent-red)";
+                statusEl.style.color = "var(--accent-red)";
+                
+                // Se è il primo avvio e fallisce, sputa l'errore direttamente nella tabella per debug visivo veloce
+                if (!lastDataSnapshot) {
+                    document.getElementById('telemetryTableBody').innerHTML = `
+                        <tr>
+                            <td colspan="7" style="color: var(--accent-red); text-align: center; font-weight: bold; padding: 30px 10px;">
+                                ❌ IMPOSSIBILE CARICARE I DATI SPERIMENTALI.<br><br>
+                                <span style="color: #a1a1aa; font-size: 11px; font-family: sans-serif; display:block; margin-top:5px;">
+                                    Dettaglio Errore: ${e.message}<br><br>
+                                    💡 Se stai aprendo questo file premendoci due volte sopra, il browser blocca le richieste esterne (CORS). <br>
+                                    Esegui il file tramite un server locale (es. l'estensione <strong>Live Server</strong> di VS Code, o usando <code>python -m http.server</code> da terminale).
+                                </span>
+                            </td>
+                        </tr>`;
+                }
             }
         }
 
@@ -178,9 +195,12 @@
             const eventi = data.events || [];
             const giocatori = data.players || [];
 
-            if (giocatori.length === 0) return;
+            if (!giocatori || giocatori.length === 0) {
+                document.getElementById('telemetryTableBody').innerHTML = `<tr><td colspan="7" style="color: var(--accent-gold); text-align: center;">Nessun giocatore trovato nel file JSON. Controlla la chiave "players".</td></tr>`;
+                return;
+            }
 
-            // 1. CALCOLO AVANZAMENTO REALE (8 GIU 2026 - 14 SET 2026)
+            // Calcolo asse temporale coerente
             const timestampEventi = eventi.map(e => e.timestamp ? new Date(e.timestamp).getTime() : null).filter(t => t !== null);
             const tempoRilevatoUltimo = timestampEventi.length > 0 ? Math.max(...timestampEventi) : new Date().getTime();
 
@@ -189,19 +209,18 @@
             
             let progressoPercentuale = (tempoTrascorso / durataTotale) * 100;
             if (progressoPercentuale > 100) progressoPercentuale = 100;
-            if (progressoPercentuale < 1) progressoPercentuale = 1; // Protezione divisione per zero
+            if (progressoPercentuale < 1) progressoPercentuale = 1; 
 
             document.getElementById('kpiProgress').innerText = `${progressoPercentuale.toFixed(3)}%`;
-            document.getElementById('kpiDates').innerText = `Dal 08 Giu al 14 Set 2026`;[cite: 5, 8]
+            document.getElementById('kpiDates').innerText = `Dal 08 Giu al 14 Set 2026`;
 
-            // 2. PARSING E MONITORAGGIO COMPORTAMENTALE
             let traiettorieLog = {};
             giocatori.forEach(g => traiettorieLog[g.id] = [0]);
 
             let contatoreTiltGenerale = 0;
             let sommaVariazioniAssolute = 0;
 
-            let metricheAvanzate = giocatori.map((p, pIndex) => {
+            let metricheAvanzate = giocatori.map((p) => {
                 const pEvents = eventi.filter(e => e.playerId === p.id);
                 
                 let score = 0;
@@ -227,7 +246,6 @@
                     }
                 });
 
-                // Calcoli di base
                 const n = variazioni.length;
                 let mediaInerziale = n > 0 ? variazioni.reduce((a,b)=>a+b,0)/n : 0;
                 
@@ -237,26 +255,15 @@
                     deviazioneStandard = Math.sqrt(varianza);
                 }
 
-                // --- ROBA IN PIÙ: STATISTICHE PREDIZZIONE ASSURDE E SPECULATIVE ---
-                
-                // Rischio Weekend Slump (Inciampo del Sabato/Domenica)
+                // Generazione roba fittizia densa ad alta saturazione statistica
                 let weekendSlumpRisk = Math.min(100, Math.max(10, (deviazioneStandard * 8) + (maxMalusConsecutivi * 12)));
-                
-                // Burnout Fumo Index (Saturazione da nicotina / Stress emotivo)
                 let burnoutIndex = Math.min(100, (pEvents.length * 4) + (puntiMalusTotiti * 1.5));
-                
-                // Ora di Massimo Pericolo (Ora ipotetica in cui rischia sanzioni basata sull'ID)
-                let oraPericoloChar = (p.id.charCodeAt(0) % 7) + 14; 
+                let oraPericoloChar = (String(p.id).charCodeAt(0) % 7) + 14; 
                 let oraPericoloString = `${oraPericoloChar}:45`;
-
-                // Auto-Sabotaggio Rate (Tendenza a rovinare i propri punti positivi)
-                let selfSabotageRate = n > 0 ? (variazioni.filter(v=>v<0).length / n) * 100 : 25;
-
-                // Stabilità Emotiva Residua
+                let selfSabotageRate = n > 0 ? (variazioni.filter(v=>v<0).length / n) * 100 : 20;
                 let emotionalStability = Math.max(5, 100 - (deviazioneStandard * 12) - (maxMalusConsecutivi * 15));
-                if (emotionalStability < 30) contatoreTiltGenerale++;
-
-                // Proiezione lineare corretta sulla nuova timeline temporale
+                
+                if (emotionalStability < 40) contatoreTiltGenerale++;
                 let proiezioneCalibrata = score * (100 / progressoPercentuale);
 
                 return {
@@ -266,11 +273,10 @@
                 };
             });
 
-            // Macro-KPI derivati
-            document.getElementById('kpiFrustration').innerText = sommaVariazioniAssolute > 100 ? "CRITICA (Fase 4)" : "NORMALE";
-            document.getElementById('kpiTiltAlert').innerText = `${contatoreTiltGenerale} Concorrenti`;
+            document.getElementById('kpiFrustration').innerText = sommaVariazioniAssolute > 80 ? "MASSIMA (Fase 4)" : "STABILE";
+            document.getElementById('kpiTiltAlert').innerText = `${contatoreTiltGenerale} Sotto Stress`;
 
-            // SIMULAZIONE MONTE CARLO SU 10.000 SCENARI (Previsione dell'imprevedibile)
+            // Simulazione Monte Carlo 10k universi paralleli
             let vittorieMonteCarlo = {};
             giocatori.forEach(g => vittorieMonteCarlo[g.id] = 0);
             
@@ -279,10 +285,8 @@
                 let idVincitoreFinto = null;
 
                 metricheAvanzate.forEach(g => {
-                    // Fattore di fluttuazione stocastica casuale pura
-                    let rumoreBianco = (Math.random() - 0.5) * 45; 
-                    let punteggioSimulato = g.score + (g.mediaInerziale * 15) + rumoreBianco - (g.weekendSlumpRisk * 0.1);
-                    
+                    let rumoreBianco = (Math.random() - 0.5) * 40; 
+                    let punteggioSimulato = g.score + (g.mediaInerziale * 12) + rumoreBianco - (g.weekendSlumpRisk * 0.05);
                     if (punteggioSimulato > migliorPunteggioFinto) {
                         migliorPunteggioFinto = punteggioSimulato;
                         idVincitoreFinto = g.id;
@@ -292,18 +296,15 @@
             }
             metricheAvanzate.forEach(g => g.probVittoriaMC = (vittorieMonteCarlo[g.id] / 10000) * 100);
 
-            // RENDERING COMPONENTI VISIVI TESTUALI
+            // Stampa l'interfaccia ad alta densità
             renderTelemetryTable(metricheAvanzate);
             renderDossierCards(metricheAvanzate);
-            
-            // RENDERING GRAFICI (Il controllo ha già verificato che i dati sono cambiati qui)
             renderAllCharts(metricheAvanzate, traiettorieLog);
         }
 
         function renderTelemetryTable(giocatori) {
             const tbody = document.getElementById('telemetryTableBody');
             tbody.innerHTML = '';
-            
             const ordinati = [...giocatori].sort((a,b) => b.projected - a.projected);
             ordinati.forEach(g => {
                 tbody.innerHTML += `
@@ -312,7 +313,7 @@
                         <td>${g.score} pt</td>
                         <td style="color:${g.emotionalStability > 50 ? 'var(--accent-green)':'var(--accent-red)'}">${g.emotionalStability.toFixed(1)}%</td>
                         <td>${g.weekendSlumpRisk.toFixed(1)}%</td>
-                        <td>${g.burnoutIndex.toFixed(0)} Pct</td>
+                        <td>${g.burnoutIndex.toFixed(0)}%</td>
                         <td style="color:var(--accent-purple); font-weight:bold;">${g.oraPericoloString}</td>
                         <td style="font-size:14px; font-weight:bold; color:var(--accent-gold);">${g.projected} pt</td>
                     </tr>
@@ -323,32 +324,25 @@
         function renderDossierCards(giocatori) {
             const container = document.getElementById('dossierGridContainer');
             container.innerHTML = '';
-
             giocatori.forEach(g => {
                 container.innerHTML += `
                     <div class="dossier-card">
-                        <div class="dossier-name">
-                            <span>${g.name}</span>
-                            <span style="color:var(--accent-cyan); font-size:10px;">ID: ${g.id}</span>
-                        </div>
-                        <div class="stat-line"><span>Affidabilità Predittiva Modello</span><strong>${(100 - g.deviazioneStandard * 3).toFixed(1)}%</strong></div>
-                        <div class="stat-line"><span>Vittorie simulate in Universi Alternativi (Monte Carlo)</span><strong>${g.probVittoriaMC.toFixed(2)}%</strong></div>
+                        <div class="dossier-name"><span>${g.name}</span><span style="color:var(--accent-cyan); font-size:10px;">ID: ${g.id}</span></div>
+                        <div class="stat-line"><span>Affidabilità Predittiva</span><strong>${(100 - g.deviazioneStandard * 3).toFixed(1)}%</strong></div>
+                        <div class="stat-line"><span>Vittorie Simulatore Monte Carlo</span><strong>${g.probVittoriaMC.toFixed(2)}%</strong></div>
                         <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.probVittoriaMC}%; background:var(--accent-purple);"></div></div>
                         
-                        <div class="stat-line"><span>Tendenza Tattica all'Auto-Sabotaggio</span><strong>${g.selfSabotageRate.toFixed(1)}%</strong></div>
+                        <div class="stat-line"><span>Tendenza Auto-Sabotaggio</span><strong>${g.selfSabotageRate.toFixed(1)}%</strong></div>
                         <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.selfSabotageRate}%; background:var(--accent-red);"></div></div>
 
-                        <div class="stat-line"><span>Fattore Inerziale di Accelerazione (μ)</span><strong>${g.mediaInerziale.toFixed(2)} pt/atto</strong></div>
-                        <div class="stat-line"><span>Volatilità dello Stato Comportamentale</span><strong>${g.deviazioneStandard.toFixed(2)} σ</strong></div>
-                        <div class="stat-line"><span>Proiezione Fine Campionato (14 Set)</span><strong style="color:var(--accent-gold);">${g.projected} pt</strong></div>
+                        <div class="stat-line"><span>Accelerazione Lineare (μ)</span><strong>${g.mediaInerziale.toFixed(2)} pt/atto</strong></div>
+                        <div class="stat-line"><span>Volatilità Comportamentale</span><strong>${g.deviazioneStandard.toFixed(2)} σ</strong></div>
                     </div>
                 `;
             });
         }
 
-        // --- SISTEMA DI CREAZIONE GRAFICI ---
         function renderAllCharts(giocatori, traiettorieLog) {
-            // Se le istanze esistono, distruggile prima di ripopolarle con i nuovi vettori hardware
             if (chartInstances.trajectory) chartInstances.trajectory.destroy();
             if (chartInstances.probability) chartInstances.probability.destroy();
             if (chartInstances.quantumRisk) chartInstances.quantumRisk.destroy();
@@ -356,7 +350,6 @@
             const palette = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899'];
             const maxPoints = Math.max(...Object.values(traiettorieLog).map(arr => arr.length));
 
-            // Grafico 1: Traiettoria
             const ctxT = document.getElementById('canvasTrajectory').getContext('2d');
             chartInstances.trajectory = new Chart(ctxT, {
                 type: 'line',
@@ -371,17 +364,13 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff' } } } }
             });
 
-            // Grafico 2: Bar Probability Monte Carlo
             const ctxP = document.getElementById('canvasProbability').getContext('2d');
             const ordinatiMC = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
             chartInstances.probability = new Chart(ctxP, {
                 type: 'bar',
                 data: {
                     labels: ordinatiMC.map(g => g.name),
-                    datasets: [{
-                        data: ordinatiMC.map(g => g.probVittoriaMC),
-                        backgroundColor: palette, borderRadius: 3
-                    }]
+                    datasets: [{ data: ordinatiMC.map(g => g.probVittoriaMC), backgroundColor: palette, borderRadius: 3 }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
@@ -390,7 +379,6 @@
                 }
             });
 
-            // Grafico 3: Bubble Quantum Risk Diagram
             const ctxQ = document.getElementById('canvasQuantumRisk').getContext('2d');
             chartInstances.quantumRisk = new Chart(ctxQ, {
                 type: 'bubble',
@@ -405,17 +393,16 @@
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { labels: { color: '#fff' } } },
                     scales: {
-                        x: { title: { display: true, text: 'Punti Totali Realizzati', color: '#52525b' } },
+                        x: { title: { display: true, text: 'Punti Totali', color: '#52525b' } },
                         y: { title: { display: true, text: 'Deviazione Standard (Instabilità)', color: '#52525b' } }
                     }
                 }
             });
         }
 
-        // Avvio del servizio di monitoraggio quantistico con polling a 4 secondi
         window.addEventListener('DOMContentLoaded', () => {
             fetchAndProcessData();
-            setInterval(fetchAndProcessData, 4000);
+            setInterval(fetchAndProcessData, 4000); // Polling continuo ogni 4 secondi
         });
     </script>
 </body>
