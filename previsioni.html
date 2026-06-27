@@ -3,33 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FantaFumo Neural Analytics & Quantum Predictions</title>
+    <title>FantaFumo Quantum Markov Engine v5.0</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #030305; --card-bg: #09090b; --text-main: #f4f4f5;
+            --bg-dark: #020204; --card-bg: #07070a; --text-main: #f4f4f5;
             --accent-blue: #3b82f6; --accent-green: #10b981; --accent-red: #ef4444; 
             --accent-purple: #8b5cf6; --accent-gold: #f59e0b; --accent-cyan: #06b6d4;
-            --border: #18181b; --text-muted: #52525b;
+            --border: #141417; --text-muted: #71717a;
         }
         body {
             font-family: "Courier New", Courier, monospace; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 20px;
-            box-sizing: border-box; font-size: 12px;
+            box-sizing: border-box; font-size: 12px; line-height: 1.4;
         }
         .header { border-bottom: 1px dashed #27272a; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
-        .header h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
+        .header h1 { margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
         .header p { margin: 5px 0 0 0; color: var(--accent-cyan); font-size: 11px; }
         
-        .status-pill { background: #111; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 5px 10px; font-size: 10px; border-radius: 3px; font-weight: bold; }
+        .status-pill { background: #0b0b0e; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 5px 10px; font-size: 10px; border-radius: 3px; font-weight: bold; }
 
-        .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 25px; }
+        .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 25px; }
         .kpi-node { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 4px; border-top: 3px solid var(--accent-blue); }
         .kpi-node.danger { border-top-color: var(--accent-red); }
         .kpi-node.warning { border-top-color: var(--accent-gold); }
         .kpi-node.quantum { border-top-color: var(--accent-purple); }
         .kpi-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
         .kpi-value { font-size: 22px; font-weight: 800; margin-top: 5px; color: #fff; }
-        .kpi-sub { font-size: 10px; color: #71717a; margin-top: 3px; }
+        .kpi-sub { font-size: 10px; color: #52525b; margin-top: 3px; }
 
         .charts-viewport { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
         .full-row { grid-column: span 2; }
@@ -44,7 +44,7 @@
         td { padding: 10px; border-bottom: 1px solid var(--border); color: #e4e4e7; }
         tr:hover { background: #0c0c0e; }
 
-        .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; }
         .dossier-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; position: relative; }
         .dossier-name { font-size: 15px; font-weight: bold; color: #fff; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; display: flex; justify-content: space-between; }
         
@@ -52,85 +52,91 @@
         .stat-line span { color: #71717a; }
         .stat-line strong { color: #fff; }
 
-        .progress-bar-container { background: #18181b; height: 4px; border-radius: 2px; margin: 4px 0 10px 0; overflow: hidden; }
+        .progress-bar-container { background: #141417; height: 4px; border-radius: 2px; margin: 4px 0 10px 0; overflow: hidden; }
         .progress-bar-fill { height: 100%; width: 0%; transition: width 0.3s; }
+        
+        .tag { display: inline-block; padding: 2px 5px; font-size: 9px; font-weight: bold; border-radius: 3px; text-transform: uppercase; margin-left: 5px; }
+        .tag-malus { background: #270f0f; color: var(--accent-red); border: 1px solid var(--accent-red); }
+        .tag-bonus { background: #0f2719; color: var(--accent-green); border: 1px solid var(--accent-green); }
     </style>
 </head>
 <body>
 
     <div class="header">
         <div>
-            <h1>📊 FantaFumo Neural Engine v4.0</h1>
-            <p>Sistemi predittivi stocastici avanzati // Data-Driven Core // Modelli del Caos</p>
+            <h1>📊 FantaFumo Markov Chaos Core v5.0</h1>
+            <p>100k Simulazioni Stocastiche Combinatorie // Analisi Frequenziale Categorie</p>
         </div>
-        <div class="status-pill" id="engineStatus">CORE INITIALIZATION...</div>
+        <div class="status-pill" id="engineStatus">BOOTING CORE...</div>
     </div>
 
+    <!-- METRICHE GLOBALI AGGIORNATE -->
     <div class="kpi-matrix">
         <div class="kpi-node">
-            <div class="kpi-title">Progressione Campionato</div>
-            <div class="kpi-value" id="kpiProgress">--%</div>
-            <div class="kpi-sub" id="kpiDates">Start: 08 Giu 2026</div>
+            <div class="kpi-title">Finestra Temporale Rimanente</div>
+            <div class="kpi-value" id="kpiDaysLeft">-- Giorni</div>
+            <div class="kpi-sub" id="kpiDates">Start Target: 08 Giu 2026</div>
         </div>
         <div class="kpi-node warning">
-            <div class="kpi-title">Fattore Frustrazione Collettiva</div>
-            <div class="kpi-value" id="kpiFrustration">--</div>
-            <div class="kpi-sub">Probabilità di liti/contestazioni verbali</div>
+            <div class="kpi-title">Categoria Più Letale Rilevata</div>
+            <div class="kpi-value" id="kpiTopCategory">--</div>
+            <div class="kpi-sub">In base alla densità di occorrenza nel JSON</div>
         </div>
         <div class="kpi-node danger">
-            <div class="kpi-title">Allerta Autodistruzione (Tilt)</div>
-            <div class="kpi-value" id="kpiTiltAlert">--</div>
-            <div class="kpi-sub">Concorrenti vicini a streak di Malus negativi</div>
+            <div class="kpi-title">Indice Entropia Globale (Caos)</div>
+            <div class="kpi-value" id="kpiEntropy">--</div>
+            <div class="kpi-sub">Fattore di imprevedibilità strutturale</div>
         </div>
         <div class="kpi-node quantum">
-            <div class="kpi-title">Simulazioni Monte Carlo Eseguite</div>
-            <div class="kpi-value">10.000</div>
-            <div class="kpi-sub">Universi paralleli calcolati in locale</div>
+            <div class="kpi-title">Scenari Generati (Monte Carlo)</div>
+            <div class="kpi-value">100.000</div>
+            <div class="kpi-sub">Iterazioni basate su matrici di transizione</div>
         </div>
     </div>
 
+    <!-- VIEWPORT GRAFICI -->
     <div class="charts-viewport">
         <div class="chart-wrapper">
-            <div class="chart-title">Linee di Tendenza e Vettori di Crescita Progressiva</div>
+            <div class="chart-title">Linee Storiche di Tendenza</div>
             <div style="position: relative; height: 250px;"><canvas id="canvasTrajectory"></canvas></div>
         </div>
         <div class="chart-wrapper">
-            <div class="chart-title">Modello Predittivo Integrato: Distribuzione Vittoria Finale (%)</div>
+            <div class="chart-title">Probabilità di Vittoria Totale (100k Simulazioni di Categoria)</div>
             <div style="position: relative; height: 250px;"><canvas id="canvasProbability"></canvas></div>
         </div>
         <div class="chart-wrapper full-row">
-            <div class="chart-title">Mappa Multidimensionale del Rischio (X: Punti | Y: Volatilità | Area: Auto-Sabotaggio)</div>
-            <div style="position: relative; height: 250px;"><canvas id="canvasQuantumRisk"></canvas></div>
+            <div class="chart-title">Distribuzione Frequenziale delle Categorie Eventi nel Campionato</div>
+            <div style="position: relative; height: 250px;"><canvas id="canvasCategories"></canvas></div>
         </div>
     </div>
 
+    <!-- TABELLA TELEMETRIA -->
     <div class="telemetry-container">
-        <div class="chart-title" style="color:var(--accent-gold)">Matrice Matematica di Proiezione Totale ed Estrapolazione del Caos</div>
+        <div class="chart-title" style="color:var(--accent-gold)">Matrice Predittiva Avanzata dopo Decoupling Deterministico</div>
         <table>
             <thead>
                 <tr>
                     <th>Partecipante</th>
                     <th>Punti Attuali</th>
                     <th>Stabilità Emotiva</th>
-                    <th>Rischio Weekend Slump</th>
-                    <th>Burnout Fumo Index</th>
-                    <th>Ora di Massimo Pericolo</th>
-                    <th>Previsione Target 14 Set</th>
+                    <th>Frequenza Atti (giorno)</th>
+                    <th>Dominio Eventi</th>
+                    <th>Fattore Imprevisto Atteso</th>
+                    <th>Target Proiettato (14 Set)</th>
                 </tr>
             </thead>
             <tbody id="telemetryTableBody">
-                <tr><td colspan="7" style="color: gray; text-align: center;">Iniezione flussi neurali in corso...</td></tr>
+                <tr><td colspan="7" style="color: gray; text-align: center;">Iniezione flussi neurali...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <div class="chart-title" style="margin-bottom: 15px;">Dossier Clinico-Comportamentale ad Alta Densità (Previsioni Non Accurate Incluse)</div>
+    <!-- DOSSIER SPECULATIVI -->
+    <div class="chart-title" style="margin-bottom: 15px;">Dossier Clinico-Comportamentale Esteso (Inaccuratezza Casuale Inclusa)</div>
     <div class="dossier-grid" id="dossierGridContainer"></div>
 
     <script>
         const DATA_URL = './fantafumo_data.json';
-        
-        // 8 Giugno 2026 - Data ufficiale corretta
         const COMPETITION_START = new Date('2026-06-08').getTime(); 
         const COMPETITION_END = new Date('2026-09-14').getTime();
 
@@ -141,15 +147,12 @@
             try {
                 const cacheBuster = new Date().getTime();
                 const response = await fetch(`${DATA_URL}?t=${cacheBuster}`, { cache: 'no-store' });
-                
-                if (!response.ok) {
-                    throw new Error(`Risposta HTTP non valida: ${response.status} ${response.statusText}`);
-                }
+                if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
 
                 const rawJson = await response.json();
                 const currentSnapshot = JSON.stringify(rawJson);
                 
-                // CRITERIO DI LOCK: Se i dati sono identici a prima, esce senza toccare i grafici
+                // STATE-LOCK ENGINE: Blocca il rendering se i dati non sono mutati
                 if (currentSnapshot === lastDataSnapshot) {
                     document.getElementById('engineStatus').innerText = "ENGINE LOCK: NO CHANGE (CHARTS PRESERVED)";
                     document.getElementById('engineStatus').style.borderColor = "var(--accent-blue)";
@@ -157,96 +160,77 @@
                     return; 
                 }
                 
-                // ESEGUE I CALCOLI. Se falliscono qui, lastDataSnapshot NON viene aggiornato, permettendo il riassestamento al prossimo ciclo.
-                executeNeuralCalculations(rawJson);
-                
-                // Salva lo stato solo ad esecuzione completata con successo!
+                executeQuantumCalculations(rawJson);
                 lastDataSnapshot = currentSnapshot;
                 
-                document.getElementById('engineStatus').innerText = "ENGINE LOCK: DATA UPDATED (RECOMPUTING)";
+                document.getElementById('engineStatus').innerText = "ENGINE LOCK: DATA UPDATED (RECOMPUTING 100K)";
                 document.getElementById('engineStatus').style.borderColor = "var(--accent-green)";
                 document.getElementById('engineStatus').style.color = "var(--accent-green)";
-
             } catch (e) {
-                console.error("Errore critico del core:", e);
-                const statusEl = document.getElementById('engineStatus');
-                statusEl.innerText = "CRITICAL ERROR: CHECK CONSOLE";
-                statusEl.style.borderColor = "var(--accent-red)";
-                statusEl.style.color = "var(--accent-red)";
-                
-                // Se è il primo avvio e fallisce, sputa l'errore direttamente nella tabella per debug visivo veloce
-                if (!lastDataSnapshot) {
-                    document.getElementById('telemetryTableBody').innerHTML = `
-                        <tr>
-                            <td colspan="7" style="color: var(--accent-red); text-align: center; font-weight: bold; padding: 30px 10px;">
-                                ❌ IMPOSSIBILE CARICARE I DATI SPERIMENTALI.<br><br>
-                                <span style="color: #a1a1aa; font-size: 11px; font-family: sans-serif; display:block; margin-top:5px;">
-                                    Dettaglio Errore: ${e.message}<br><br>
-                                    💡 Se stai aprendo questo file premendoci due volte sopra, il browser blocca le richieste esterne (CORS). <br>
-                                    Esegui il file tramite un server locale (es. l'estensione <strong>Live Server</strong> di VS Code, o usando <code>python -m http.server</code> da terminale).
-                                </span>
-                            </td>
-                        </tr>`;
-                }
+                console.error(e);
+                document.getElementById('engineStatus').innerText = "CRITICAL ERROR: DATA UNREADABLE";
+                document.getElementById('engineStatus').style.borderColor = "var(--accent-red)";
             }
         }
 
-        function executeNeuralCalculations(data) {
+        function executeQuantumCalculations(data) {
             const eventi = data.events || [];
             const giocatori = data.players || [];
 
-            if (!giocatori || giocatori.length === 0) {
-                document.getElementById('telemetryTableBody').innerHTML = `<tr><td colspan="7" style="color: var(--accent-gold); text-align: center;">Nessun giocatore trovato nel file JSON. Controlla la chiave "players".</td></tr>`;
-                return;
-            }
+            if (giocatori.length === 0) return;
 
-            // Calcolo asse temporale coerente
+            // Calcoli temporali precisi
             const timestampEventi = eventi.map(e => e.timestamp ? new Date(e.timestamp).getTime() : null).filter(t => t !== null);
-            const tempoRilevatoUltimo = timestampEventi.length > 0 ? Math.max(...timestampEventi) : new Date().getTime();
-
-            const durataTotale = COMPETITION_END - COMPETITION_START;
-            const tempoTrascorso = tempoRilevatoUltimo - COMPETITION_START;
+            const tempoUltimoEvento = timestampEventi.length > 0 ? Math.max(...timestampEventi) : new Date().getTime();
             
-            let progressoPercentuale = (tempoTrascorso / durataTotale) * 100;
-            if (progressoPercentuale > 100) progressoPercentuale = 100;
-            if (progressoPercentuale < 1) progressoPercentuale = 1; 
+            const giorniTrascorsi = Math.max(1, (tempoUltimoEvento - COMPETITION_START) / (1000 * 60 * 60 * 24));
+            const giorniRimanenti = Math.max(1, (COMPETITION_END - tempoUltimoEvento) / (1000 * 60 * 60 * 24));
+            const totaleGiorniCamp = (COMPETITION_END - COMPETITION_START) / (1000 * 60 * 60 * 24);
+            const progressoPercentuale = Math.min(100, Math.max(1, (giorniTrascorsi / totaleGiorniCamp) * 100));
 
-            document.getElementById('kpiProgress').innerText = `${progressoPercentuale.toFixed(3)}%`;
-            document.getElementById('kpiDates').innerText = `Dal 08 Giu al 14 Set 2026`;
+            document.getElementById('kpiDaysLeft').innerText = `${Math.ceil(giorniRimanenti)} Giorni`;
 
+            // Mappatura e aggregazione Categorie presenti nel JSON
+            let dizionarioCategorie = {};
             let traiettorieLog = {};
             giocatori.forEach(g => traiettorieLog[g.id] = [0]);
 
-            let contatoreTiltGenerale = 0;
-            let sommaVariazioniAssolute = 0;
+            eventi.forEach(e => {
+                let cat = e.category || (e.points < 0 ? "Malus Implicito" : "Bonus Implicito");
+                dizionarioCategorie[cat] = (dizionarioCategorie[cat] || 0) + 1;
+            });
 
-            let metricheAvanzate = giocatori.map((p) => {
+            // Trova la categoria più frequente
+            let topCat = "Nessuna";
+            let maxCatCount = 0;
+            Object.entries(dizionarioCategorie).forEach(([k, v]) => {
+                if (v > maxCatCount) { maxCatCount = v; topCat = k; }
+            });
+            document.getElementById('kpiTopCategory').innerText = topCat.toUpperCase();
+
+            // Calcolo metriche per singolo giocatore
+            let metricheGiocatori = giocatori.map(p => {
                 const pEvents = eventi.filter(e => e.playerId === p.id);
-                
                 let score = 0;
                 let variazioni = [];
-                let malusConsecutivi = 0;
-                let maxMalusConsecutivi = 0;
-                let puntiMalusTotiti = 0;
+                
+                // Mappa delle categorie specifiche di questo giocatore
+                let catPersonali = {};
 
                 pEvents.forEach(e => {
                     if (typeof e.points === 'number') {
                         score += e.points;
                         variazioni.push(e.points);
                         traiettorieLog[p.id].push(score);
-                        sommaVariazioniAssolute += Math.abs(e.points);
-
-                        if (e.points < 0) {
-                            malusConsecutivi++;
-                            puntiMalusTotiti += Math.abs(e.points);
-                            if (malusConsecutivi > maxMalusConsecutivi) maxMalusConsecutivi = malusConsecutivi;
-                        } else {
-                            malusConsecutivi = 0;
-                        }
+                        
+                        let cat = e.category || (e.points < 0 ? "Malus Implicito" : "Bonus Implicito");
+                        if (!catPersonali[cat]) catPersonali[cat] = [];
+                        catPersonali[cat].push(e.points);
                     }
                 });
 
                 const n = variazioni.length;
+                let frequenzaGiornaliera = n / giorniTrascorsi;
                 let mediaInerziale = n > 0 ? variazioni.reduce((a,b)=>a+b,0)/n : 0;
                 
                 let deviazioneStandard = 0;
@@ -255,66 +239,96 @@
                     deviazioneStandard = Math.sqrt(varianza);
                 }
 
-                // Generazione roba fittizia densa ad alta saturazione statistica
-                let weekendSlumpRisk = Math.min(100, Math.max(10, (deviazioneStandard * 8) + (maxMalusConsecutivi * 12)));
-                let burnoutIndex = Math.min(100, (pEvents.length * 4) + (puntiMalusTotiti * 1.5));
-                let oraPericoloChar = (String(p.id).charCodeAt(0) % 7) + 14; 
-                let oraPericoloString = `${oraPericoloChar}:45`;
-                let selfSabotageRate = n > 0 ? (variazioni.filter(v=>v<0).length / n) * 100 : 20;
-                let emotionalStability = Math.max(5, 100 - (deviazioneStandard * 12) - (maxMalusConsecutivi * 15));
-                
-                if (emotionalStability < 40) contatoreTiltGenerale++;
-                let proiezioneCalibrata = score * (100 / progressoPercentuale);
+                // Determinazione della sua categoria dominante
+                let domCat = "Nessuna";
+                let maxCountP = 0;
+                Object.entries(catPersonali).forEach(([k,v]) => {
+                    if(v.length > maxCountP) { maxCountP = v.length; domCat = k; }
+                });
 
                 return {
-                    ...p, score, deviazioneStandard, mediaInerziale, weekendSlumpRisk, 
-                    burnoutIndex, oraPericoloString, selfSabotageRate, emotionalStability,
-                    projected: Math.round(proiezioneCalibrata), totalActs: n
+                    ...p, score, deviazioneStandard, mediaInerziale, frequenzaGiornaliera,
+                    domCat, catPersonali, totalActs: n, projected: Math.round(score * (100 / progressoPercentuale))
                 };
             });
 
-            document.getElementById('kpiFrustration').innerText = sommaVariazioniAssolute > 80 ? "MASSIMA (Fase 4)" : "STABILE";
-            document.getElementById('kpiTiltAlert').innerText = `${contatoreTiltGenerale} Sotto Stress`;
-
-            // Simulazione Monte Carlo 10k universi paralleli
+            // 🎲 SIMULAZIONE MONTE CARLO AD ALTA DENSITÀ: 100.000 ITERAZIONI GENERATIVE DI CATEGORIA
             let vittorieMonteCarlo = {};
             giocatori.forEach(g => vittorieMonteCarlo[g.id] = 0);
-            
-            for (let i = 0; i < 10000; i++) {
-                let migliorPunteggioFinto = -99999;
+
+            // Calcolo dell'entropia generale basato sulla volatilità totale
+            let volatilitàGlobale = metricheGiocatori.reduce((acc, g) => acc + g.deviazioneStandard, 0);
+            document.getElementById('kpiEntropy').innerText = (volatilitàGlobale * 1.5).toFixed(2);
+
+            for (let i = 0; i < 100000; i++) {
+                let migliorPunteggioFinto = -999999;
                 let idVincitoreFinto = null;
 
-                metricheAvanzate.forEach(g => {
-                    let rumoreBianco = (Math.random() - 0.5) * 40; 
-                    let punteggioSimulato = g.score + (g.mediaInerziale * 12) + rumoreBianco - (g.weekendSlumpRisk * 0.05);
+                metricheGiocatori.forEach(g => {
+                    let punteggioSimulato = g.score;
+                    
+                    // Simula gli eventi per i giorni mancanti
+                    let eventiAttesi = Math.round(g.frequenzaGiornaliera * giorniRimanenti);
+                    // Aggiungi rumore sul volume di eventi attesi per simulare weekend pazzi o controlli a sorpresa (+/- 40% di eventi)
+                    let varianzaVolume = (Math.random() - 0.5) * 0.8;
+                    eventiAttesi = Math.max(0, Math.round(eventiAttesi * (1 + varianzaVolume)));
+
+                    // Estrai casualmente dagli eventi storici del giocatore o applica rumore di categoria
+                    for (let e = 0; e < eventiAttesi; e++) {
+                        let puntiEvento = 0;
+                        let chiaviCat = Object.keys(g.catPersonali);
+                        
+                        if (chiaviCat.length > 0) {
+                            // Sceglie una categoria a caso tra quelle che prende di solito
+                            let catScelta = chiaviCat[Math.floor(Math.random() * chiaviCat.length)];
+                            let storiciCat = g.catPersonali[catScelta];
+                            // Prende un valore storico e ci mette sopra un ulteriore rumore del caos (da -8 a +8 punti per l'imprevisto)
+                            puntiEvento = storiciCat[Math.floor(Math.random() * storiciCat.length)] + ((Math.random() - 0.5) * 16);
+                        } else {
+                            // Se il giocatore non ha eventi, usa rumore puro di background instabile
+                            puntiEvento = (Math.random() - 0.5) * 10;
+                        }
+                        punteggioSimulato += puntiEvento;
+                    }
+
                     if (punteggioSimulato > migliorPunteggioFinto) {
                         migliorPunteggioFinto = punteggioSimulato;
                         idVincitoreFinto = g.id;
                     }
                 });
+
                 if (idVincitoreFinto) vittorieMonteCarlo[idVincitoreFinto]++;
             }
-            metricheAvanzate.forEach(g => g.probVittoriaMC = (vittorieMonteCarlo[g.id] / 10000) * 100);
 
-            // Stampa l'interfaccia ad alta densità
-            renderTelemetryTable(metricheAvanzate);
-            renderDossierCards(metricheAvanzate);
-            renderAllCharts(metricheAvanzate, traiettorieLog);
+            // Assegna le percentuali su 100k corrette
+            metricheGiocatori.forEach(g => {
+                g.probVittoriaMC = (vittorieMonteCarlo[g.id] / 100000) * 100;
+                // Calcolo indici speculativi finti richiesti
+                g.emotionalStability = Math.max(2, 100 - (g.deviazioneStandard * 15));
+                g.randomImprevisto = Math.abs((g.mediaInerziale * 4) + (Math.random() - 0.5) * 50).toFixed(1);
+                g.indiceSgamo = Math.min(100, Math.max(5, (g.totalActs * 3.5) + (Math.random() * 20))).toFixed(1);
+            });
+
+            // Renderizza l'interfaccia densa
+            renderTelemetryTable(metricheGiocatori);
+            renderDossierCards(metricheGiocatori);
+            renderCharts(metricheGiocatori, traiettorieLog, dizionarioCategorie);
         }
 
         function renderTelemetryTable(giocatori) {
             const tbody = document.getElementById('telemetryTableBody');
             tbody.innerHTML = '';
-            const ordinati = [...giocatori].sort((a,b) => b.projected - a.projected);
+            
+            const ordinati = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
             ordinati.forEach(g => {
                 tbody.innerHTML += `
                     <tr>
                         <td style="font-weight:bold; text-transform:capitalize; color:#fff;">${g.name}</td>
                         <td>${g.score} pt</td>
                         <td style="color:${g.emotionalStability > 50 ? 'var(--accent-green)':'var(--accent-red)'}">${g.emotionalStability.toFixed(1)}%</td>
-                        <td>${g.weekendSlumpRisk.toFixed(1)}%</td>
-                        <td>${g.burnoutIndex.toFixed(0)}%</td>
-                        <td style="color:var(--accent-purple); font-weight:bold;">${g.oraPericoloString}</td>
+                        <td>${g.frequenzaGiornaliera.toFixed(2)} /giorno</td>
+                        <td style="color:var(--accent-cyan); font-size:11px;">${g.domCat.substring(0,18)}...</td>
+                        <td>± ${g.randomImprevisto}%</td>
                         <td style="font-size:14px; font-weight:bold; color:var(--accent-gold);">${g.projected} pt</td>
                     </tr>
                 `;
@@ -324,53 +338,60 @@
         function renderDossierCards(giocatori) {
             const container = document.getElementById('dossierGridContainer');
             container.innerHTML = '';
+
             giocatori.forEach(g => {
                 container.innerHTML += `
                     <div class="dossier-card">
-                        <div class="dossier-name"><span>${g.name}</span><span style="color:var(--accent-cyan); font-size:10px;">ID: ${g.id}</span></div>
-                        <div class="stat-line"><span>Affidabilità Predittiva</span><strong>${(100 - g.deviazioneStandard * 3).toFixed(1)}%</strong></div>
-                        <div class="stat-line"><span>Vittorie Simulatore Monte Carlo</span><strong>${g.probVittoriaMC.toFixed(2)}%</strong></div>
+                        <div class="dossier-name">
+                            <span>${g.name}</span>
+                            <span style="color:var(--accent-purple); font-size:11px;">WIN RATE 100K: ${g.probVittoriaMC.toFixed(2)}%</span>
+                        </div>
                         <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.probVittoriaMC}%; background:var(--accent-purple);"></div></div>
                         
-                        <div class="stat-line"><span>Tendenza Auto-Sabotaggio</span><strong>${g.selfSabotageRate.toFixed(1)}%</strong></div>
-                        <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.selfSabotageRate}%; background:var(--accent-red);"></div></div>
+                        <div class="stat-line"><span>Indice di Rischio "Sgammato Abusivo"</span><strong style="color:var(--accent-red)">${g.indiceSgamo}%</strong></div>
+                        <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.indiceSgamo}%; background:var(--accent-red);"></div></div>
 
-                        <div class="stat-line"><span>Accelerazione Lineare (μ)</span><strong>${g.mediaInerziale.toFixed(2)} pt/atto</strong></div>
-                        <div class="stat-line"><span>Volatilità Comportamentale</span><strong>${g.deviazioneStandard.toFixed(2)} σ</strong></div>
+                        <div class="stat-line"><span>Atti Registrati Totali</span><strong>${g.totalActs} anomalie</strong></div>
+                        <div class="stat-line"><span>Inerzia di Spinta Quantistica (μ)</span><strong>${g.mediaInerziale.toFixed(2)} pt</strong></div>
+                        <div class="stat-line"><span>Deviazione Varianza del Destino</span><strong>${g.deviazioneStandard.toFixed(2)} σ</strong></div>
+                        <div class="stat-line"><span>Dominio Comportamentale</span><span class="tag ${g.mediaInerziale < 0 ? 'tag-malus':'tag-bonus'}">${g.domCat}</span></div>
                     </div>
                 `;
             });
         }
 
-        function renderAllCharts(giocatori, traiettorieLog) {
+        function renderCharts(giocatori, traiettorieLog, dizionarioCategorie) {
+            // Distruzione istanze precedenti per salvaguardia cicli hardware
             if (chartInstances.trajectory) chartInstances.trajectory.destroy();
             if (chartInstances.probability) chartInstances.probability.destroy();
-            if (chartInstances.quantumRisk) chartInstances.quantumRisk.destroy();
+            if (chartInstances.categories) chartInstances.categories.destroy();
 
             const palette = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899'];
             const maxPoints = Math.max(...Object.values(traiettorieLog).map(arr => arr.length));
 
+            // Grafico 1: Traiettoria Storica
             const ctxT = document.getElementById('canvasTrajectory').getContext('2d');
             chartInstances.trajectory = new Chart(ctxT, {
                 type: 'line',
                 data: {
-                    labels: Array.from({length: maxPoints}, (_, i) => `Log ${i}`),
+                    labels: Array.from({length: maxPoints}, (_, i) => `Evo ${i}`),
                     datasets: giocatori.map((g, idx) => ({
                         label: g.name, data: traiettorieLog[g.id],
                         borderColor: palette[idx % palette.length], backgroundColor: 'transparent',
-                        borderWidth: 2, pointRadius: 1, tension: 0.1
+                        borderWidth: 2, pointRadius: 2, tension: 0.1
                     }))
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff' } } } }
             });
 
+            // Grafico 2: Probabilità di vittoria stocastica su 100k cicli
             const ctxP = document.getElementById('canvasProbability').getContext('2d');
             const ordinatiMC = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
             chartInstances.probability = new Chart(ctxP, {
                 type: 'bar',
                 data: {
                     labels: ordinatiMC.map(g => g.name),
-                    datasets: [{ data: ordinatiMC.map(g => g.probVittoriaMC), backgroundColor: palette, borderRadius: 3 }]
+                    datasets: [{ data: ordinatiMC.map(g => g.probVittoriaMC), backgroundColor: palette, borderRadius: 2 }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
@@ -379,30 +400,29 @@
                 }
             });
 
-            const ctxQ = document.getElementById('canvasQuantumRisk').getContext('2d');
-            chartInstances.quantumRisk = new Chart(ctxQ, {
-                type: 'bubble',
+            // Grafico 3: Istogramma delle Categorie Complessivo
+            const ctxC = document.getElementById('canvasCategories').getContext('2d');
+            chartInstances.categories = new Chart(ctxC, {
+                type: 'bar',
                 data: {
-                    datasets: giocatori.map((g, idx) => ({
-                        label: g.name,
-                        data: [{ x: g.score, y: g.deviazioneStandard, r: Math.max(5, g.selfSabotageRate / 3) }],
-                        backgroundColor: palette[idx % palette.length] + 'aa', borderColor: '#fff', borderWidth: 0.5
-                    }))
+                    labels: Object.keys(dizionarioCategorie),
+                    datasets: [{
+                        label: 'Occorrenze Totali nel Campionato',
+                        data: Object.values(dizionarioCategorie),
+                        backgroundColor: '#8b5cf6', borderColor: '#fff', borderWidth: 0.5, borderRadius: 3
+                    }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#fff' } } },
-                    scales: {
-                        x: { title: { display: true, text: 'Punti Totali', color: '#52525b' } },
-                        y: { title: { display: true, text: 'Deviazione Standard (Instabilità)', color: '#52525b' } }
-                    }
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { ticks: { color: '#71717a' } }, y: { ticks: { color: '#efe4e7' } } }
                 }
             });
         }
 
         window.addEventListener('DOMContentLoaded', () => {
             fetchAndProcessData();
-            setInterval(fetchAndProcessData, 4000); // Polling continuo ogni 4 secondi
+            setInterval(fetchAndProcessData, 4000); 
         });
     </script>
 </body>
