@@ -121,6 +121,30 @@
       "points": 40,
       "reason": "Premio Cirrosi Epatica (Valore Base)",
       "date": "27 giu 2026, 16:43"
+    },
+    {
+      "playerId": "abdul",
+      "points": 50,
+      "reason": "Il Geometra (Valore Base)",
+      "date": "27 giu 2026, 16:43"
+    },
+    {
+      "playerId": "abdul",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "27 giu 2026, 16:44"
+    },
+    {
+      "playerId": "ryan",
+      "points": 20,
+      "reason": "Alchimista Low-Cost (Valore Base)",
+      "date": "27 giu 2026, 16:44"
+    },
+    {
+      "playerId": "ryan",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "27 giu 2026, 16:47"
     }
   ],
   "tariffs": [
