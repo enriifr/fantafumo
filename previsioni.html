@@ -3,449 +3,419 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FantaFumo Quantum Analytics - Centro Predittivo Avanzato</title>
-    <!-- Chart.js CDN per il rendering della telemetria visiva -->
+    <title>FantaFumo Neural Analytics & Quantum Predictions</title>
+    <!-- Chart.js CDN per la telemetria visiva ad alta densità -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #050507; --card-bg: #0c0c0e; --text-main: #f4f4f5;
-            --accent-blue: #2563eb; --accent-green: #16a34a; --accent-red: #dc2626; 
-            --accent-purple: #7c3aed; --accent-gold: #ca8a04; --border: #1f1f23; --text-muted: #71717a;
+            --bg-dark: #030305; --card-bg: #09090b; --text-main: #f4f4f5;
+            --accent-blue: #3b82f6; --accent-green: #10b981; --accent-red: #ef4444; 
+            --accent-purple: #8b5cf6; --accent-gold: #f59e0b; --accent-cyan: #06b6d4;
+            --border: #18181b; --text-muted: #52525b;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 25px;
-            box-sizing: border-box;
+            font-family: "Courier New", Courier, monospace; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 20px;
+            box-sizing: border-box; font-size: 12px;
         }
-        .header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 25px; }
-        .header h1 { margin: 0; font-size: 28px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-main); }
-        .header p { margin: 6px 0 0 0; color: var(--text-muted); font-size: 13px; font-style: italic; }
+        .header { border-bottom: 1px dashed #27272a; padding-bottom: 20px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-end; }
+        .header h1 { margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
+        .header p { margin: 5px 0 0 0; color: var(--accent-cyan); font-size: 11px; }
+        
+        .status-pill { background: #111; border: 1px solid var(--accent-green); color: var(--accent-green); padding: 5px 10px; font-size: 10px; border-radius: 3px; font-weight: bold; }
 
-        /* KPI Matrix Grid */
-        .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .kpi-node { background: var(--card-bg); border: 1px solid var(--border); padding: 18px; border-radius: 10px; position: relative; overflow: hidden; }
-        .kpi-node::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--accent-blue); }
-        .kpi-node.danger::before { background: var(--accent-red); }
-        .kpi-node.warning::before { background: var(--accent-gold); }
-        .kpi-node.quantum::before { background: var(--accent-purple); }
-        .kpi-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-        .kpi-value { font-size: 26px; font-weight: 800; margin-top: 8px; color: #ffffff; }
-        .kpi-subtext { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        /* KPI Grid Estesa */
+        .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 25px; }
+        .kpi-node { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 4px; border-top: 3px solid var(--accent-blue); }
+        .kpi-node.danger { border-top-color: var(--accent-red); }
+        .kpi-node.warning { border-top-color: var(--accent-gold); }
+        .kpi-node.quantum { border-top-color: var(--accent-purple); }
+        .kpi-title { font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
+        .kpi-value { font-size: 22px; font-weight: 800; margin-top: 5px; color: #fff; }
+        .kpi-sub { font-size: 10px; color: #71717a; margin-top: 3px; }
 
-        /* Layout dei Grafici */
-        .charts-viewport { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
-        .full-width-chart { grid-column: span 2; }
+        /* Dashboard Viewport Layout */
+        .charts-viewport { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .full-row { grid-column: span 2; }
         @media (max-width: 1024px) { .charts-viewport > div { grid-column: span 2 !important; } }
         
-        .chart-wrapper { background: var(--card-bg); border: 1px solid var(--border); padding: 22px; border-radius: 12px; height: 340px; }
-        .chart-title { font-size: 13px; font-weight: bold; text-transform: uppercase; margin-bottom: 15px; display: flex; justify-content: space-between; color: var(--text-muted); }
+        .chart-wrapper { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; height: 320px; }
+        .chart-title { font-size: 11px; font-weight: bold; text-transform: uppercase; margin-bottom: 12px; color: #a1a1aa; border-left: 2px solid var(--accent-cyan); padding-left: 6px; }
 
-        /* Tabella Predittiva */
-        .telemetry-container { background: var(--card-bg); border: 1px solid var(--border); padding: 22px; border-radius: 12px; overflow-x: auto; margin-bottom: 25px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
-        th { padding: 12px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); font-family: monospace; }
-        tr:hover { background: #131316; }
+        /* Super-Tables */
+        .telemetry-container { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 10px; border-bottom: 2px solid var(--border); color: var(--accent-cyan); font-size: 10px; text-transform: uppercase; }
+        td { padding: 10px; border-bottom: 1px solid var(--border); color: #e4e4e7; }
+        tr:hover { background: #0c0c0e; }
 
-        /* Deep Insights Dossier */
-        .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
-        .dossier-card { background: var(--card-bg); border: 1px solid var(--border); padding: 22px; border-radius: 12px; position: relative; }
-        .dossier-header { font-size: 18px; font-weight: bold; text-transform: capitalize; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed var(--border); padding-bottom: 10px; }
+        /* Dossier Medico Comportamentale */
+        .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; }
+        .dossier-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 6px; position: relative; }
+        .dossier-name { font-size: 15px; font-weight: bold; color: #fff; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px dashed var(--border); padding-bottom: 5px; display: flex; justify-content: space-between; }
         
-        .telemetry-row { display: flex; justify-content: space-between; font-size: 12px; padding: 6px 0; border-bottom: 1px solid #111114; }
-        .telemetry-row span { color: var(--text-muted); }
-        .telemetry-row strong { color: #ffffff; }
+        .stat-line { display: flex; justify-content: space-between; padding: 4px 0; font-size: 11px; border-bottom: 1px solid #0f0f11; }
+        .stat-line span { color: #71717a; }
+        .stat-line strong { color: #fff; }
 
-        .metric-bar-bg { background: #1c1c21; height: 5px; border-radius: 3px; margin-top: 4px; margin-bottom: 10px; overflow: hidden; }
-        .metric-bar-fill { height: 100%; width: 0%; transition: width 0.5s ease-in-out; }
-
-        .badge-risk { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: bold; text-transform: uppercase; }
+        .progress-bar-container { background: #18181b; height: 4px; border-radius: 2px; margin: 4px 0 10px 0; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; transition: width 0.3s; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🔮 FantaFumo Quantum & Predictive Intelligence</h1>
-        <p>Motore predittivo non-lineare basato su analisi delle stringhe temporali, clustering dei malus e metriche di vulnerabilità stocastica.</p>
+        <div>
+            <h1>📊 FantaFumo Neural Engine v3.9</h1>
+            <p>Sistemi predittivi stocastici avanzati // Data-Driven Core // Modelli del Caos</p>
+        </div>
+        <div class="status-pill" id="engineStatus">ENGINE LOCK: IDLE</div>
     </div>
 
-    <!-- MATRICE DELLE METRICHE IN TEMPO REALE -->
+    <!-- KPI MATRIX EXTRA MULTIPLA -->
     <div class="kpi-matrix">
         <div class="kpi-node">
-            <div class="kpi-title">Stato Avanzamento Campionato (Data-Driven)</div>
+            <div class="kpi-title">Progressione Campionato</div>
             <div class="kpi-value" id="kpiProgress">--%</div>
-            <div class="kpi-subtext" id="kpiTimelineRange">Allineamento sul record log...</div>
+            <div class="kpi-sub" id="kpiDates">Start: 08 Giu 2026</div>
         </div>
         <div class="kpi-node warning">
-            <div class="kpi-title">Indice di Entropia Globale</div>
-            <div class="kpi-value" id="kpiEntropy">--</div>
-            <div class="kpi-subtext">Grado di imprevedibilità generale degli atti</div>
+            <div class="kpi-title">Fattore Frustrazione Collettiva</div>
+            <div class="kpi-value" id="kpiFrustration">--</div>
+            <div class="kpi-sub">Probabilità di liti/contestazioni verbali</div>
         </div>
         <div class="kpi-node danger">
-            <div class="kpi-title">Cluster di Rischio Critico</div>
-            <div class="kpi-value" id="kpiMeltdownAlert">--</div>
-            <div class="kpi-subtext">Soggetti in imminente spirale di sanzioni</div>
+            <div class="kpi-title">Allerta Autodistruzione (Tilt)</div>
+            <div class="kpi-value" id="kpiTiltAlert">--</div>
+            <div class="kpi-sub">Concorrenti vicini a streak di Malus negativi</div>
         </div>
         <div class="kpi-node quantum">
-            <div class="kpi-title">Fattore Cigno Nero di Rete</div>
-            <div class="kpi-value" id="kpiBlackSwan">--%</div>
-            <div class="kpi-subtext">Probabilità macro di un evento fuori dai modelli</div>
+            <div class="kpi-title">Simulazioni Monte Carlo Eseguite</div>
+            <div class="kpi-value">10.000</div>
+            <div class="kpi-sub">Universi paralleli calcolati in locale</div>
         </div>
     </div>
 
-    <!-- VIEWPORT DEI VETTORI GRAFICI -->
+    <!-- VIEWPORT DELA TELEMETRIA GRAFICA -->
     <div class="charts-viewport">
-        <!-- Grafico 1: Traiettoria storica standard -->
         <div class="chart-wrapper">
-            <div class="chart-title">Analisi dei Vettori di Tendenza Progressiva</div>
-            <div style="position: relative; height: 260px;"><canvas id="chartTrajectory"></canvas></div>
+            <div class="chart-title">Linee di Tendenza e Vettori di Crescita Progressiva</div>
+            <div style="position: relative; height: 250px;"><canvas id="canvasTrajectory"></canvas></div>
         </div>
-        <!-- Grafico 2: Probabilità Bayesiana Vittoria -->
         <div class="chart-wrapper">
-            <div class="chart-title">Distribuzione Probabilistica della Vittoria Finale (%)</div>
-            <div style="position: relative; height: 260px;"><canvas id="chartProbability"></canvas></div>
+            <div class="chart-title">Modello Predittivo Integrato: Distribuzione Vittoria Finale (%)</div>
+            <div style="position: relative; height: 250px;"><canvas id="canvasProbability"></canvas></div>
         </div>
-        <!-- Grafico 3: Mappa Quantistica del Rischio (NUOVO) -->
-        <div class="chart-wrapper full-width-chart">
-            <div class="chart-title">Mappa Multidimensionale del Caos (X: Punti | Y: Volatilità | Area: Rischio Crollo)</div>
-            <div style="position: relative; height: 260px;"><canvas id="chartQuantumRisk"></canvas></div>
+        <div class="chart-wrapper full-row">
+            <div class="chart-title">Mappa Multidimensionale del Rischio (X: Punti | Y: Volatilità | Area: Auto-Sabotaggio)</div>
+            <div style="position: relative; height: 250px;"><canvas id="canvasQuantumRisk"></canvas></div>
         </div>
     </div>
 
-    <!-- MATRICE TELEMETRICA PRINCIPALE -->
+    <!-- SUPER TABELLA TELEMETRICA ESPANSA -->
     <div class="telemetry-container">
-        <div class="chart-title" style="color:var(--accent-gold)">Matrice Matematica di Proiezione Totale (Target: 14 Set 2026)</div>
+        <div class="chart-title" style="color:var(--accent-gold)">Matrice Matematica di Proiezione Totale ed Estrapolazione del Caos</div>
         <table>
             <thead>
                 <tr>
                     <th>Partecipante</th>
                     <th>Punti Attuali</th>
-                    <th>Fattore Inerziale (μ)</th>
-                    <th>Indice Chaos (Anomalia)</th>
-                    <th>Rischio Meltdown Emotivo</th>
-                    <th>Soglia Cigno Nero Individuale</th>
-                    <th>Proiezione Algoritmica Finale</th>
+                    <th>Stabilità Emotiva</th>
+                    <th>Rischio Weekend Slump</th>
+                    <th>Burnout Fumo Index</th>
+                    <th>Ora di Massimo Pericolo</th>
+                    <th>Previsione Target 14 Set</th>
                 </tr>
             </thead>
             <tbody id="telemetryTableBody">
-                <tr><td colspan="7" style="color: gray; text-align: center;">Iniezione vettori statistici in corso...</td></tr>
+                <tr><td colspan="7" style="color: gray; text-align: center;">Iniezione flussi neurali...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- DOSSIER COMPORTAMENTALI QUANTISTICI -->
-    <div class="chart-title" style="margin-bottom: 15px; padding-left: 5px;">Dossier Clinico-Predittivo dei Concorrenti</div>
-    <div class="dossier-grid" id="quantumDossierContainer"></div>
+    <!-- DOSSIER EXTRA DETTAGLIATO -->
+    <div class="chart-title" style="margin-bottom: 15px;">Dossier Clinico-Comportamentale ad Alta Densità (Previsioni Non Accurate Incluse)</div>
+    <div class="dossier-grid" id="dossierGridContainer"></div>
 
     <script>
         const DATA_URL = './fantafumo_data.json';
-        const TARGET_END_DATE = new Date('2026-09-14').getTime(); // Data finale immutabile
+        
+        // DATE DI RIFERIMENTO MODIFICATE SU RICHIESTA UTENTE (Inizio 8 Giugno 2026)
+        const COMPETITION_START = new Date('2026-06-08').getTime(); 
+        const COMPETITION_END = new Date('2026-09-14').getTime();[cite: 8]
 
-        let instances = {};
+        let chartInstances = {};
+        let lastDataSnapshot = ""; // SISTEMA DI MEMORIA LOCK PER EVITARE RE-RENDERING INUTILI
 
-        async function runPredictiveEngine() {
+        async function fetchAndProcessData() {
             try {
-                const timestamp = new Date().getTime();
-                const response = await fetch(`${DATA_URL}?t=${timestamp}`, { cache: 'no-store' });
-                const database = await response.json();
+                const cacheBuster = new Date().getTime();
+                const response = await fetch(`${DATA_URL}?t=${cacheBuster}`, { cache: 'no-store' });
+                const rawJson = await response.json();
                 
-                processQuantumModels(database);
+                const currentSnapshot = JSON.stringify(rawJson);
+                
+                // CONTROLLO DI STATO: SE I DATI NON SONO CAMBIATI, ESCI DALLA FUNZIONE SENZA TOCCARE I GRAFICI
+                if (currentSnapshot === lastDataSnapshot) {
+                    document.getElementById('engineStatus').innerText = "ENGINE LOCK: NO CHANGE (CHARTS PRESERVED)";
+                    document.getElementById('engineStatus').style.borderColor = "var(--accent-blue)";
+                    document.getElementById('engineStatus').style.color = "var(--accent-blue)";
+                    return; 
+                }
+                
+                lastDataSnapshot = currentSnapshot;
+                document.getElementById('engineStatus').innerText = "ENGINE LOCK: DATA UPDATED (RECOMPUTING)";
+                document.getElementById('engineStatus').style.borderColor = "var(--accent-green)";
+                document.getElementById('engineStatus').style.color = "var(--accent-green)";
+
+                executeNeuralCalculations(rawJson);
             } catch (e) {
-                console.error("Errore nel caricamento dei dati quantistici:", e);
+                console.error("Errore nel ciclo di computazione predittiva:", e);
+                document.getElementById('engineStatus').innerText = "ENGINE ERROR";
             }
         }
 
-        function processQuantumModels(data) {
+        function executeNeuralCalculations(data) {
             const eventi = data.events || [];
             const giocatori = data.players || [];
 
-            if(eventi.length === 0) return;
+            if (giocatori.length === 0) return;
 
-            // -------------------------------------------------------------
-            // FIX STATO AVANZAMENTO (DATA-DRIVEN)
-            // -------------------------------------------------------------
-            // Troviamo il primo evento registrato per definire l'inizio effettivo della timeline del database
-            const timestampsRilevati = eventi.map(e => e.timestamp ? new Date(e.timestamp).getTime() : null).filter(t => t !== null);
+            // 1. CALCOLO AVANZAMENTO REALE (8 GIU 2026 - 14 SET 2026)
+            const timestampEventi = eventi.map(e => e.timestamp ? new Date(e.timestamp).getTime() : null).filter(t => t !== null);
+            const tempoRilevatoUltimo = timestampEventi.length > 0 ? Math.max(...timestampEventi) : new Date().getTime();
+
+            const durataTotale = COMPETITION_END - COMPETITION_START;
+            const tempoTrascorso = tempoRilevatoUltimo - COMPETITION_START;
             
-            let dataInizioCampionato = new Date('2026-03-01').getTime(); // Fallback se mancano i timestamp[cite: 5]
-            if(timestampsRilevati.length > 0) {
-                dataInizioCampionato = Math.min(...timestampsRilevati);
-            }
+            let progressoPercentuale = (tempoTrascorso / durataTotale) * 100;
+            if (progressoPercentuale > 100) progressoPercentuale = 100;
+            if (progressoPercentuale < 1) progressoPercentuale = 1; // Protezione divisione per zero
 
-            const dataUltimoEvento = timestampsRilevati.length > 0 ? Math.max(...timestampsRilevati) : new Date().getTime();
+            document.getElementById('kpiProgress').innerText = `${progressoPercentuale.toFixed(3)}%`;
+            document.getElementById('kpiDates').innerText = `Dal 08 Giu al 14 Set 2026`;[cite: 5, 8]
 
-            const spanTotaleCampionato = TARGET_END_DATE - dataInizioCampionato;
-            const spanTempoTrascorso = dataUltimoEvento - dataInizioCampionato;
-            
-            // Calcolo preciso basato sul progresso reale dei dati registrati
-            let avanzamentoPercentuale = (spanTempoTrascorso / spanTotaleCampionato) * 100;
-            if(avanzamentoPercentuale > 100) avanzamentoPercentuale = 100;
-            if(avanzamentoPercentuale < 0) avanzamentoPercentuale = 1;
+            // 2. PARSING E MONITORAGGIO COMPORTAMENTALE
+            let traiettorieLog = {};
+            giocatori.forEach(g => traiettorieLog[g.id] = [0]);
 
-            document.getElementById('kpiProgress').innerText = `${avanzamentoPercentuale.toFixed(2)}%`;
-            document.getElementById('kpiTimelineRange').innerText = `Dal: ${new Date(dataInizioCampionato).toLocaleDateString('it-IT')} Al: 14 Set 2026`;
+            let contatoreTiltGenerale = 0;
+            let sommaVariazioniAssolute = 0;
 
-            // -------------------------------------------------------------
-            // PREVEDERE L'IMPREVEDIBILE: ALGORITMI SULLO STORICO
-            // -------------------------------------------------------------
-            let vettoriTraiettoria = {};
-            giocatori.forEach(g => vettoriTraiettoria[g.id] = [0]);
-
-            let globalMalusPoints = [];
-            let globalChaosScores = [];
-            let criticalMeltdownCount = 0;
-
-            let analisiGiocatori = giocatori.map(p => {
+            let metricheAvanzate = giocatori.map((p, pIndex) => {
                 const pEvents = eventi.filter(e => e.playerId === p.id);
-                let scoreAttuale = 0;
-                let variazioniPunti = [];
-                let malusSequenzialiConsecutivi = 0;
+                
+                let score = 0;
+                let variazioni = [];
+                let malusConsecutivi = 0;
                 let maxMalusConsecutivi = 0;
-                let anomalyCount = 0;
+                let puntiMalusTotiti = 0;
 
-                pEvents.forEach((e, idx) => {
+                pEvents.forEach(e => {
                     if (typeof e.points === 'number') {
-                        scoreAttuale += e.points;
-                        variazioniPunti.push(e.points);
-                        vettoriTraiettoria[p.id].push(scoreAttuale);
+                        score += e.points;
+                        variazioni.push(e.points);
+                        traiettorieLog[p.id].push(score);
+                        sommaVariazioniAssolute += Math.abs(e.points);
 
-                        if(e.points < 0) {
-                            malusSequenzialiConsecutivi++;
-                            globalMalusPoints.push(Math.abs(e.points));
-                            if(malusSequenzialiConsecutivi > maxMalusConsecutivi) maxMalusConsecutivi = malusSequenzialiConsecutivi;
+                        if (e.points < 0) {
+                            malusConsecutivi++;
+                            puntiMalusTotiti += Math.abs(e.points);
+                            if (malusConsecutivi > maxMalusConsecutivi) maxMalusConsecutivi = malusConsecutivi;
                         } else {
-                            malusSequenzialiConsecutivi = 0;
+                            malusConsecutivi = 0;
                         }
                     }
                 });
 
-                // Calcolo Media Mobile Inerziale (μ)
-                const n = variazioniPunti.length;
-                let mediaInerziale = n > 0 ? variazioniPunti.reduce((a,b)=>a+b, 0)/n : 0;
-
-                // Calcolo Volatilità Standard (Deviazione Standard)
-                let volatilita = 0;
+                // Calcoli di base
+                const n = variazioni.length;
+                let mediaInerziale = n > 0 ? variazioni.reduce((a,b)=>a+b,0)/n : 0;
+                
+                let deviazioneStandard = 0;
                 if (n > 1) {
-                    let varianza = variazioniPunti.reduce((acc, val) => acc + Math.pow(val - mediaInerziale, 2), 0) / (n - 1);
-                    volatilita = Math.sqrt(varianza);
+                    let varianza = variazioni.reduce((acc, v) => acc + Math.pow(v - mediaInerziale, 2), 0) / (n - 1);
+                    deviazioneStandard = Math.sqrt(varianza);
                 }
 
-                // CALCOLO INDICE DI ANOMALIA CAOTICA (Chaos Index)
-                // Conta quante volte un giocatore devia pesantemente dalla sua stessa media comportamentale
-                variazioniPunti.forEach(v => {
-                    if(volatilita > 0 && Math.abs(v - mediaInerziale) > (1.5 * volatilita)) {
-                        anomalyCount++;
-                    }
-                });
-                let chaosIndex = n > 0 ? (anomalyCount / n) * 10 : 0;
-                globalChaosScores.push(chaosIndex);
+                // --- ROBA IN PIÙ: STATISTICHE PREDIZZIONE ASSURDE E SPECULATIVE ---
+                
+                // Rischio Weekend Slump (Inciampo del Sabato/Domenica)
+                let weekendSlumpRisk = Math.min(100, Math.max(10, (deviazioneStandard * 8) + (maxMalusConsecutivi * 12)));
+                
+                // Burnout Fumo Index (Saturazione da nicotina / Stress emotivo)
+                let burnoutIndex = Math.min(100, (pEvents.length * 4) + (puntiMalusTotiti * 1.5));
+                
+                // Ora di Massimo Pericolo (Ora ipotetica in cui rischia sanzioni basata sull'ID)
+                let oraPericoloChar = (p.id.charCodeAt(0) % 7) + 14; 
+                let oraPericoloString = `${oraPericoloChar}:45`;
 
-                // CALCOLO PROBABILITÀ DI CROLLO EMOTIVO (Meltdown Risk)
-                // Basato sulla vicinanza e sequenzialità dei malus. Chi subisce sanzioni a catena accumula tilt.
-                let meltdownRisk = 0;
-                if(maxMalusConsecutivi > 0) {
-                    meltdownRisk = Math.min(100, (maxMalusConsecutivi * 25) + (chaosIndex * 4));
-                }
-                if(meltdownRisk > 65) criticalMeltdownCount++;
+                // Auto-Sabotaggio Rate (Tendenza a rovinare i propri punti positivi)
+                let selfSabotageRate = n > 0 ? (variazioni.filter(v=>v<0).length / n) * 100 : 25;
 
-                // CALCOLO FATTORE CIGNO NERO INDIVIDUALE (Black Swan Kurtosis)
-                // Rappresenta l'anormalità estrema. Basato sul momento statistico di quarto ordine (curtosi)
-                let cignoNeroIndice = 0;
-                if (n > 3 && volatilita > 0) {
-                    let m4 = variazioniPunti.reduce((acc, val) => acc + Math.pow(val - mediaInerziale, 4), 0) / n;
-                    let curtosi = m4 / Math.pow(varianza = volatilita*volatilita, 2);
-                    cignoNeroIndice = Math.min(100, Math.max(0, (curtosi / 5) * 10));
-                } else {
-                    cignoNeroIndice = chaosIndex * 8; // Fallback stocastico
-                }
+                // Stabilità Emotiva Residua
+                let emotionalStability = Math.max(5, 100 - (deviazioneStandard * 12) - (maxMalusConsecutivi * 15));
+                if (emotionalStability < 30) contatoreTiltGenerale++;
 
-                // Proiezione del punteggio calibrata sullo stato di avanzamento dinamico
-                let fattoreMoltiplicativoTempo = 100 / avanzamentoPercentuale;
-                let punteggioProiettato = scoreAttuale * fattoreMoltiplicativoTempo;
+                // Proiezione lineare corretta sulla nuova timeline temporale
+                let proiezioneCalibrata = score * (100 / progressoPercentuale);
 
                 return {
-                    ...p,
-                    score: scoreAttuale,
-                    inerzia: mediaInerziale,
-                    volatilita: volatilita,
-                    chaosIndex: chaosIndex,
-                    meltdownRisk: meltdownRisk,
-                    cignoNero: cignoNeroIndice,
-                    projected: Math.round(punteggioProiettato),
-                    totalActs: n
+                    ...p, score, deviazioneStandard, mediaInerziale, weekendSlumpRisk, 
+                    burnoutIndex, oraPericoloString, selfSabotageRate, emotionalStability,
+                    projected: Math.round(proiezioneCalibrata), totalActs: n
                 };
             });
 
-            // Calcolo Entropia di Rete e KPI macro globale
-            let avgChaos = globalChaosScores.reduce((a,b)=>a+b,0) / giocatori.length;
-            document.getElementById('kpiEntropy').innerText = avgChaos > 5 ? 'CRITICA (Alta)' : (avgChaos > 3 ? 'INSTABILE' : 'STABILE');
-            document.getElementById('kpiMeltdownAlert').innerText = `${criticalMeltdownCount} Utenti`;
+            // Macro-KPI derivati
+            document.getElementById('kpiFrustration').innerText = sommaVariazioniAssolute > 100 ? "CRITICA (Fase 4)" : "NORMALE";
+            document.getElementById('kpiTiltAlert').innerText = `${contatoreTiltGenerale} Concorrenti`;
+
+            // SIMULAZIONE MONTE CARLO SU 10.000 SCENARI (Previsione dell'imprevedibile)
+            let vittorieMonteCarlo = {};
+            giocatori.forEach(g => vittorieMonteCarlo[g.id] = 0);
             
-            let avgBlackSwan = analisiGiocatori.reduce((a,b)=>a+b.cignoNero, 0) / giocatori.length;
-            document.getElementById('kpiBlackSwan').innerText = `${avgBlackSwan.toFixed(1)}%`;
+            for (let i = 0; i < 10000; i++) {
+                let migliorPunteggioFinto = -99999;
+                let idVincitoreFinto = null;
 
-            // Calcolo della probabilità di vittoria con correzione probabilistica multi-variabile
-            let sommaPesiQuantum = 0;
-            const minProj = Math.min(...analisiGiocatori.map(g => g.projected), 0);
-            const compensazioneMeteo = Math.abs(minProj) + 20;
+                metricheAvanzate.forEach(g => {
+                    // Fattore di fluttuazione stocastica casuale pura
+                    let rumoreBianco = (Math.random() - 0.5) * 45; 
+                    let punteggioSimulato = g.score + (g.mediaInerziale * 15) + rumoreBianco - (g.weekendSlumpRisk * 0.1);
+                    
+                    if (punteggioSimulato > migliorPunteggioFinto) {
+                        migliorPunteggioFinto = punteggioSimulato;
+                        idVincitoreFinto = g.id;
+                    }
+                });
+                if (idVincitoreFinto) vittorieMonteCarlo[idVincitoreFinto]++;
+            }
+            metricheAvanzate.forEach(g => g.probVittoriaMC = (vittorieMonteCarlo[g.id] / 10000) * 100);
 
-            analisiGiocatori.forEach(g => {
-                // Il potenziale tiene conto del punteggio proiettato mitigato dal rischio caos
-                g.pesoQuantum = (g.projected + compensazioneMeteo) * (1 - (g.chaosIndex / 30));
-                if(g.pesoQuantum < 1) g.pesoQuantum = 1;
-                sommaPesiQuantum += g.pesoQuantum;
-            });
-            analisiGiocatori.forEach(g => g.probVittoria = (g.pesoQuantum / sommaPesiQuantum) * 100);
-
-            // Rendering dei Componenti UI
-            renderTelemetryTable(analisiGiocatori);
-            renderQuantumDossier(analisiGiocatori);
-            renderAdvancedCharts(analisiGiocatori, vettoriTraiettoria);
+            // RENDERING COMPONENTI VISIVI TESTUALI
+            renderTelemetryTable(metricheAvanzate);
+            renderDossierCards(metricheAvanzate);
+            
+            // RENDERING GRAFICI (Il controllo ha già verificato che i dati sono cambiati qui)
+            renderAllCharts(metricheAvanzate, traiettorieLog);
         }
 
         function renderTelemetryTable(giocatori) {
             const tbody = document.getElementById('telemetryTableBody');
             tbody.innerHTML = '';
-
-            // Ordina per potenziale predittivo finale decrescente
+            
             const ordinati = [...giocatori].sort((a,b) => b.projected - a.projected);
-
             ordinati.forEach(g => {
                 tbody.innerHTML += `
                     <tr>
-                        <td style="font-weight:bold; color:#fff; text-transform:capitalize;">${g.name}</td>
+                        <td style="font-weight:bold; text-transform:capitalize; color:#fff;">${g.name}</td>
                         <td>${g.score} pt</td>
-                        <td style="color:${g.inerzia >= 0 ? 'var(--accent-green)':'var(--accent-red)'}">${g.inerzia.toFixed(2)}</td>
-                        <td>${g.chaosIndex.toFixed(1)} / 10</td>
-                        <td style="color:${g.meltdownRisk > 50 ? 'var(--accent-red)' : 'var(--text-muted)'}">${g.meltdownRisk.toFixed(1)}%</td>
-                        <td>${g.cignoNero.toFixed(1)}%</td>
-                        <td style="font-size:15px; font-weight:bold; color:var(--accent-gold);">${g.projected} pt</td>
+                        <td style="color:${g.emotionalStability > 50 ? 'var(--accent-green)':'var(--accent-red)'}">${g.emotionalStability.toFixed(1)}%</td>
+                        <td>${g.weekendSlumpRisk.toFixed(1)}%</td>
+                        <td>${g.burnoutIndex.toFixed(0)} Pct</td>
+                        <td style="color:var(--accent-purple); font-weight:bold;">${g.oraPericoloString}</td>
+                        <td style="font-size:14px; font-weight:bold; color:var(--accent-gold);">${g.projected} pt</td>
                     </tr>
                 `;
             });
         }
 
-        function renderQuantumDossier(giocatori) {
-            const container = document.getElementById('quantumDossierContainer');
+        function renderDossierCards(giocatori) {
+            const container = document.getElementById('dossierGridContainer');
             container.innerHTML = '';
 
             giocatori.forEach(g => {
-                let colorRisk = 'var(--accent-green)';
-                let labelRisk = 'Basso';
-                if(g.meltdownRisk > 40) { colorRisk = 'var(--accent-gold)'; labelRisk = 'Moderato'; }
-                if(g.meltdownRisk > 65) { colorRisk = 'var(--accent-red)'; labelRisk = 'Critico'; }
-
                 container.innerHTML += `
                     <div class="dossier-card">
-                        <div class="dossier-header">
-                            <span style="text-transform:capitalize;">${g.name}</span>
-                            <span class="badge-risk" style="background:${colorRisk}; color:#000;">Tilt: ${labelRisk}</span>
+                        <div class="dossier-name">
+                            <span>${g.name}</span>
+                            <span style="color:var(--accent-cyan); font-size:10px;">ID: ${g.id}</span>
                         </div>
-                        <div class="telemetry-row"><span>Indice Reale di Affidabilità Statistica</span><strong>${(100 - g.cignoNero).toFixed(1)}%</strong></div>
-                        <div class="telemetry-row"><span>Probabilità di Vittoria Calcolata</span><strong>${g.probVittoria.toFixed(1)}%</strong></div>
-                        <div class="metric-bar-bg"><div class="metric-bar-fill" style="width:${g.probVittoria}%; background:var(--accent-blue);"></div></div>
+                        <div class="stat-line"><span>Affidabilità Predittiva Modello</span><strong>${(100 - g.deviazioneStandard * 3).toFixed(1)}%</strong></div>
+                        <div class="stat-line"><span>Vittorie simulate in Universi Alternativi (Monte Carlo)</span><strong>${g.probVittoriaMC.toFixed(2)}%</strong></div>
+                        <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.probVittoriaMC}%; background:var(--accent-purple);"></div></div>
                         
-                        <div class="telemetry-row"><span>Rischio Rottura Lineare (Meltdown)</span><strong>${g.meltdownRisk.toFixed(1)}%</strong></div>
-                        <div class="metric-bar-bg"><div class="metric-bar-fill" style="width:${g.meltdownRisk}%; background:${colorRisk};"></div></div>
+                        <div class="stat-line"><span>Tendenza Tattica all'Auto-Sabotaggio</span><strong>${g.selfSabotageRate.toFixed(1)}%</strong></div>
+                        <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.selfSabotageRate}%; background:var(--accent-red);"></div></div>
 
-                        <div class="telemetry-row"><span>Volatilità Operativa Strutturale</span><strong>${g.volatilita.toFixed(2)} σ</strong></div>
-                        <div class="telemetry-row"><span>Frequenza Totale Atti Rilevati</span><strong>${g.totalActs} istanze</strong></div>
+                        <div class="stat-line"><span>Fattore Inerziale di Accelerazione (μ)</span><strong>${g.mediaInerziale.toFixed(2)} pt/atto</strong></div>
+                        <div class="stat-line"><span>Volatilità dello Stato Comportamentale</span><strong>${g.deviazioneStandard.toFixed(2)} σ</strong></div>
+                        <div class="stat-line"><span>Proiezione Fine Campionato (14 Set)</span><strong style="color:var(--accent-gold);">${g.projected} pt</strong></div>
                     </div>
                 `;
             });
         }
 
-        // --- ENGINES DI RENDERING GRAFICI (CHART.JS CORRETTI ED EVOLUTI) ---
+        // --- SISTEMA DI CREAZIONE GRAFICI ---
+        function renderAllCharts(giocatori, traiettorieLog) {
+            // Se le istanze esistono, distruggile prima di ripopolarle con i nuovi vettori hardware
+            if (chartInstances.trajectory) chartInstances.trajectory.destroy();
+            if (chartInstances.probability) chartInstances.probability.destroy();
+            if (chartInstances.quantumRisk) chartInstances.quantumRisk.destroy();
 
-        function renderAdvancedCharts(giocatori, vettoriTraiettoria) {
-            if (instances.trajectory) instances.trajectory.destroy();
-            if (instances.probability) instances.probability.destroy();
-            if (instances.quantumRisk) instances.quantumRisk.destroy();
+            const palette = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#06b6d4', '#ec4899'];
+            const maxPoints = Math.max(...Object.values(traiettorieLog).map(arr => arr.length));
 
-            const palette = ['#2563eb', '#16a34a', '#ca8a04', '#7c3aed', '#dc2626', '#db2777', '#0d9488'];
-
-            // 1. GRAFICO DELLE TRAIETTORIE
-            const ctxT = document.getElementById('chartTrajectory').getContext('2d');
-            const maxPoints = Math.max(...Object.values(vettoriTraiettoria).map(arr => arr.length));
-            
-            instances.trajectory = new Chart(ctxT, {
+            // Grafico 1: Traiettoria
+            const ctxT = document.getElementById('canvasTrajectory').getContext('2d');
+            chartInstances.trajectory = new Chart(ctxT, {
                 type: 'line',
                 data: {
-                    labels: Array.from({length: maxPoints}, (_, i) => `${i}°`),
+                    labels: Array.from({length: maxPoints}, (_, i) => `Log ${i}`),
                     datasets: giocatori.map((g, idx) => ({
-                        label: g.name,
-                        data: vettoriTraiettoria[g.id],
-                        borderColor: palette[idx % palette.length],
-                        backgroundColor: 'transparent',
-                        borderWidth: 2.5,
-                        tension: 0.15,
-                        pointRadius: 1
+                        label: g.name, data: traiettorieLog[g.id],
+                        borderColor: palette[idx % palette.length], backgroundColor: 'transparent',
+                        borderWidth: 2, pointRadius: 1, tension: 0.1
                     }))
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#fff', font: { size: 10 } } } },
-                    scales: { x: { grid: { color: '#1f1f23' } }, y: { grid: { color: '#1f1f23' } } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff' } } } }
             });
 
-            // 2. GRAFICO DELLE PROBABILITÀ BAYESIANE
-            const ctxP = document.getElementById('chartProbability').getContext('2d');
-            const ordinatiPerProb = [...giocatori].sort((a,b) => b.probVittoria - a.probVittoria);
-
-            instances.probability = new Chart(ctxP, {
+            // Grafico 2: Bar Probability Monte Carlo
+            const ctxP = document.getElementById('canvasProbability').getContext('2d');
+            const ordinatiMC = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
+            chartInstances.probability = new Chart(ctxP, {
                 type: 'bar',
                 data: {
-                    labels: ordinatiPerProb.map(g => g.name),
+                    labels: ordinatiMC.map(g => g.name),
                     datasets: [{
-                        data: ordinatiPerProb.map(g => g.probVittoria),
-                        backgroundColor: palette,
-                        borderRadius: 5
+                        data: ordinatiMC.map(g => g.probVittoriaMC),
+                        backgroundColor: palette, borderRadius: 3
                     }]
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
-                    scales: { 
-                        x: { ticks: { color: '#71717a' }, grid: { display: false } },
-                        y: { max: 100, ticks: { color: '#71717a' }, grid: { color: '#1f1f23' } }
-                    }
+                    scales: { y: { max: 100, ticks: { color: '#71717a' } }, x: { ticks: { color: '#71717a' } } }
                 }
             });
 
-            // 3. GRAFICO QUANTISTICO MULTIDIMENSIONALE DEL RISCHIO (BUBBLE CHART)
-            const ctxQ = document.getElementById('chartQuantumRisk').getContext('2d');
-
-            instances.quantumRisk = new Chart(ctxQ, {
+            // Grafico 3: Bubble Quantum Risk Diagram
+            const ctxQ = document.getElementById('canvasQuantumRisk').getContext('2d');
+            chartInstances.quantumRisk = new Chart(ctxQ, {
                 type: 'bubble',
                 data: {
                     datasets: giocatori.map((g, idx) => ({
                         label: g.name,
-                        data: [{
-                            x: g.score,          // Posizione X: Punteggio reale attuale
-                            y: g.volatilita,     // Posizione Y: Instabilità/Volatilità comportamentale
-                            r: Math.max(6, g.meltdownRisk / 2.5) // Dimensione bolla: Intensità Rischio di Crollo (Meltdown)
-                        }],
-                        backgroundColor: g.meltdownRisk > 65 ? 'rgba(220, 38, 38, 0.7)' : (g.meltdownRisk > 40 ? 'rgba(202, 138, 4, 0.7)' : 'rgba(37, 99, 235, 0.7)'),
-                        borderColor: '#ffffff',
-                        borderWidth: 1
+                        data: [{ x: g.score, y: g.deviazioneStandard, r: Math.max(5, g.selfSabotageRate / 3) }],
+                        backgroundColor: palette[idx % palette.length] + 'aa', borderColor: '#fff', borderWidth: 0.5
                     }))
                 },
                 options: {
                     responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { labels: { color: '#fff', font: { size: 9 } } } },
+                    plugins: { legend: { labels: { color: '#fff' } } },
                     scales: {
-                        x: { title: { display: true, text: 'Punti Attuali Realizzati', color: '#71717a' }, grid: { color: '#1f1f23' }, ticks: { color: '#71717a' } },
-                        y: { title: { display: true, text: 'Deviazione Standard (Volatilità)', color: '#71717a' }, grid: { color: '#1f1f23' }, ticks: { color: '#71717a' } }
+                        x: { title: { display: true, text: 'Punti Totali Realizzati', color: '#52525b' } },
+                        y: { title: { display: true, text: 'Deviazione Standard (Instabilità)', color: '#52525b' } }
                     }
                 }
             });
         }
 
-        // Inizializzazione ed esecuzione a ciclo continuo (polling predittivo automatico ogni 5 secondi)
+        // Avvio del servizio di monitoraggio quantistico con polling a 4 secondi
         window.addEventListener('DOMContentLoaded', () => {
-            runPredictiveEngine();
-            setInterval(runPredictiveEngine, 5000);
+            fetchAndProcessData();
+            setInterval(fetchAndProcessData, 4000);
         });
     </script>
 </body>
