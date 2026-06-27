@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FantaFumo BET - Quote Ufficiali</title>
+    <title>FantaFumo BET - Multipla & Live Stats</title>
     <style>
         :root {
             --bg-dark: #09090b; --card-bg: #18181b; --text-main: #fafafa;
@@ -20,244 +20,389 @@
         
         .wallet-zone { display: flex; align-items: center; gap: 15px; }
         .balance-badge { background: #14532d; color: var(--accent-green); border: 1px solid var(--accent-green); padding: 8px 16px; border-radius: 6px; font-weight: bold; font-size: 16px; }
-        .deadline-badge { background: #451a03; color: #f97316; border: 1px solid #f97316; padding: 8px 12px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        
+        .main-grid { display: grid; grid-template-columns: 1fr 400px; gap: 20px; flex-grow: 1; }
+        @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
 
-        .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 20px; flex-grow: 1; }
-        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
-
-        .sportsbook { display: flex; flex-direction: column; gap: 10px; }
-        .market-title { font-size: 14px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 5px; border-left: 3px solid var(--accent-gold); padding-left: 8px;}
+        .sportsbook { display: flex; flex-direction: column; gap: 25px; }
+        .market-section { background: #0f0f11; border: 1px solid var(--border); padding: 15px; border-radius: 10px; }
+        .market-title { font-size: 14px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 12px; border-left: 3px solid var(--accent-gold); padding-left: 8px;}
         
         .bet-row {
             display: flex; align-items: center; justify-content: space-between;
-            background: var(--card-bg); border: 1px solid var(--border); padding: 15px 20px; border-radius: 8px; transition: 0.2s;
+            background: var(--card-bg); border: 1px solid var(--border); padding: 12px 18px; border-radius: 8px; transition: 0.2s; margin-bottom: 8px;
         }
         .bet-row:hover { border-color: #52525b; }
-        .player-info { display: flex; flex-direction: column; gap: 4px; }
-        .player-name { font-size: 18px; font-weight: bold; text-transform: capitalize; }
-        .player-stats { font-size: 12px; color: #71717a; }
+        .player-info { display: flex; flex-direction: column; gap: 4px; max-width: 60%; }
+        .player-name { font-size: 16px; font-weight: bold; text-transform: capitalize; }
+        .player-stats { font-size: 11px; color: #71717a; }
 
+        .odds-container { display: flex; gap: 8px; }
         .odds-button {
             background: #27272a; border: 1px solid #3f3f46; color: var(--accent-gold);
-            font-size: 18px; font-weight: 900; padding: 12px 24px; border-radius: 6px;
-            cursor: pointer; min-width: 100px; text-align: center; transition: 0.2s;
+            font-size: 15px; font-weight: 800; padding: 10px 16px; border-radius: 6px;
+            cursor: pointer; min-width: 90px; text-align: center; transition: 0.2s;
+            display: flex; flex-direction: column; align-items: center; gap: 2px;
         }
+        .odds-button span { font-size: 9px; color: #a1a1aa; font-weight: normal; }
         .odds-button:hover:not(:disabled) { background: var(--accent-gold); color: black; border-color: var(--accent-gold); }
-        .odds-button:disabled { background: #09090b; color: #52525b; border-color: var(--border); cursor: not-allowed; font-size: 12px; }
+        .odds-button:hover:not(:disabled) span { color: #3f3f46; }
+        .odds-button.selected { background: var(--accent-gold); color: black; border-color: var(--accent-gold); }
+        .odds-button.selected span { color: #3f3f46; }
+        .odds-button:disabled { background: #09090b; color: #52525b; border-color: var(--border); cursor: not-allowed; }
 
-        .slips-column { display: flex; flex-direction: column; gap: 20px; }
+        .slips-column { display: flex; flex-direction: column; gap: 20px; position: sticky; top: 20px; height: fit-content; }
         .slip-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .slip-title { font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 0; }
+        .slip-title { font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin: 0; display: flex; justify-content: space-between; }
         
-        .input-group { display: flex; flex-direction: column; gap: 8px; }
-        .input-group label { font-size: 12px; color: #a1a1aa; text-transform: uppercase; }
+        .slip-items-list { display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto; }
+        .slip-item-row { background: #27272a; padding: 10px; border-radius: 6px; border-left: 3px solid var(--accent-gold); position: relative; }
+        .slip-item-remove { position: absolute; top: 8px; right: 8px; color: var(--accent-red); cursor: pointer; font-weight: bold; font-size: 14px; }
+        
+        .input-group { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
         .stake-input { background: #09090b; border: 1px solid var(--border); color: white; padding: 12px; font-size: 18px; border-radius: 6px; font-weight: bold; width: 100%; box-sizing: border-box; }
         
-        .summary-row { display: flex; justify-content: space-between; font-size: 14px; margin-top: 5px; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 14px; }
         .summary-row.total { font-size: 18px; font-weight: 900; color: var(--accent-green); border-top: 1px dashed var(--border); padding-top: 10px; }
         
         .btn-place { background: var(--accent-green); color: black; border: none; padding: 15px; border-radius: 6px; font-size: 16px; font-weight: 900; cursor: pointer; text-transform: uppercase; width: 100%; transition: 0.2s; }
-        .btn-place:hover { background: #16a34a; }
         .btn-place:disabled { background: #27272a; color: #71717a; cursor: not-allowed; }
 
         .my-bets-box { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
         .bets-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 250px; overflow-y: auto; }
-        .ticket-item { background: #27272a; border-radius: 6px; padding: 10px; font-size: 12px; border-left: 4px solid var(--accent-gold); display: flex; justify-content: space-between; align-items: center; }
+        .ticket-item { background: #27272a; border-radius: 6px; padding: 10px; font-size: 12px; border-left: 4px solid var(--accent-green); display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>🎰 FantaFumo BET</h1>
+        <h1>🎰 FantaFumo BET v2</h1>
         <div class="wallet-zone">
-            <div class="deadline-badge">⏳ Scadenza: 14 Set</div>
             <div class="balance-badge" id="walletBalance">Saldo: €100.00</div>
         </div>
     </div>
 
     <div class="main-grid">
-        <!-- PALINSESTO SCOMMESSE -->
-        <div>
-            <div class="market-title">Vincente FantaFumo 2026 (Quote Live Dinamiche)</div>
-            <div class="sportsbook" id="sportsbookContainer">
-                <div style="color: gray; padding: 20px;">Caricamento quote dal server...</div>
+        <!-- PALINSESTO DI TUTTI I MERCATI -->
+        <div class="sportsbook">
+            
+            <!-- MERCATO A: PROSSIMO EVENTO GENERALE -->
+            <div class="market-section">
+                <div class="market-title">🔥 Mercato Speciale: Natura del Prossimo Evento Registrato</div>
+                <div id="globalSpeedMarket"><!-- Caricato dinamicamente --></div>
             </div>
+
+            <!-- MERCATO B: VINCENTE CAMPIONATO -->
+            <div class="market-section">
+                <div class="market-title">🏆 Vincente FantaFumo 2026</div>
+                <div id="winnerMarketContainer"></div>
+            </div>
+
+            <!-- MERCATO C: OVER/UNDER & PROSSIMO MALUS INDIVIDUALE -->
+            <div class="market-section">
+                <div class="market-title">📊 Prop Giocatori: Over/Under Punti Totali & Prossimo Malus Personale</div>
+                <div id="playerPropsContainer"></div>
+            </div>
+
         </div>
 
-        <!-- SCHEDINA E PORTAFOGLIO -->
+        <!-- SCHEDINA MULTIPLA -->
         <div class="slips-column">
             <div class="slip-box">
-                <h3 class="slip-title">Schedina Corrente</h3>
-                <div id="slipContent">
-                    <div style="color: gray; font-size: 13px; text-align: center; padding: 20px;">Seleziona una quota per iniziare.</div>
+                <h3 class="slip-title">Schedina <span id="slipTypeBadge" style="font-size:11px; padding:4px 8px; background:#3f3f46; border-radius:4px;">Singola</span></h3>
+                <div class="slip-items-list" id="slipItemsContainer">
+                    <div style="color: gray; font-size: 13px; text-align: center; padding: 20px;">Seleziona una o più quote per comporre la multipla.</div>
+                </div>
+                
+                <div id="slipCalculationArea" style="display:none;">
+                    <div class="input-group">
+                        <label style="font-size:11px; color:#a1a1aa; text-transform:uppercase;">Importo Giocata (€)</label>
+                        <input type="number" class="stake-input" id="stakeVolume" value="10" min="1" oninput="calculateSlipTotals()">
+                    </div>
+                    <div style="margin-top:15px; display:flex; flex-direction:column; gap:6px;">
+                        <div class="summary-row"><span>Moltiplicatore Quote:</span><strong id="totalOddsDisplay">1.00</strong></div>
+                        <div class="summary-row total"><span>Potenziale Vincita:</span><strong id="potentialWinDisplay">€0.00</strong></div>
+                    </div>
+                    <button class="btn-place" id="placeConfirmBtn" onclick="executeCompositeBet()">Piazza Scommessa</button>
                 </div>
             </div>
 
+            <!-- STORICO LOCALE -->
             <div class="my-bets-box">
                 <h3 class="slip-title" style="font-size: 14px;">Le Mie Scommesse Attive</h3>
-                <div class="bets-list" id="myBetsList">
-                    <div style="color: gray; font-size: 12px; text-align: center; padding: 10px;">Nessun biglietto giocato.</div>
-                </div>
+                <div class="bets-list" id="myBetsList"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // URL del file JSON condiviso con la classifica principale
         const DATA_URL = './fantafumo_data.json';
-        
         let dbData = { players: [], events: [] };
-        let activeBet = null; // Contiene la scommessa attualmente selezionata
+        let selectedSelections = []; // Array di quote caricate in schedina (Multipla)
         let userBalance = 100.00;
 
-        // Inizializza portafoglio locale utente
         if (!localStorage.getItem('ff_balance')) {
             localStorage.setItem('ff_balance', '100.00');
             localStorage.setItem('ff_my_bets', JSON.stringify([]));
         }
         userBalance = parseFloat(localStorage.getItem('ff_balance'));
 
-        async function fetchLiveOdds() {
+        async function loadDataAndCalculateOdds() {
             try {
                 const timestamp = new Date().getTime();
                 const response = await fetch(`${DATA_URL}?t=${timestamp}`, { cache: 'no-store' });
-                if (!response.ok) throw new Error('Impossibile scaricare i dati');
                 dbData = await response.json();
                 
-                elaboraQuoteEDashboard();
+                elaboraAlgoritmoProbabilita();
             } catch (e) {
-                console.error("Errore nel sync delle quote:", e);
+                console.error("Errore nell'elaborazione statistica delle quote:", e);
             }
         }
 
-        function elaboraQuoteEDashboard() {
-            // 1. Calcola i punteggi correnti dei giocatori esattamente come nella classifica generale
-            const playersWithScores = dbData.players.map(player => {
+        function elaboraAlgoritmoProbabilita() {
+            const eventi = dbData.events || [];
+            const giocatori = dbData.players || [];
+
+            // -------------------------------------------------------------
+            // 1. CALCOLO METRICHE GLOBALI (PROSSIMO BONUS VS MALUS)
+            // -------------------------------------------------------------
+            const totaleBonus = eventi.filter(e => typeof e.points === 'number' && e.points > 0).length;
+            const totaleMalus = eventi.filter(e => typeof e.points === 'number' && e.points < 0).length;
+            const totaleAtti = totaleBonus + totaleMalus;
+
+            // Regola di Laplace per calcolare probabilità predittiva condizionata dallo storico
+            let probNextBonus = totaleAtti > 0 ? (totaleBonus + 1) / (totaleAtti + 2) : 0.5;
+            let probNextMalus = 1 - probNextBonus;
+
+            // Lavagna al 90% (Margine di guadagno bookmaker applicato alle probabilità reali)
+            let quotaGlobalBonus = (0.90 / probNextBonus).toFixed(2);
+            let quotaGlobalMalus = (0.90 / probNextMalus).toFixed(2);
+
+            renderGlobalMarket(quotaGlobalBonus, quotaGlobalMalus, totaleBonus, totaleMalus);
+
+            // -------------------------------------------------------------
+            // 2. CALCOLO METRICHE DI PERFORMANCE INDIVIDUALI E OVER/UNDER
+            // -------------------------------------------------------------
+            const playersProcessed = giocatori.map(p => {
+                const pEvents = eventi.filter(e => e.playerId === p.id);
+                
                 let score = 0;
                 let status = null;
-                const playerEvents = dbData.events.filter(e => e.playerId === player.id);
-                playerEvents.forEach(e => {
-                    if (typeof e.points === 'number') { score += e.points; } 
-                    else if (e.points === 'W') { status = 'W'; } 
-                    else if (e.points === 'L') { status = 'L'; }
+                let malusCount = 0;
+                let totalDifficultyPoints = 0;
+
+                pEvents.forEach(e => {
+                    if (typeof e.points === 'number') {
+                        score += e.points;
+                        if (e.points < 0) {
+                            malusCount++;
+                            totalDifficultyPoints += Math.abs(e.points); // Peso della severità dei malus passati
+                        }
+                    } else if (e.points === 'W') status = 'W';
+                    else if (e.points === 'L') status = 'L';
                 });
-                return { ...player, score, status };
+
+                return { ...p, score, status, malusCount, totalDifficultyPoints, totalEventsCount: pEvents.length };
             });
 
-            // 2. Algoritmo di calcolo Quote Dinamiche inverse rispetto al punteggio
-            // Troviamo il punteggio minimo per evitare problemi con valori negativi
-            const minScore = Math.min(...playersWithScores.map(p => p.score));
-            const offset = minScore < 0 ? Math.abs(minScore) + 20 : 20;
-
+            // Calcolo Quote Vincente Campionato (Logica Inversa Proporzionale)
+            const minScore = Math.min(...playersProcessed.map(p => p.score), 0);
+            const shiftOffset = Math.abs(minScore) + 20;
             let totalWeight = 0;
-            playersWithScores.forEach(p => {
-                if (!p.status) {
-                    p.weight = p.score + offset;
-                    totalWeight += p.weight;
-                }
+            
+            playersProcessed.forEach(p => { if(!p.status) { p.weight = p.score + shiftOffset; totalWeight += p.weight; } });
+            playersProcessed.forEach(p => {
+                if(p.status === 'W') p.winnerOdds = 'VINTA';
+                else if(p.status === 'L') p.winnerOdds = 'SQUALIFICATO';
+                else p.winnerOdds = (0.90 / (p.weight / totalWeight)).toFixed(2);
             });
 
-            playersWithScores.forEach(p => {
-                if (p.status === 'W') p.liveOdds = 'VINTA';
-                else if (p.status === 'L') p.liveOdds = 'SQUALIFICATO';
-                else {
-                    // Probabilità basata sul peso del punteggio corrente
-                    let probability = p.weight / totalWeight;
-                    // Formula inversa della quota con un margine del banco inserito (payout ~90%)
-                    let calculatedOdds = 0.90 / probability;
-                    
-                    // Applica dei tetti di verosimiglianza per evitare quote assurde
-                    if (calculatedOdds < 1.05) calculatedOdds = 1.05;
-                    if (calculatedOdds > 99.00) calculatedOdds = 99.00;
-                    
-                    p.liveOdds = calculatedOdds.toFixed(2);
-                }
-            });
+            renderWinnerMarket(playersProcessed);
 
-            // Ordina il tabellone per favoriti (dalla quota più bassa alla più alta)
-            playersWithScores.sort((a,b) => {
-                if(isNaN(a.liveOdds)) return 1;
-                if(isNaN(b.liveOdds)) return -1;
-                return parseFloat(a.liveOdds) - parseFloat(b.liveOdds);
-            });
-
-            renderSportsbook(playersWithScores);
+            // Calcolo Quote Avanzate (Over/Under basato su Difficoltà e Tendenze)
+            renderAdvancedProps(playersProcessed, totaleMalus);
             updateWalletUI();
         }
 
-        function renderSportsbook(processedPlayers) {
-            const container = document.getElementById('sportsbookContainer');
-            container.innerHTML = '';
+        // --- RENDERING DEI SINGOLI TABELLONI ---
 
-            processedPlayers.forEach(p => {
-                const row = document.createElement('div');
-                row.className = 'bet-row';
-
-                let scoreDisplay = p.status ? (p.status === 'W' ? '🏆 Finita' : '💀 Esiliato') : `${p.score} pt`;
-                let isSelectable = !p.status;
-
-                row.innerHTML = `
+        function renderGlobalMarket(qBonus, qMalus, nBonus, nMalus) {
+            const container = document.getElementById('globalSpeedMarket');
+            container.innerHTML = `
+                <div class="bet-row">
                     <div class="player-info">
-                        <span class="player-name">${p.name}</span>
-                        <span class="player-stats">Andamento: ${scoreDisplay}</span>
+                        <span class="player-name">Esito Prossima Notifica Registro</span>
+                        <span class="player-stats">Storico Attuale: ${nBonus} Bonus vs ${nMalus} Malus rilevati</span>
                     </div>
-                    <button class="odds-button" ${isSelectable ? '' : 'disabled'} onclick='selectQuota("${p.id}", "${p.name}", ${p.liveOdds})'>
-                        ${isSelectable ? p.liveOdds : p.liveOdds}
-                    </button>
+                    <div class="odds-container">
+                        <button class="odds-button ${isSelected('global_next', 'bonus')}" onclick="toggleSelection('global_next', 'bonus', 'Prossimo Evento: BONUS', ${qBonus})">
+                            ${qBonus} <span>BONUS</span>
+                        </button>
+                        <button class="odds-button ${isSelected('global_next', 'malus')}" onclick="toggleSelection('global_next', 'malus', 'Prossimo Evento: MALUS', ${qMalus})">
+                            ${qMalus} <span>MALUS</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderWinnerMarket(players) {
+            const container = document.getElementById('winnerMarketContainer');
+            container.innerHTML = '';
+            // Ordina dal favorito al meno favorito
+            const sorted = [...players].sort((a,b) => isNaN(a.winnerOdds) ? 1 : isNaN(b.winnerOdds) ? -1 : parseFloat(a.winnerOdds) - parseFloat(b.winnerOdds));
+            
+            sorted.forEach(p => {
+                const isAvailable = !p.status;
+                container.innerHTML += `
+                    <div class="bet-row">
+                        <div class="player-info">
+                            <span class="player-name">${p.name}</span>
+                            <span class="player-stats">Punteggio Corrente: ${p.status ? (p.status === 'W' ? 'Vincitore' : 'Eliminato') : p.score + ' pt'}</span>
+                        </div>
+                        <button class="odds-button ${isSelected('winner', p.id)}" ${isAvailable?'':'disabled'} onclick="toggleSelection('winner', '${p.id}', 'Vic. Campionato: ${p.name}', ${p.winnerOdds})">
+                            ${isAvailable ? p.winnerOdds : (p.status === 'W' ? 'VINTA' : 'OUT')}
+                        </button>
+                    </div>
                 `;
-                container.appendChild(row);
             });
         }
 
-        function selectQuota(id, name, odds) {
-            activeBet = { id, name, odds: parseFloat(odds) };
-            renderBetSlip();
+        function renderAdvancedProps(players, globalMalusTotal) {
+            const container = document.getElementById('playerPropsContainer');
+            container.innerHTML = '';
+
+            players.forEach(p => {
+                if (p.status) return; // Salta chi è fuori dai giochi
+
+                // CALCOLO LINEA OVER/UNDER DINAMICA IN BASE AL GIOCATORE
+                // La linea si adatta al punteggio attuale per rimanere sempre in bilico matematico (Es: Punti attuali + 6.5)
+                const lineValue = (p.score + 6.5).toFixed(1);
+                
+                // Probabilità calcolata sulla base della pulizia del giocatore (rapporto malus/eventi totali)
+                let malusRatio = p.totalEventsCount > 0 ? (p.malusCount / p.totalEventsCount) : 0.4;
+                if(malusRatio < 0.15) malusRatio = 0.15; // Cap minimi e massimi di mercato
+                if(malusRatio > 0.85) malusRatio = 0.85;
+
+                let qOver = (0.92 / malusRatio).toFixed(2);
+                let qUnder = (0.92 / (1 - malusRatio)).toFixed(2);
+
+                // QUOTA PROSSIMO MALUS INDIVIDUALE (Chi ha la frequenza di malus/difficoltà più alta ha le quote più basse)
+                let relativeMalusShare = globalMalusTotal > 0 ? (p.malusCount + 1) / (globalMalusTotal + players.length) : (1 / players.length);
+                let qNextPersonalMalus = (0.88 / relativeMalusShare).toFixed(2);
+                if(parseFloat(qNextPersonalMalus) > 25) qNextPersonalMalus = "25.00";
+
+                container.innerHTML += `
+                    <div class="bet-row" style="background: #111113; border-color: #27272a;">
+                        <div class="player-info">
+                            <span class="player-name" style="color:var(--accent-gold); text-transform:capitalize;">${p.name}</span>
+                            <span class="player-stats">Aggressività: ${p.malusCount} Malus totali (Severità Media: ${p.malusCount > 0 ? (p.totalDifficultyPoints/p.malusCount).toFixed(1) : 0} pt)</span>
+                        </div>
+                        <div class="odds-container">
+                            <button class="odds-button ${isSelected('ou_'+p.id, 'over')}" onclick="toggleSelection('ou_${p.id}', 'over', '${p.name} Over ${lineValue}', ${qOver})">
+                                ${qOver} <span>Over ${lineValue}</span>
+                            </button>
+                            <button class="odds-button ${isSelected('ou_'+p.id, 'under')}" onclick="toggleSelection('ou_${p.id}', 'under', '${p.name} Under ${lineValue}', ${qUnder})">
+                                ${qUnder} <span>Under ${lineValue}</span>
+                            </button>
+                            <button class="odds-button ${isSelected('next_malus', p.id)}" onclick="toggleSelection('next_malus', '${p.id}', 'Prossimo Malus: ${p.name}', ${qNextPersonalMalus})">
+                                ${qNextPersonalMalus} <span>Prox Malus</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
-        function renderBetSlip() {
-            const container = document.getElementById('slipContent');
-            if (!activeBet) {
-                container.innerHTML = `<div style="color: gray; font-size: 13px; text-align: center; padding: 20px;">Seleziona una quota per iniziare.</div>`;
+        // --- SISTEMA DI GESTIONE MULTIPLA ---
+
+        function isSelected(marketId, outcomeId) {
+            return selectedSelections.some(s => s.marketId === marketId && s.outcomeId === outcomeId) ? 'selected' : '';
+        }
+
+        function toggleSelection(marketId, outcomeId, label, odds) {
+            // Regola fondamentale dei bookmaker: Non puoi inserire in una schedina multipla 
+            // più esiti correlati appartenenti allo stesso identico mercato.
+            const index = selectedSelections.findIndex(s => s.marketId === marketId);
+            
+            if (index > -1) {
+                if (selectedSelections[index].outcomeId === outcomeId) {
+                    // Cliccato di nuovo sulla stessa quota: la rimuove
+                    selectedSelections.splice(index, 1);
+                } else {
+                    // Cliccato su un esito diverso dello stesso mercato: lo sostituisce
+                    selectedSelections[index] = { marketId, outcomeId, label, odds: parseFloat(odds) };
+                }
+            } else {
+                // Nuovo mercato indipendente: viene aggiunto alla schedina multipla
+                selectedSelections.push({ marketId, outcomeId, label, odds: parseFloat(odds) });
+            }
+
+            // Rielabora i display dei tabelloni per mostrare lo stato di selezione attiva ed aggiorna la schedina
+            elaboraAlgoritmoProbabilita(); 
+            renderSlip();
+        }
+
+        function removeSelectionDirectly(marketId) {
+            selectedSelections = selectedSelections.filter(s => s.marketId !== marketId);
+            elaboraAlgoritmoProbabilita();
+            renderSlip();
+        }
+
+        function renderSlip() {
+            const container = document.getElementById('slipItemsContainer');
+            const calcArea = document.getElementById('slipCalculationArea');
+            const badge = document.getElementById('slipTypeBadge');
+
+            if (selectedSelections.length === 0) {
+                container.innerHTML = `<div style="color: gray; font-size: 13px; text-align: center; padding: 20px;">Seleziona una o più quote per comporre la multipla.</div>`;
+                calcArea.style.display = 'none';
                 return;
             }
 
-            container.innerHTML = `
-                <div style="display:flex; justify-content:between; font-weight:bold; margin-bottom:10px;">
-                    <span style="text-transform:capitalize;">👉 ${activeBet.name} Vincente</span>
-                    <span style="color:var(--accent-gold); margin-left:auto;">@${activeBet.odds.toFixed(2)}</span>
-                </div>
-                <div class="input-group">
-                    <label>Importo della Scommessa (€)</label>
-                    <input type="number" class="stake-input" id="stakeVolume" value="10" min="1" max="${userBalance}" oninput="updatePotentialWin()">
-                </div>
-                <div style="margin-top:15px; display:flex; flex-direction:column; gap:6px;">
-                    <div class="summary-row"><span>Quota totale:</span><strong>${activeBet.odds.toFixed(2)}</strong></div>
-                    <div class="summary-row total"><span>Potenziale Vincita:</span><strong id="potentialWin">€0.00</strong></div>
-                </div>
-                <button class="btn-place" id="placeConfirmBtn" onclick="executeBet()">Piazza Scommessa Live</button>
-            `;
-            updatePotentialWin();
+            badge.innerText = selectedSelections.length > 1 ? `Multipla x${selectedSelections.length}` : 'Singola';
+            container.innerHTML = '';
+            
+            selectedSelections.forEach(s => {
+                container.innerHTML += `
+                    <div class="slip-item-row">
+                        <span class="slip-item-remove" onclick="removeSelectionDirectly('${s.marketId}')">×</span>
+                        <div style="font-weight:bold; font-size:13px; padding-right:15px;">${s.label}</div>
+                        <div style="color:var(--accent-gold); font-weight:bold; font-size:14px; margin-top:4px;">@${s.odds.toFixed(2)}</div>
+                    </div>
+                `;
+            });
+
+            calcArea.style.display = 'block';
+            calculateSlipTotals();
         }
 
-        function updatePotentialWin() {
+        function calculateSlipTotals() {
             const stakeInput = document.getElementById('stakeVolume');
-            const winDisplay = document.getElementById('potentialWin');
+            const oddsDisplay = document.getElementById('totalOddsDisplay');
+            const winDisplay = document.getElementById('potentialWinDisplay');
             const confirmBtn = document.getElementById('placeConfirmBtn');
 
-            if (!stakeInput || !activeBet) return;
-            
             let stake = parseFloat(stakeInput.value);
+            
+            // Algoritmo combinatorio: moltiplicazione matematica sequenziale delle quote della multipla
+            let totalOdds = selectedSelections.reduce((acc, curr) => acc * curr.odds, 1);
+            if (totalOdds > 9999) totalOdds = 9999; // Cap massimo di vincita stabilito dal banco
+
+            oddsDisplay.innerText = totalOdds.toFixed(2);
+
             if (isNaN(stake) || stake <= 0 || stake > userBalance) {
                 winDisplay.innerText = "€0.00";
                 confirmBtn.disabled = true;
                 return;
             }
+
             confirmBtn.disabled = false;
-            let potential = stake * activeBet.odds;
-            winDisplay.innerText = `€${potential.toFixed(2)}`;
+            let potentialWin = stake * totalOdds;
+            winDisplay.innerText = `€${potentialWin.toFixed(2)}`;
         }
 
-        function executeBet() {
+        function executeCompositeBet() {
             const stakeInput = document.getElementById('stakeVolume');
             let stake = parseFloat(stakeInput.value);
 
@@ -266,57 +411,57 @@
             userBalance -= stake;
             localStorage.setItem('ff_balance', userBalance.toFixed(2));
 
-            // Salva la scommessa nello storico locale
-            let myBets = JSON.parse(localStorage.getItem('ff_my_bets'));
+            let totalOdds = selectedSelections.reduce((acc, curr) => acc * curr.odds, 1);
+            let descrizioniEsiti = selectedSelections.map(s => `${s.label} (@${s.odds.toFixed(2)})`).join(' + ');
+
+            let myBets = JSON.parse(localStorage.getItem('ff_my_bets')) || [];
             myBets.push({
-                player: activeBet.name,
-                odds: activeBet.odds,
+                desc: descrizioniEsiti,
+                odds: totalOdds,
                 stake: stake,
-                payout: stake * activeBet.odds,
+                payout: stake * totalOdds,
+                isMulti: selectedSelections.length > 1,
                 date: new Date().toLocaleString('it-IT', {day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit'})
             });
             localStorage.setItem('ff_my_bets', JSON.stringify(myBets));
 
-            activeBet = null;
-            renderBetSlip();
-            updateWalletUI();
-            alert("Scommessa accettata con successo! In bocca al lupo.");
+            selectedSelections = [];
+            renderSlip();
+            elaboraAlgoritmoProbabilita();
+            alert("Schedina piazzata con successo nel sistema locale serverless!");
         }
 
         function updateWalletUI() {
             document.getElementById('walletBalance').innerText = `Saldo: €${userBalance.toFixed(2)}`;
-            
             const listContainer = document.getElementById('myBetsList');
             const myBets = JSON.parse(localStorage.getItem('ff_my_bets')) || [];
             
             if (myBets.length === 0) {
-                listContainer.innerHTML = '<div style="color: gray; font-size: 12px; text-align: center; padding: 10px;">Nessun biglietto giocato.</div>';
+                listContainer.innerHTML = '<div style="color: gray; font-size: 12px; text-align: center; padding: 10px;">Nessun biglietto in archivio.</div>';
                 return;
             }
 
             listContainer.innerHTML = '';
-            // Mostra le scommesse più recenti in alto
             [...myBets].reverse().forEach(b => {
-                const ticket = document.createElement('div');
-                ticket.className = 'ticket-item';
-                ticket.innerHTML = `
-                    <div style="display:flex; flex-direction:column;">
-                        <strong style="text-transform:capitalize; font-size:13px;">${b.player} Vincente</strong>
-                        <span style="color:gray; font-size:10px;">Giocata il: ${b.date}</span>
-                    </div>
-                    <div style="text-align:right;">
-                        <div>Puntata: <strong>€${b.stake.toFixed(2)}</strong> (@${b.odds.toFixed(2)})</div>
-                        <div style="color:var(--accent-green); font-weight:bold;">Vincita: €${b.payout.toFixed(2)}</div>
+                listContainer.innerHTML += `
+                    <div class="ticket-item" style="border-left-color: ${b.isMulti ? 'var(--accent-gold)' : 'var(--accent-green)'}">
+                        <div style="display:flex; flex-direction:column; max-width:65%;">
+                            <strong style="font-size:11px; color:#fafafa; word-break:break-word;">${b.desc}</strong>
+                            <span style="color:gray; font-size:10px; margin-top:4px;">Piazzata: ${b.date}</span>
+                        </div>
+                        <div style="text-align:right; min-width:30%;">
+                            <div>Quota: <strong>⚡${b.odds.toFixed(2)}</strong></div>
+                            <div>Puntata: <strong>€${b.stake.toFixed(2)}</strong></div>
+                            <div style="color:var(--accent-green); font-weight:bold; font-size:13px; margin-top:2px;">Vincita: €${b.payout.toFixed(2)}</div>
+                        </div>
                     </div>
                 `;
-                listContainer.appendChild(ticket);
             });
         }
 
-        // Avvio e Polling automatico ogni 5 secondi per sincronizzare le quote live al variare del punteggio dei ragazzi
         window.addEventListener('DOMContentLoaded', () => {
-            fetchLiveOdds();
-            setInterval(fetchLiveOdds, 5000);
+            loadDataAndCalculateOdds();
+            setInterval(loadDataAndCalculateOdds, 5000); // Polling real-time ogni 5 secondi
         });
     </script>
 </body>
