@@ -3,219 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ FantaFumo OMEGA CORE v6.2 // Quantum Threat Dashboard</title>
+    <title>🛸 FantaFumo GOD-MODE v7.0 // Singularity Core Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-dark: #020203; --card-bg: #060608; --card-header: #0b0b10;
-            --text-main: #f4f4f5; --text-muted: #52525b; --border: #131318;
-            --accent-blue: #2563eb; --accent-green: #059669; --accent-red: #dc2626; 
-            --accent-purple: #7c3aed; --accent-gold: #d97706; --accent-cyan: #0891b2;
-            --matrix-glow: rgba(8, 145, 178, 0.15);
+            --bg-dark: #020204; --card-bg: #050508; --card-header: #0a0a0f;
+            --text-main: #f4f4f5; --text-muted: #4b4b52; --border: #121217;
+            --accent-blue: #1d4ed8; --accent-green: #047857; --accent-red: #b91c1c; 
+            --accent-purple: #6d28d9; --accent-gold: #b45309; --accent-cyan: #0e7490;
+            --neon-green: #22c55e; --neon-amber: #f59e0b;
         }
         body {
-            font-family: "Courier New", Courier, monospace; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 15px;
-            box-sizing: border-box; font-size: 11px; letter-spacing: -0.2px;
+            font-family: "Courier New", Courier, monospace; background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 12px;
+            box-sizing: border-box; font-size: 11px; line-height: 1.3;
         }
-        /* Layout Strutturale */
-        .scuba-grid { display: flex; flex-direction: column; gap: 15px; max-width: 1800px; margin: 0 auto; }
+        .scuba-container { display: flex; flex-direction: column; gap: 12px; max-width: 1920px; margin: 0 auto; }
         
         /* Cyber Header */
-        .cyber-header { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; position: relative; overflow: hidden; }
-        .cyber-header::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-red)); }
-        .title-block h1 { margin: 0; font-size: 20px; text-transform: uppercase; letter-spacing: 3px; color: #fff; text-shadow: 0 0 10px var(--accent-cyan); }
-        .title-block p { margin: 4px 0 0 0; color: var(--text-muted); font-size: 10px; }
-        
-        .engine-status-box { text-align: right; display: flex; flex-direction: column; gap: 4px; }
-        .status-pill { background: #000; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 4px 8px; font-weight: bold; font-size: 9px; border-radius: 2px; box-shadow: 0 0 8px rgba(217, 119, 6, 0.2); }
+        .cyber-header { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; border-top: 3px solid var(--accent-cyan); }
+        .title-block h1 { margin: 0; font-size: 18px; text-transform: uppercase; letter-spacing: 2px; color: #fff; }
+        .title-block p { margin: 3px 0 0 0; color: var(--accent-cyan); font-size: 10px; }
+        .status-pill { background: #000; border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 3px 6px; font-weight: bold; font-size: 9px; }
 
         /* Control Panel */
-        .control-panel { background: #0a0a0f; border: 1px dashed var(--accent-purple); padding: 10px; border-radius: 4px; display: flex; gap: 10px; align-items: center; }
-        .panel-btn { background: #12121a; border: 1px solid var(--border); color: #fff; padding: 5px 10px; cursor: pointer; text-transform: uppercase; font-size: 10px; font-family: inherit; transition: all 0.2s; }
-        .panel-btn:hover { background: var(--accent-purple); border-color: #fff; box-shadow: 0 0 8px var(--accent-purple); }
+        .control-panel { background: #07070b; border: 1px dashed var(--accent-purple); padding: 8px; border-radius: 4px; display: flex; gap: 8px; align-items: center; }
+        .panel-btn { background: #111116; border: 1px solid var(--border); color: #fff; padding: 4px 8px; cursor: pointer; text-transform: uppercase; font-size: 9px; font-family: inherit; }
+        .panel-btn:hover { background: var(--accent-purple); }
 
-        /* KPI Matrix (Grid Esagerata a 8 colonne) */
-        .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-        .kpi-node { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 3px; border-left: 3px solid var(--accent-blue); position: relative; }
-        .kpi-node::after { content: 'SYS.DATA'; position: absolute; bottom: 2px; right: 4px; color: #1f1f23; font-size: 8px; font-weight: bold; }
+        /* KPI Grid (8 nodi) */
+        .kpi-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; }
+        .kpi-node { background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-left: 3px solid var(--accent-blue); }
         .kpi-node.danger { border-left-color: var(--accent-red); }
         .kpi-node.warning { border-left-color: var(--accent-gold); }
         .kpi-node.quantum { border-left-color: var(--accent-purple); }
         .kpi-node.cyan { border-left-color: var(--accent-cyan); }
         .kpi-title { font-size: 9px; color: var(--text-muted); text-transform: uppercase; font-weight: bold; }
-        .kpi-value { font-size: 20px; font-weight: 800; margin-top: 4px; color: #fff; font-family: sans-serif; }
-        .kpi-sub { font-size: 9px; color: #44444a; margin-top: 2px; }
+        .kpi-value { font-size: 18px; font-weight: 800; margin-top: 2px; color: #fff; }
 
-        /* Viewport Grafici Multipli */
-        .charts-viewport { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .wide-row { grid-column: span 2; }
+        /* Layout a Sezioni dense */
+        .mega-layout-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 12px; }
+        .module-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 4px; padding: 10px; }
+        .module-title { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 8px; color: #a1a1aa; border-left: 2px solid var(--accent-cyan); padding-left: 5px; display: flex; justify-content: space-between; }
+
+        /* MODULE 1: EICAS Cockpit Styling */
+        .eicas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }
+        .eicas-instrument { background: #010103; border: 1px solid #1a1a24; padding: 6px; text-align: center; font-size: 10px; border-radius: 2px; }
+        .eicas-dial { font-size: 14px; font-weight: bold; color: var(--neon-green); margin: 4px 0; font-family: monospace; }
+        .eicas-alert { font-size: 9px; font-weight: bold; color: var(--accent-red); background: rgba(185,28,28,0.15); border: 1px solid var(--accent-red); padding: 2px; border-radius: 2px; margin-top: 4px; animation: blink-red 1s infinite; }
+        @keyframes blink-red { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* MODULE 2: VLSM Subnetting Matrix */
+        .vlsm-table { width: 100%; border-collapse: collapse; font-size: 9px; }
+        .vlsm-table th { background: var(--card-header); color: var(--accent-purple); padding: 4px; text-align: left; }
+        .vlsm-table td { padding: 4px; border-bottom: 1px solid #0f0f15; }
+
+        /* MODULE 3: LiDAR Render Engine */
+        .lidar-canvas-container { position: relative; width: 100%; height: 160px; background: #000; border: 1px solid #1f1f2e; border-radius: 3px; }
+        .lidar-hud-overlay { position: absolute; top: 4px; left: 4px; font-size: 8px; color: var(--accent-green); pointer-events: none; }
+
+        /* MODULE 4: macOS Kernel Panic Console */
+        .mac-panic-box { background: #000; border: 1px solid #222; border-radius: 4px; padding: 8px; font-family: monospace; font-size: 9px; height: 140px; overflow-y: auto; color: #fff; }
+        .mac-bar-bg { background: #111; height: 6px; border-radius: 3px; border: 1px solid #333; overflow: hidden; margin-top: 4px; }
+        .mac-bar-fill { height: 100%; background: #fff; width: 0%; transition: width 0.5s; }
+
+        /* MODULE 5: Paradox Rail Map */
+        .rail-track { background: #0e0e13; border: 1px dashed #222; padding: 8px; border-radius: 3px; margin-top: 4px; display: flex; justify-content: space-between; align-items: center; }
+        .rail-node { padding: 3px 6px; background: #161622; border: 1px solid #333; border-radius: 2px; font-size: 9px; }
+        .rail-node.active { border-color: var(--accent-red); color: var(--accent-red); box-shadow: 0 0 5px rgba(185,28,28,0.4); }
+
+        /* Viewport Grafici (6 moduli Chart.js) */
+        .charts-viewport { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
         .full-row { grid-column: span 3; }
         @media (max-width: 1200px) { .charts-viewport > div { grid-column: span 3 !important; } }
-        
-        .chart-wrapper { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 4px; height: 280px; position: relative; }
-        .chart-title { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; color: #a1a1aa; border-left: 2px solid var(--accent-cyan); padding-left: 6px; display: flex; justify-content: space-between; }
-        .chart-spec { font-size: 8px; color: var(--text-muted); }
+        .chart-wrapper { background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 4px; height: 220px; }
 
-        /* Mega Matrix Table */
-        .telemetry-container { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 4px; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
-        th { padding: 8px 10px; border-bottom: 2px solid var(--border); color: var(--accent-cyan); font-size: 9px; text-transform: uppercase; background: var(--card-header); }
-        td { padding: 8px 10px; border-bottom: 1px solid #101015; color: #d4d4d8; font-family: monospace; }
-        tr:hover { background: #0b0b10; }
-        
-        /* Dossier Cards Component */
-        .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
-        .dossier-card { background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 4px; position: relative; }
-        .dossier-header { font-size: 13px; font-weight: bold; color: #fff; text-transform: uppercase; padding-bottom: 6px; border-bottom: 1px dashed #27272a; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-        
-        .stat-line { display: flex; justify-content: space-between; padding: 3px 0; font-size: 10px; border-bottom: 1px solid #0a0a0f; }
-        .stat-line span { color: var(--text-muted); }
-        .stat-line strong { color: #fff; }
+        /* Telemetry Table 12 colonne */
+        .telemetry-container { background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 4px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 6px 8px; border-bottom: 2px solid var(--border); color: var(--accent-cyan); font-size: 9px; text-transform: uppercase; background: var(--card-header); }
+        td { padding: 6px 8px; border-bottom: 1px solid #0d0d12; color: #d4d4d8; font-family: monospace; font-size: 10px; }
+        tr:hover { background: #09090e; }
 
-        .bar-label { font-size: 8px; color: #a1a1aa; text-transform: uppercase; margin-top: 4px; display: flex; justify-content: space-between; }
-        .progress-bar-container { background: #0f0f15; height: 5px; border-radius: 1px; margin-bottom: 6px; overflow: hidden; border: 1px solid #1c1c24; }
-        .progress-bar-fill { height: 100%; width: 0%; transition: width 0.4s ease-out; }
+        /* Dossier Component */
+        .dossier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+        .dossier-card { background: var(--card-bg); border: 1px solid var(--border); padding: 10px; border-radius: 4px; }
+        .progress-bar-container { background: #0b0b0f; height: 4px; overflow: hidden; margin-bottom: 4px; border: 1px solid #14141c; }
+        .progress-bar-fill { height: 100%; width: 0%; transition: width 0.3s; }
+        .stat-line { display: flex; justify-content: space-between; font-size: 10px; padding: 2px 0; }
+        .stat-line span { color: #52525b; }
 
-        /* Realtime Sub-Spacial Terminal Log */
-        .terminal-log { background: #010102; border: 1px solid #222; border-left: 4px solid var(--accent-red); padding: 10px; border-radius: 4px; font-family: 'Courier New', monospace; height: 120px; overflow-y: auto; color: #22c55e; box-shadow: inset 0 0 10px #000; }
-        .log-row { padding: 2px 0; line-height: 1.2; display: flex; gap: 8px; }
+        /* Terminal Logs */
+        .terminal-log { background: #010102; border: 1px solid #1a1a24; padding: 8px; border-radius: 4px; font-family: monospace; height: 90px; overflow-y: auto; color: #22c55e; font-size: 9px; }
+        .log-row { display: flex; gap: 6px; margin-bottom: 1px; }
         .log-ts { color: var(--accent-cyan); }
-        .log-tag { color: var(--accent-gold); font-weight: bold; }
-
-        .tag { padding: 1px 4px; font-size: 8px; font-weight: bold; border-radius: 2px; text-transform: uppercase; }
-        .tag-danger { background: rgba(220,38,38,0.15); color: var(--accent-red); border: 1px solid var(--accent-red); }
-        .tag-success { background: rgba(5,150,105,0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
     </style>
 </head>
 <body>
 
-<div class="scuba-grid">
+<div class="scuba-container">
 
-    <!-- HEADER CYBERPUNK -->
+    <!-- HEADER -->
     <div class="cyber-header">
         <div class="title-block">
-            <h1>⚡ FantaFumo Markov Chaos Core v6.2</h1>
-            <p>Sistemi predittivi stocastici multidimensionali ad alta densità // Target Timeline: 08 Giu - 14 Set 2026</p>
+            <h1>🛸 FantaFumo God-Mode Engine v7.0</h1>
+            <p>Iniezione Concorrente Multimodulo // EICAS, VLSM, LiDAR, DFU, Paradox Tracing Attivi</p>
         </div>
         <div class="engine-status-box">
-            <div class="status-pill" id="engineStatus">INITIALIZING CORE MATRIX...</div>
-            <div style="font-size: 8px; color: var(--text-muted)">SUBSYSTEM: ACTIVE // BUFFER: OK</div>
+            <div class="status-pill" id="engineStatus">BOOTING CORE STRING SYSTEM...</div>
         </div>
     </div>
 
-    <!-- CONTROL CENTER SIDEBAR ALTERNATIVA -->
+    <!-- CONTROL CENTER -->
     <div class="control-panel">
-        <span style="color: var(--accent-cyan); font-weight: bold; font-size: 10px; text-transform: uppercase;">Simulatore Anomalie Temporali:</span>
-        <button class="panel-btn" onclick="triggerAnomaly('none')">Linea Temporale Standard</button>
-        <button class="panel-btn" onclick="triggerAnomaly('weekend')">Saturazione Weekend (+Caos)</button>
-        <button class="panel-btn" onclick="triggerAnomaly('rage')">Iniezione Colera Nervoso (Tilt Spinto)</button>
-        <div id="anomalyIndicator" style="font-size: 10px; color: var(--accent-gold); margin-left: auto; font-weight: bold;">[STATO: LINEA TEMPORALE COERENTE]</div>
+        <span style="color: var(--accent-purple); font-weight: bold; font-size: 9px;">PARAMETRIC MODIFIERS:</span>
+        <button class="panel-btn" onclick="triggerAnomaly('none')">Coerenza Lineare</button>
+        <button class="panel-btn" onclick="triggerAnomaly('weekend')">Saturazione Fine Settimana (Caos x3)</button>
+        <button class="panel-btn" onclick="triggerAnomaly('rage')">Meltdown Nervoso Generale (Rage Mode)</button>
+        <div id="anomalyIndicator" style="font-size: 9px; color: var(--accent-gold); margin-left: auto; font-weight: bold;">[LINEA TEMPORALE NOMINALE]</div>
     </div>
 
-    <!-- MEGA MATRIX KPI (8 NODI) -->
+    <!-- METRICHE GLOBALI (8 NODI) -->
     <div class="kpi-matrix">
-        <div class="kpi-node">
-            <div class="kpi-title">Giorni Mancanti al Target</div>
-            <div class="kpi-value" id="kpiDaysLeft">--</div>
-            <div class="kpi-sub">Data Limite: 14 Set 2026</div>
+        <div class="kpi-node"><div class="kpi-title">Finestra alla Chiusura</div><div class="kpi-value" id="kpiDaysLeft">--</div></div>
+        <div class="kpi-node warning"><div class="kpi-title">Dominio Vettoriale</div><div class="kpi-value" id="kpiTopCategory">--</div></div>
+        <div class="kpi-node danger"><div class="kpi-title">Entropia Termica</div><div class="kpi-value" id="kpiEntropy">--</div></div>
+        <div class="kpi-node quantum"><div class="kpi-title">Simulazioni Veloce</div><div class="kpi-value">100.000</div></div>
+        <div class="kpi-node cyan"><div class="kpi-title">Anomalie Archiviate</div><div class="kpi-value" id="kpiTotalEvents">--</div></div>
+        <div class="kpi-node danger"><div class="kpi-title">Sgamo Index Globale</div><div class="kpi-value" id="kpiRiskIndex">--%</div></div>
+        <div class="kpi-node quantum"><div class="kpi-title">Subnet Quantistiche</div><div class="kpi-value" id="kpiSubnets">-- /24</div></div>
+        <div class="kpi-node cyan"><div class="kpi-title">Ritardo Ferroviario Medio</div><div class="kpi-value" id="kpiTrainDelay">-- min</div></div>
+    </div>
+
+    <!-- NUOVA ROW: MODULI 1 & 2 (EICAS & VLSM) -->
+    <div class="mega-layout-row">
+        <!-- MODULO 1: GLASS COCKPIT EICAS -->
+        <div class="module-card">
+            <div class="module-title"><span>✈️ Modulo 1: EICAS Glass Cockpit di Assetto Emotivo</span><span style="color:var(--accent-gold)">PITCH / ROLL TELEMETRY</span></div>
+            <div class="eicas-grid" id="eicasGridContainer">
+                <div class="eicas-instrument">Caricamento vettori giroscopici...</div>
+            </div>
         </div>
-        <div class="kpi-node warning">
-            <div class="kpi-title">Dominio Macro Categorico</div>
-            <div class="kpi-value" id="kpiTopCategory">--</div>
-            <div class="kpi-sub">Picco di densità frequenziale</div>
-        </div>
-        <div class="kpi-node danger">
-            <div class="kpi-title">Entropia Termodinamica</div>
-            <div class="kpi-value" id="kpiEntropy">--</div>
-            <div class="kpi-sub">Indice di disordine combinatorio</div>
-        </div>
-        <div class="kpi-node quantum">
-            <div class="kpi-title">Iterazioni Generative</div>
-            <div class="kpi-value">100.000</div>
-            <div class="kpi-sub">Monte Carlo ad albero espanso</div>
-        </div>
-        <div class="kpi-node cyan">
-            <div class="kpi-title">Volume Anomalie Totali</div>
-            <div class="kpi-value" id="kpiTotalEvents">--</div>
-            <div class="kpi-sub">Atti registrati nel database</div>
-        </div>
-        <div class="kpi-node danger">
-            <div class="kpi-title">Vulnerabilità Collettiva</div>
-            <div class="kpi-value" id="kpiRiskIndex">--%</div>
-            <div class="kpi-sub">Rischio sanzioni imminenti</div>
-        </div>
-        <div class="kpi-node quantum">
-            <div class="kpi-title">Dimensioni Parallele Scrutate</div>
-            <div class="kpi-value">1.442</div>
-            <div class="kpi-sub">Fattore probabilistico stringhe</div>
-        </div>
-        <div class="kpi-node warning">
-            <div class="kpi-title">Stato Vibe Globale</div>
-            <div class="kpi-value" id="kpiVibeStatus">--</div>
-            <div class="kpi-sub">Rilevazione stocastica emotiva</div>
+        <!-- MODULO 2: VLSM SUBNETTING MATRIX -->
+        <div class="module-card">
+            <div class="module-title"><span>🌐 Modulo 2: Maschera di Subnetting Quantistico dei Malus (VLSM Chaos Mask)</span><span style="color:var(--accent-purple)">ISO/OSI LAYER 3</span></div>
+            <table class="vlsm-table">
+                <thead>
+                    <tr><th>Host</th><th>IP Assegnato</th><th>Subnet Mask</th><th>Sotto-Rete Stress</th><th>Dignità Packets Lost</th></tr>
+                </thead>
+                <tbody id="vlsmTableBody">
+                    <tr><td colspan="5" style="color:gray; text-align:center;">Generazione maschere di rete...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- VIEWPORT DI 6 CHART COMPLESSI -->
+    <!-- NUOVA ROW: MODULI 3, 4 & 5 (LiDAR, DFU, TRAIN PARADOX) -->
+    <div class="mega-layout-row">
+        <!-- MODULO 3: ADAS / LiDAR ANTI-COLLISIONE -->
+        <div class="module-card">
+            <div class="module-title"><span>🚗 Modulo 3: Radar LiDAR Predittivo Anti-Collisione Classifica</span><span style="color:var(--accent-red)">ADAS LEVEL 5</span></div>
+            <div class="lidar-canvas-container">
+                <div class="lidar-hud-overlay" id="lidarHudText">SCANNING CLASSIFICA...</div>
+                <canvas id="canvasLidar" width="450" height="160" style="width:100%; height:100%;"></canvas>
+            </div>
+        </div>
+        <!-- MODULO 4: MAC-STYLE DFU KERNEL PANIC -->
+        <div class="module-card">
+            <div class="module-title"><span>💻 Modulo 4: Diagnostica DFU Hardware & Biological Kernel Panic</span><span style="color:#fff;">MACOS CONSOLE V2</span></div>
+            <div class="mac-panic-box" id="macConsoleBox">Initializing verbose boot mode...</div>
+            <div style="font-size:8px; color:gray; margin-top:4px; display:flex; justify-content:space-between;">
+                <span>Vibe Internet Recovery Progress:</span><span id="macProgressLabel">0%</span>
+            </div>
+            <div class="mac-bar-bg"><div class="mac-bar-fill" id="macProgressBar"></div></div>
+        </div>
+        <!-- MODULO 5: RAVENNA-BOLOGNA RAILWAY PARADOX -->
+        <div class="module-card">
+            <div class="module-title"><span>🚊 Modulo 5: Generatore Strutturale del Paradosso Ferroviario Regionale</span><span style="color:var(--accent-cyan)">SPACE-TIME DISTORTION</span></div>
+            <div style="font-size:9px; color:#a1a1aa; margin-bottom:4px;" id="trainStatusLabel">Tracciamento convogli Ravenna-Bologna in corso...</div>
+            <div class="rail-track">
+                <div class="rail-node" id="nodeRV">Ravenna (RA)</div>
+                <div class="rail-node" id="nodeAL">Alfonsine</div>
+                <div class="rail-node" id="nodeLU">Lugo</div>
+                <div class="rail-node" id="nodeBO">Bologna C.le</div>
+            </div>
+            <div style="font-size:9px; color:var(--accent-gold); margin-top:6px;" id="trainParadoxFormula">Deviazione probabilistica della Timeline indotta: δ = 0.00%</div>
+        </div>
+    </div>
+
+    <!-- VIEWPORT DI 6 CHART.JS GRAFICI -->
     <div class="charts-viewport">
-        <div class="chart-wrapper">
-            <div class="chart-title"><span>Vettori Storici di Crescita</span><span class="chart-spec">LOG LINEARE</span></div>
-            <div style="position: relative; height: 230px;"><canvas id="canvasTrajectory"></canvas></div>
-        </div>
-        <div class="chart-wrapper">
-            <div class="chart-title"><span>Winrate Predittivo 100k</span><span class="chart-spec">MONTE CARLO PROBABILITY</span></div>
-            <div style="position: relative; height: 230px;"><canvas id="canvasProbability"></canvas></div>
-        </div>
-        <div class="chart-wrapper">
-            <div class="chart-title"><span>Mappa dello Spazio di Rischio</span><span class="chart-spec">X:PUNTI | Y:STABILITÀ | R:MALUS</span></div>
-            <div style="position: relative; height: 230px;"><canvas id="canvasQuantumRisk"></canvas></div>
-        </div>
-        <div class="chart-wrapper">
-            <div class="chart-title"><span>Spettro delle Categorie</span><span class="chart-spec">DENSITÀ OCCORRENZE</span></div>
-            <div style="position: relative; height: 230px;"><canvas id="canvasCategories"></canvas></div>
-        </div>
-        <div class="chart-wrapper">
-            <div class="chart-title"><span>Fusi Orari del Pericolo Imprevisto</span><span class="chart-spec">DISTRIBUZIONE RADAR 24H</span></div>
-            <div style="position: relative; height: 230px;"><canvas id="canvasRadarDanger"></canvas></div>
-        </div>
-        <div class="chart-wrapper">
-            <div class="chart-title"><span>Decadimento Entropia Emotiva</span><span class="chart-spec">POLAR AREA MATRIX</span></div>
-            <div style="position: relative; height: 230px;"><canvas id="canvasPolarEntropy"></canvas></div>
-        </div>
+        <div class="chart-wrapper"><div class="chart-title">Linee Storiche di Crescita</div><canvas id="canvasTrajectory"></canvas></div>
+        <div class="chart-wrapper"><div class="chart-title">Winrate Predittivo 100k</div><canvas id="canvasProbability"></canvas></div>
+        <div class="chart-wrapper"><div class="chart-title">Mappa del Rischio Quantistico</div><canvas id="canvasQuantumRisk"></canvas></div>
+        <div class="chart-wrapper"><div class="chart-title">Spettro Volumetrico Categorie</div><canvas id="canvasCategories"></canvas></div>
+        <div class="chart-wrapper"><div class="chart-title">Radar delle Ore di Massimo Pericolo</div><canvas id="canvasRadarDanger"></canvas></div>
+        <div class="chart-wrapper"><div class="chart-title">Decadimento Entropia Emotiva</div><canvas id="canvasPolarEntropy"></canvas></div>
     </div>
 
-    <!-- INTERFACCIA TABELLARE ESTESA A 12 COLONNE -->
+    <!-- TABELLA TELEMETRIA PRINCIPALE A 12 COLONNE -->
     <div class="telemetry-container">
-        <div class="chart-title" style="color:var(--accent-gold)">Matrice Matematica di Proiezione OMEGA (Telemetria Desolarizzata a 12 Dimensioni)</div>
+        <div class="chart-title" style="color:var(--accent-gold)">Matrice Predittiva OMEGA Estesa (Telemetria a 12 Dimensioni Sincronizzate)</div>
         <table>
             <thead>
                 <tr>
                     <th>Soggetto</th>
-                    <th>Punti Attuali</th>
+                    <th>Punti</th>
                     <th>Stabilità Mentale</th>
-                    <th>Frequenza Fumo/Die</th>
+                    <th>Frequenza Atti/Die</th>
                     <th>Categoria Dominante</th>
-                    <th>Tossicità Fine Settimana</th>
-                    <th>Indice di Paranoia (Ψ)</th>
+                    <th>Tossicità Weekend</th>
+                    <th>Indice Paranoia (Ψ)</th>
                     <th>Auto-Danno Tattico</th>
                     <th>Quota Sgamo (%)</th>
-                    <th>Deviazione Standard (σ)</th>
-                    <th>Proiezione Lineare Basale</th>
+                    <th>Deviazione (σ)</th>
+                    <th>Proiezione Lineare</th>
                     <th>Target Quantum (14 Set)</th>
                 </tr>
             </thead>
             <tbody id="telemetryTableBody">
-                <tr><td colspan="12" style="color: gray; text-align: center;">Iniezione flussi neurali in corso...</td></tr>
+                <tr><td colspan="12" style="color: gray; text-align: center;">Allineamento vettori dimensionali...</td></tr>
             </tbody>
         </table>
     </div>
 
-    <!-- DOSSIER DETTAGLIATI CON MULTI PROGRESS BARS -->
-    <div class="chart-title" style="margin-bottom: 5px;">Profilazione Clinico-Psicofisica dei Concorrenti (Inaccuratezza Fantascientifica Massima)</div>
+    <!-- DOSSIER COMPORTAMENTALI ESTESI -->
+    <div class="chart-title">Profilazione Clinica-Comportamentale Avanzata dei Concorrenti</div>
     <div class="dossier-grid" id="dossierGridContainer"></div>
 
-    <!-- TERMINE DI STREAMING EVENTI QUANTISTICI (REALTIME LOG) -->
-    <div class="chart-title" style="margin-bottom: 5px; color: var(--accent-red);">Monitor dei Sotto-Processi di Rete e Collassi della Funzione d'Onda</div>
+    <!-- TERMINAL LOG GENERALE -->
+    <div class="chart-title" style="color:var(--accent-red)">Monitor dei Sotto-Processi di Rete e Collassi della Funzione d'Onda</div>
     <div class="terminal-log" id="terminalLogBox"></div>
 
 </div>
@@ -227,16 +243,20 @@
 
     let chartInstances = {};
     let lastDataSnapshot = ""; 
-    let activeAnomaly = 'none'; // Modificatore pulsanti simulazione
+    let activeAnomaly = 'none';
+    let globalGiocatoriCached = [];
+
+    // Variabili per cicli di animazione moduli finti
+    let simulatedTrainDelay = 14;
+    let macRecoveryProgress = 0;
+    let macTargetPlayer = "";
 
     function triggerAnomaly(type) {
         activeAnomaly = type;
         const ind = document.getElementById('anomalyIndicator');
-        if(type === 'none') ind.innerText = "[STATO: LINEA TEMPORALE COERENTE]";
-        if(type === 'weekend') ind.innerText = "[ANOMALIA DETECTED: SABATO CONTINUO // CAOS +50%]";
-        if(type === 'rage') ind.innerText = "[ANOMALIA DETECTED: COLERA NERVOSO // DISTRUZIONE PUNTI X2]";
-        
-        // Forza il ricalcolo bypassando lo state lock resettando lo snapshot precedente
+        if(type === 'none') ind.innerText = "[LINEA TEMPORALE NOMINALE]";
+        if(type === 'weekend') ind.innerText = "[ANOMALIA COMMUTATA: TRIPLICE CAOS FINE SETTIMANA]";
+        if(type === 'rage') ind.innerText = "[ANOMALIA COMMUTATA: MASSIMO SQUILIBRIO BIOLOGICO]";
         lastDataSnapshot = "";
         fetchAndProcessData();
     }
@@ -244,13 +264,7 @@
     function writeToTerminal(tag, msg) {
         const box = document.getElementById('terminalLogBox');
         const now = new Date().toLocaleTimeString();
-        box.innerHTML += `
-            <div class="log-row">
-                <span class="log-ts">[${now}]</span>
-                <span class="log-tag">[${tag}]</span>
-                <span>${msg}</span>
-            </div>
-        `;
+        box.innerHTML += `<div class="log-row"><span class="log-ts">[${now}]</span><span style="color:var(--accent-gold)">[${tag}]</span><span>${msg}</span></div>`;
         box.scrollTop = box.scrollHeight;
     }
 
@@ -258,42 +272,40 @@
         try {
             const cacheBuster = new Date().getTime();
             const response = await fetch(`${DATA_URL}?t=${cacheBuster}`, { cache: 'no-store' });
-            if (!response.ok) throw new Error(`Fetch Fallito Server Status: ${response.status}`);
+            if (!response.ok) throw new Error(`Server Fault: ${response.status}`);
 
             const rawJson = await response.json();
             const currentSnapshot = JSON.stringify(rawJson) + activeAnomaly;
             
-            // STATE-LOCK ENGINE: Impedisce sfarfallii e spreco cicli CPU se nulla è cambiato
+            // STATE-LOCK ENGINE
             if (currentSnapshot === lastDataSnapshot) {
-                document.getElementById('engineStatus').innerText = "ENGINE LOCK: LOCKED (NO STRUCTURAL CHANGES)";
+                document.getElementById('engineStatus').innerText = "ENGINE LOCK: LOCKED (COMPUTATION COHERENT)";
                 document.getElementById('engineStatus').style.borderColor = "var(--accent-blue)";
                 document.getElementById('engineStatus').style.color = "var(--accent-blue)";
                 return; 
             }
             
-            executeOmegaCalculations(rawJson);
+            executeQuantumCalculations(rawJson);
             lastDataSnapshot = currentSnapshot;
             
-            document.getElementById('engineStatus').innerText = "ENGINE LOCK: COMPUTING 100K SCENARIOS";
+            document.getElementById('engineStatus').innerText = "ENGINE LOCK: RECOMPUTED (100K ITERATIONS COMPLETED)";
             document.getElementById('engineStatus').style.borderColor = "var(--accent-green)";
             document.getElementById('engineStatus').style.color = "var(--accent-green)";
         } catch (e) {
             console.error(e);
-            document.getElementById('engineStatus').innerText = "CORE CORRUPTION DISCOVERED";
+            document.getElementById('engineStatus').innerText = "CRITICAL HARDWARE MALFUNCTION";
             document.getElementById('engineStatus').style.borderColor = "var(--accent-red)";
-            writeToTerminal("CRITICAL_ERR", e.message);
+            writeToTerminal("CORE_ERR", e.message);
         }
     }
 
-    function executeOmegaCalculations(data) {
+    function executeQuantumCalculations(data) {
         const eventi = data.events || [];
         const giocatori = data.players || [];
-
         if (giocatori.length === 0) return;
 
         document.getElementById('kpiTotalEvents').innerText = eventi.length;
 
-        // Calcolo asse temporale
         const timestampEventi = eventi.map(e => e.timestamp ? new Date(e.timestamp).getTime() : null).filter(t => t !== null);
         const tempoUltimoEvento = timestampEventi.length > 0 ? Math.max(...timestampEventi) : new Date().getTime();
         
@@ -304,13 +316,12 @@
 
         document.getElementById('kpiDaysLeft').innerText = `${Math.ceil(giorniRimanenti)} gg`;
 
-        // Analisi Categorie Macro
         let dizionarioCategorie = {};
         let traiettorieLog = {};
         giocatori.forEach(g => traiettorieLog[g.id] = [0]);
 
         eventi.forEach(e => {
-            let cat = e.category || (e.points < 0 ? "Sgamo Generico" : "Bonus Condotta");
+            let cat = e.category || (e.points < 0 ? "Fumo Abusivo" : "Bonus Condotta");
             dizionarioCategorie[cat] = (dizionarioCategorie[cat] || 0) + 1;
         });
 
@@ -320,7 +331,6 @@
         });
         document.getElementById('kpiTopCategory').innerText = topCat.toUpperCase();
 
-        // Elaborazione parametri avanzati per giocatore
         let metricheGiocatori = giocatori.map((p, idx) => {
             const pEvents = eventi.filter(e => e.playerId === p.id);
             let score = 0; let variazioni = [];
@@ -328,17 +338,17 @@
 
             pEvents.forEach(e => {
                 if (typeof e.points === 'number') {
-                    let pMod = e.points;
-                    if(activeAnomaly === 'rage' && pMod < 0) pMod *= 2; // Effetto anomalia
+                    let pointsMod = e.points;
+                    if(activeAnomaly === 'rage' && pointsMod < 0) pointsMod *= 3;
                     
-                    score += pMod;
-                    variazioni.push(pMod);
+                    score += pointsMod;
+                    variazioni.push(pointsMod);
                     traiettorieLog[p.id].push(score);
-                    if (pMod < 0) puntiMalusTot += Math.abs(pMod);
+                    if (pointsMod < 0) puntiMalusTot += Math.abs(pointsMod);
 
-                    let cat = e.category || (pMod < 0 ? "Sgamo Generico" : "Bonus Condotta");
+                    let cat = e.category || (pointsMod < 0 ? "Fumo Abusivo" : "Bonus Condotta");
                     if (!catPersonali[cat]) catPersonali[cat] = [];
-                    catPersonali[cat].push(pMod);
+                    catPersonali[cat].push(pointsMod);
                 }
             });
 
@@ -357,12 +367,11 @@
                 if(v.length > maxCountP) { maxCountP = v.length; domCat = k; }
             });
 
-            // Calcoli pseudo-statistici fittizi per saturare l'interfaccia
-            let weekendToxicity = Math.min(100, Math.max(5, (deviazioneStandard * 11) + (activeAnomaly === 'weekend' ? 50 : 0)));
-            let paranoiaIndex = Math.min(100, Math.max(10, (puntiMalusTot * 2.1) + (idx * 8)));
-            let autoDannoRate = n > 0 ? (variazioni.filter(v=>v<0).length / n) * 100 : 15;
-            let quotaSgamo = Math.min(100, Math.max(2, (n * 2.5) + (puntiMalusTot * 0.8)));
-            let emotionalStability = Math.max(1, 100 - (deviazioneStandard * 14) - (puntiMalusTot * 0.5));
+            let weekendToxicity = Math.min(100, Math.max(5, (deviazioneStandard * 12) + (activeAnomaly === 'weekend' ? 65 : 0)));
+            let paranoiaIndex = Math.min(100, Math.max(8, (puntiMalusTot * 2.5) + (idx * 5)));
+            let autoDannoRate = n > 0 ? (variazioni.filter(v=>v<0).length / n) * 100 : 10;
+            let quotaSgamo = Math.min(100, Math.max(4, (n * 3) + (puntiMalusTot * 0.7)));
+            let emotionalStability = Math.max(1, 100 - (deviazioneStandard * 15) - (puntiMalusTot * 0.4));
 
             return {
                 ...p, score, deviazioneStandard, mediaInerziale, frequenzaGiornaliera,
@@ -372,92 +381,89 @@
             };
         });
 
-        // 🎲 SUPREMO SIMULATORE MONTE CARLO A CATEGORIE ESPANSE (100.000 ITERAZIONI)
+        // SIMULAZIONE COMPLESSA SU 100.000 ITERAZIONI
         let vittorieMonteCarlo = {};
         giocatori.forEach(g => vittorieMonteCarlo[g.id] = 0);
 
-        let entropiaTotale = metricheGiocatori.reduce((acc, g) => acc + g.deviazioneStandard, 0);
-        document.getElementById('kpiEntropy').innerText = `${(entropiaTotale * 2.15).toFixed(2)} J/K`;
-        document.getElementById('kpiRiskIndex').innerText = `${(autoDannoRateSum(metricheGiocatori) / giocatori.length).toFixed(1)}%`;
-        document.getElementById('kpiVibeStatus').innerText = entropiaTotale > 15 ? "COLLASSO QUANTISTICO" : "STABILE IN LIQUIDO";
+        let sumDS = metricheGiocatori.reduce((acc, g) => acc + g.deviazioneStandard, 0);
+        document.getElementById('kpiEntropy').innerText = `${(sumDS * 2.8).toFixed(2)} σ/J`;
+        document.getElementById('kpiRiskIndex').innerText = `${(metricheGiocatori.reduce((a,b)=>a+b.autoDannoRate,0)/giocatori.length).toFixed(1)}%`;
+        document.getElementById('kpiSubnets').innerText = `${giocatori.length} (/${32 - giocatori.length})`;
 
         for (let i = 0; i < 100000; i++) {
-            let migliorPunteggioFinto = -9999999;
-            let idVincitoreFinto = null;
-
+            let maxS = -9999999; let winId = null;
             metricheGiocatori.forEach(g => {
-                let punteggioSimulato = g.score;
-                let eventiAttesi = Math.round(g.frequenzaGiornaliera * giorniRimanenti);
-                
-                // Iniezione caos da anomalie temporali pulsanti
-                let fattoreMoltiplicatoreCaos = 0.6;
-                if(activeAnomaly === 'weekend') fattoreMoltiplicatoreCaos = 1.8;
-                let varianzaVolume = (Math.random() - 0.5) * fattoreMoltiplicatoreCaos;
-                eventiAttesi = Math.max(0, Math.round(eventiAttesi * (1 + varianzaVolume)));
+                let simScore = g.score;
+                let expectedActs = Math.round(g.frequenzaGiornaliera * giorniRimanenti);
+                let mult = activeAnomaly === 'weekend' ? 2.5 : 0.5;
+                expectedActs = Math.max(0, Math.round(expectedActs * (1 + (Math.random() - 0.5) * mult)));
 
-                for (let e = 0; e < eventiAttesi; e++) {
-                    let puntiEvento = 0;
-                    let chiaviCat = Object.keys(g.catPersonali);
-                    
-                    if (chiaviCat.length > 0) {
-                        let catScelta = chiaviCat[Math.floor(Math.random() * chiaviCat.length)];
-                        let storiciCat = g.catPersonali[catScelta];
-                        puntiEvento = storiciCat[Math.floor(Math.random() * storiciCat.length)];
-                        // Aggiunta rumore stocastico puro espanso
-                        let rumoreFondo = (Math.random() - 0.5) * 22;
-                        puntiEvento += rumoreFondo;
+                for (let e = 0; e < expectedActs; e++) {
+                    let keys = Object.keys(g.catPersonali);
+                    if (keys.length > 0) {
+                        let c = keys[Math.floor(Math.random() * keys.length)];
+                        simScore += g.catPersonali[c][Math.floor(Math.random() * g.catPersonali[c].length)] + ((Math.random() - 0.5) * 18);
                     } else {
-                        puntiEvento = (Math.random() - 0.5) * 15;
+                        simScore += (Math.random() - 0.5) * 12;
                     }
-                    punteggioSimulato += puntiEvento;
                 }
-
-                if (punteggioSimulato > migliorPunteggioFinto) {
-                    migliorPunteggioFinto = punteggioSimulato;
-                    idVincitoreFinto = g.id;
-                }
+                if (simScore > maxS) { maxS = simScore; winId = g.id; }
             });
-            if (idVincitoreFinto) vittorieMonteCarlo[idVincitoreFinto]++;
+            if (winId) vittorieMonteCarlo[winId]++;
         }
 
-        metricheGiocatori.forEach(g => {
-            g.probVittoriaMC = (vittorieMonteCarlo[g.id] / 100000) * 100;
-        });
+        metricheGiocatori.forEach(g => g.probVittoriaMC = (vittorieMonteCarlo[g.id] / 100000) * 100);
 
-        // Trigger Log Terminale Finto per dare vita al Layout
-        writeToTerminal("MONTE_CARLO", "Risoluzione completata per 100.000 stringhe temporali.");
-        metricheGiocatori.forEach(g => {
-            if(g.probVittoriaMC > 40) writeToTerminal("THREAT_ALERT", `Dominio di traiettoria rilevato per ${g.name.toUpperCase()} (${g.probVittoriaMC.toFixed(1)}%)`);
-        });
+        globalGiocatoriCached = metricheGiocatori;
 
-        // STAMPA DEI COMPONENTI AD ALTA DENSITÀ
+        // AGGIORNAMENTO COMPONENTI ESTESI
         renderTelemetryTable(metricheGiocatori);
         renderDossierCards(metricheGiocatori);
-        renderOmegaCharts(metricheGiocatori, traiettorieLog, dizionarioCategorie);
+        renderVlsmSubnets(metricheGiocatori);
+        renderCharts(metricheGiocatori, traiettorieLog, dizionarioCategorie);
+        
+        writeToTerminal("MONTE_CARLO_CORE", "100k vettori stocastici proiettati. Stato dimensionale aggiornato.");
     }
 
-    function autoDannoRateSum(g) { return g.reduce((acc, x) => acc + x.autoDannoRate, 0); }
+    // MODULO 2: IMPLEMENTAZIONE VISIVA VLSM
+    function renderVlsmSubnets(giocatori) {
+        const tbody = document.getElementById('vlsmTableBody');
+        tbody.innerHTML = '';
+        giocatori.forEach((g, idx) => {
+            let ip = `10.142.${idx * 16}.2`;
+            let mask = g.totalActs > 15 ? "255.255.255.252 (/30)" : "255.255.255.240 (/28)";
+            let lostPackets = Math.round(g.autoDannoRate * 1.5);
+            tbody.innerHTML += `
+                <tr>
+                    <td style="font-weight:bold; color:#fff;">${g.name.toUpperCase()}</td>
+                    <td style="color:var(--accent-cyan)">${ip}</td>
+                    <td>${mask}</td>
+                    <td>NET_STRESS_ASSET_${g.id}</td>
+                    <td style="color:var(--accent-red); font-weight:bold;">${lostPackets} PKTS</td>
+                </tr>
+            `;
+        });
+    }
 
     function renderTelemetryTable(giocatori) {
         const tbody = document.getElementById('telemetryTableBody');
         tbody.innerHTML = '';
         const ordinati = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
-        
         ordinati.forEach(g => {
             tbody.innerHTML += `
                 <tr>
                     <td style="font-weight:bold; text-transform:capitalize; color:#fff;">${g.name}</td>
                     <td style="color:var(--accent-cyan); font-weight:bold;">${g.score}</td>
-                    <td style="color:${g.emotionalStability > 50 ? 'var(--accent-green)':'var(--accent-red)'}">${g.emotionalStability.toFixed(1)}%</td>
-                    <td>${g.frequenzaGiornaliera.toFixed(2)} act/d</td>
-                    <td style="font-size:10px; color:#a1a1aa;">${g.domCat}</td>
+                    <td style="color:${g.emotionalStability > 55 ? 'var(--neon-green)':'var(--accent-red)'}">${g.emotionalStability.toFixed(1)}%</td>
+                    <td>${g.frequenzaGiornaliera.toFixed(2)} /d</td>
+                    <td style="font-size:9px; color:#888;">${g.domCat.substring(0,15)}</td>
                     <td>${g.weekendToxicity.toFixed(1)}%</td>
-                    <td style="color:var(--accent-purple); font-weight:bold;">${g.paranoiaIndex.toFixed(1)} Ψ</td>
+                    <td>${g.paranoiaIndex.toFixed(1)} Ψ</td>
                     <td style="color:var(--accent-red);">${g.autoDannoRate.toFixed(1)}%</td>
                     <td>${g.quotaSgamo.toFixed(1)}%</td>
                     <td>${g.deviazioneStandard.toFixed(2)} σ</td>
                     <td>${g.projectedBasale} pt</td>
-                    <td style="font-size:13px; font-weight:bold; color:var(--accent-gold);">${Math.round(g.score + (g.mediaInerziale * 30))} pt</td>
+                    <td style="font-weight:bold; color:var(--accent-gold);">${Math.round(g.score + (g.mediaInerziale * 30))} pt</td>
                 </tr>
             `;
         });
@@ -466,120 +472,205 @@
     function renderDossierCards(giocatori) {
         const container = document.getElementById('dossierGridContainer');
         container.innerHTML = '';
-
         giocatori.forEach(g => {
             container.innerHTML += `
                 <div class="dossier-card">
-                    <div class="dossier-header">
-                        <span>🧬 ${g.name}</span>
-                        <span class="tag ${g.score >= 0 ? 'tag-success':'tag-danger'}">ID: ${g.id}</span>
-                    </div>
-                    
-                    <div class="bar-label"><span>Vittoria Quantistica (Monte Carlo)</span><strong>${g.probVittoriaMC.toFixed(2)}%</strong></div>
+                    <div style="font-weight:bold; color:#fff; text-transform:uppercase; margin-bottom:6px;">🕵️‍♂️ ${g.name}</div>
+                    <div class="stat-line"><span>Simulazione Quantum Win</span><strong style="color:var(--accent-purple)">${g.probVittoriaMC.toFixed(2)}%</strong></div>
                     <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.probVittoriaMC}%; background:var(--accent-purple);"></div></div>
                     
-                    <div class="bar-label"><span>Indice Paranoia da Monitoraggio (Ψ)</span><strong>${g.paranoiaIndex.toFixed(1)}%</strong></div>
+                    <div class="stat-line"><span>Livello Paranoia Registrato</span><strong style="color:var(--accent-gold)">${g.paranoiaIndex.toFixed(1)}%</strong></div>
                     <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.paranoiaIndex}%; background:var(--accent-gold);"></div></div>
                     
-                    <div class="bar-label"><span>Saturazione Tossica del Weekend</span><strong>${g.weekendToxicity.toFixed(1)}%</strong></div>
-                    <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.weekendToxicity}%; background:var(--accent-red);"></div></div>
-
-                    <div class="stat-line"><span>Atti nel File</span><strong>${g.totalActs}</strong></div>
-                    <div class="stat-line"><span>Forza di Tendenza (μ)</span><strong>${g.mediaInerziale.toFixed(2)} pt</strong></div>
-                    <div class="stat-line"><span>Fattore Sabotaggio Puro</span><strong>${g.autoDannoRate.toFixed(1)}%</strong></div>
-                    <div class="stat-line"><span>Predizione Errore Biologico</span><strong>± ${(g.deviazioneStandard * 4.5).toFixed(1)} punti</strong></div>
+                    <div class="stat-line"><span>Vulnerabilità Ispezione Coatta</span><strong style="color:var(--accent-red)">${g.quotaSgamo.toFixed(1)}%</strong></div>
+                    <div class="progress-bar-container"><div class="progress-bar-fill" style="width:${g.quotaSgamo}%; background:var(--accent-red);"></div></div>
                 </div>
             `;
         });
     }
 
-    function renderOmegaCharts(giocatori, traiettorieLog, dizionarioCategorie) {
-        // Distruzione atomica di vecchi elementi grafici per azzeramento perdite RAM
-        Object.values(chartInstances).forEach(instance => { if(instance) instance.destroy(); });
+    // INTERVALLI DINAMICI - ANIMAZIONI REALTIME INDIPENDENTI (NON BLOCCANTI)
+    setInterval(() => {
+        if(globalGiocatoriCached.length === 0) return;
 
+        // 1. Aggiornamento Dinamico EICAS Glass Cockpit
+        const eicasContainer = document.getElementById('eicasGridContainer');
+        eicasContainer.innerHTML = '';
+        globalGiocatoriCached.forEach(g => {
+            let pitch = ((Math.random() - 0.5) * 30 + (g.mediaInerziale * 10)).toFixed(1);
+            let roll = ((Math.random() - 0.5) * 40).toFixed(1);
+            let yaw = Math.floor(Math.random() * 360);
+            let alertBox = g.emotionalStability < 45 ? `<div class="eicas-alert">⚠️ SINK RATE! PULL UP</div>` : `<div style="color:var(--neon-green); font-size:8px;">STABLE AP ENGAGED</div>`;
+            
+            eicasContainer.innerHTML += `
+                <div class="eicas-instrument">
+                    <div style="font-weight:bold; color:#a1a1aa;">${g.name.toUpperCase()}</div>
+                    <div class="eicas-dial">${pitch}° P</div>
+                    <div style="font-size:8px; color:gray;">R: ${roll}° // Y: ${yaw}°</div>
+                    ${alertBox}
+                </div>
+            `;
+        });
+
+        // 2. Modulo 3: ADAS / LiDAR Engine Render su Canvas
+        renderLidarRadar();
+
+        // 3. Modulo 4: macOS Kernel Panic Engine
+        animateMacKernelPanic();
+
+        // 4. Modulo 5: Paradosso Ferroviario Ravenna-Bologna
+        animateRailwayParadox();
+
+    }, 1000);
+
+    // MODULO 3: ANIMAZIONE VETTORIALE LIDAR
+    function renderLidarRadar() {
+        const canvas = document.getElementById('canvasLidar');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0,0,450,160);
+
+        // Disegna griglia radar circolare
+        ctx.strokeStyle = '#0e241b'; ctx.lineWidth = 1;
+        for(let r=20; r<150; r+=30) { ctx.beginPath(); ctx.arc(225, 150, r, Math.PI, 2*Math.PI); ctx.stroke(); }
+        ctx.beginPath(); ctx.moveTo(225, 0); ctx.lineTo(225, 150); ctx.stroke();
+
+        // Traccia i giocatori come punti LiDAR riflessi
+        if(globalGiocatoriCached.length < 2) return;
+        const sorted = [...globalGiocatoriCached].sort((a,b) => b.score - a.score);
+        
+        let leader = sorted[0];
+        let chaser = sorted[1];
+        let dist = leader.score - chaser.score;
+        let ttc = (dist / Math.max(0.1, Math.abs(chaser.mediaInerziale - leader.mediaInerziale))).toFixed(2);
+
+        document.getElementById('lidarHudText').innerHTML = `TARGET: ${leader.name.toUpperCase()} // CHASER: ${chaser.name.toUpperCase()}<br>GAP DISTANCE: ${dist} PT // TTC: ${ttc} SEC`;
+
+        sorted.forEach((g, i) => {
+            let angle = Math.PI + (Math.PI / (sorted.length + 1)) * (i + 1);
+            let radius = Math.min(140, 30 + (g.score + 100) * 0.5);
+            let x = 225 + radius * Math.cos(angle);
+            let y = 150 + radius * Math.sin(angle);
+
+            ctx.fillStyle = i === 0 ? '#dc2626' : '#22c55e';
+            ctx.beginPath(); ctx.arc(x, y, 5, 0, 2*Math.PI); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.fillText(g.name.substring(0,4), x - 10, y - 8);
+        });
+    }
+
+    // MODULO 4: LOGICA MAC-STYLE KERNEL PANIC
+    function animateMacKernelPanic() {
+        const consoleBox = document.getElementById('macConsoleBox');
+        if(!consoleBox) return;
+
+        if(macRecoveryProgress === 0 || macRecoveryProgress >= 100) {
+            macRecoveryProgress = 1;
+            let targetG = globalGiocatoriCached[Math.floor(Math.random() * globalGiocatoriCached.length)];
+            macTargetPlayer = targetG ? targetG.name : "System";
+            consoleBox.innerHTML = `<span style="color:var(--accent-red)">*** CRITICAL KERNEL PANIC ON CPU 0 ***</span><br>Reason: VIBE_STATUS_MELTDOWN_CRASH<br>Faulting Subject: ${macTargetPlayer.toUpperCase()}<br>Entering DFU Firmware Restore Mode...<br>`;
+        } else {
+            macRecoveryProgress += Math.floor(Math.random() * 25) + 5;
+            if(macRecoveryProgress > 100) macRecoveryProgress = 100;
+            consoleBox.innerHTML += `AppleUSBThunderbolt: Restoring secondary registers... ${macRecoveryProgress}%<br>`;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        document.getElementById('macProgressBar').style.width = `${macRecoveryProgress}%`;
+        document.getElementById('macProgressLabel').innerText = `${macRecoveryProgress}%`;
+    }
+
+    // MODULO 5: LOGICA DEL PARADOSSO FERROVIARIO BOLOGNA-RAVENNA
+    function animateRailwayParadox() {
+        simulatedTrainDelay += Math.floor(Math.random() * 5) - 2;
+        if(simulatedTrainDelay < 0) simulatedTrainDelay = 5;
+        document.getElementById('kpiTrainDelay').innerText = `${simulatedTrainDelay} min`;
+
+        const nodes = ['nodeRV', 'nodeAL', 'nodeLU', 'nodeBO'];
+        nodes.forEach(n => document.getElementById(n).classList.remove('active'));
+        
+        let activeNodeIndex = Math.floor(Math.random() * 4);
+        document.getElementById(nodes[activeNodeIndex]).classList.add('active');
+
+        let formulaDelta = (simulatedTrainDelay * 0.412).toFixed(2);
+        document.getElementById('trainStatusLabel').innerText = `Treno R 2943 (Ravenna -> Bologna Centrale) fermato a blocco segnale. Ritardo stimato: +${simulatedTrainDelay} min`;
+        document.getElementById('trainParadoxFormula').innerText = `Deviazione spaziale indotta sulla classifica fumo: δ = ${formulaDelta}%`;
+    }
+
+    // CHART.JS ENGINE GRAPH GENERATOR
+    function renderCharts(giocatori, traiettorieLog, dizionarioCategorie) {
+        Object.values(chartInstances).forEach(instance => { if(instance) instance.destroy(); });
         const palette = ['#2563eb', '#059669', '#d97706', '#7c3aed', '#dc2626', '#0891b2', '#ec4899'];
         const maxPoints = Math.max(...Object.values(traiettorieLog).map(arr => arr.length));
 
-        // Chart 1: Traiettoria
+        // 1. Line Trajectory
         chartInstances.trajectory = new Chart(document.getElementById('canvasTrajectory').getContext('2d'), {
             type: 'line',
             data: {
                 labels: Array.from({length: maxPoints}, (_, i) => `${i}°`),
                 datasets: giocatori.map((g, idx) => ({
-                    label: g.name, data: traiettorieLog[g.id],
-                    borderColor: palette[idx % palette.length], backgroundColor: 'transparent', borderWidth: 2, pointRadius: 1, tension: 0.1
+                    label: g.name, data: traiettorieLog[g.id], borderColor: palette[idx % palette.length], backgroundColor: 'transparent', borderWidth: 2, pointRadius: 1, tension: 0.1
                 }))
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff', font:{size:9} } } }, scales:{x:{ticks:{color:'#52525b'}},y:{ticks:{color:'#52525b'}}} }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff', font:{size:8} } } }, scales:{x:{ticks:{color:'#444'}},y:{ticks:{color:'#444'}}} }
         });
 
-        // Chart 2: Probabilità
-        const ordinatiMC = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
+        // 2. Bar Probability
+        const ordMC = [...giocatori].sort((a,b) => b.probVittoriaMC - a.probVittoriaMC);
         chartInstances.probability = new Chart(document.getElementById('canvasProbability').getContext('2d'), {
             type: 'bar',
             data: {
-                labels: ordinatiMC.map(g => g.name),
-                datasets: [{ data: ordinatiMC.map(g => g.probVittoriaMC), backgroundColor: palette, borderRadius: 2 }]
+                labels: ordMC.map(g => g.name),
+                datasets: [{ data: ordMC.map(g => g.probVittoriaMC), backgroundColor: palette, borderRadius: 2 }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100, ticks: { color: '#52525b' } }, x: { ticks: { color: '#fff' } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { max: 100, ticks: { color: '#444' } }, x: { ticks: { color: '#fff' } } } }
         });
 
-        // Chart 3: Bubble Quantum Risk
+        // 3. Bubble Quantum Risk
         chartInstances.quantumRisk = new Chart(document.getElementById('canvasQuantumRisk').getContext('2d'), {
             type: 'bubble',
             data: {
                 datasets: giocatori.map((g, idx) => ({
-                    label: g.name, data: [{ x: g.score, y: g.emotionalStability, r: Math.max(4, g.puntiMalusTot / 1.5) }],
-                    backgroundColor: palette[idx % palette.length] + 'aa', borderColor: '#fff', borderWidth: 0.5
+                    label: g.name, data: [{ x: g.score, y: g.emotionalStability, r: Math.max(4, g.puntiMalusTot / 1.5) }], backgroundColor: palette[idx % palette.length] + 'aa'
                 }))
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff', font:{size:8} } } }, scales: { x: { ticks: { color: '#52525b' } }, y: { ticks: { color: '#52525b' } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff', font:{size:8} } } }, scales: { x: { ticks: { color: '#444' } }, y: { ticks: { color: '#444' } } } }
         });
 
-        // Chart 4: Categories Bar Orizzontale
+        // 4. Horizontal Categories
         chartInstances.categories = new Chart(document.getElementById('canvasCategories').getContext('2d'), {
             type: 'bar',
             data: {
                 labels: Object.keys(dizionarioCategorie),
-                datasets: [{ data: Object.values(dizionarioCategorie), backgroundColor: '#0891b2', borderRadius: 2 }]
+                datasets: [{ data: Object.values(dizionarioCategorie), backgroundColor: '#0e7490' }]
             },
-            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#52525b' } }, y: { ticks: { color: '#fff', font:{size:9} } } } }
+            options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { color: '#444' } }, y: { ticks: { color: '#fff', font:{size:8} } } } }
         });
 
-        // Chart 5: Radar Zone di Pericolo (Basato su calcoli pseudorand legati all'ID)
+        // 5. Radar Hour Danger Zone
         chartInstances.radarDanger = new Chart(document.getElementById('canvasRadarDanger').getContext('2d'), {
             type: 'radar',
             data: {
-                labels: ['Mattina (06-12)', 'Pomeriggio (12-18)', 'Sera (18-00)', 'Notte Fonda (00-06)'],
-                datasets: giocatori.map((g, idx) => {
-                    let seed = String(g.id).charCodeAt(0);
-                    return {
-                        label: g.name,
-                        data: [ (seed % 4) * 20 + 20, (seed % 3) * 30 + 10, (seed % 5) * 15 + 35, g.paranoiaIndex ],
-                        borderColor: palette[idx % palette.length], backgroundColor: palette[idx % palette.length] + '11', borderWidth: 1.5
-                    }
-                })
+                labels: ['Mattino', 'Pomeriggio', 'Sera', 'Notte'],
+                datasets: giocatori.map((g, idx) => ({
+                    label: g.name, data: [20, 45, g.paranoiaIndex, g.weekendToxicity], borderColor: palette[idx % palette.length], backgroundColor: 'transparent', borderWidth: 1
+                }))
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { grid: { color: '#131318' }, angleLines: { color: '#131318' }, pointLabels: { color: '#71717a', font:{size:8} }, ticks: { display: false } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { grid: { color: '#121217' }, ticks: { display: false }, pointLabels:{color:'#fff', font:{size:8}} } } }
         });
 
-        // Chart 6: Polar Area Entropia Emotiva
+        // 6. Polar Vibe Area
         chartInstances.polarEntropy = new Chart(document.getElementById('canvasPolarEntropy').getContext('2d'), {
             type: 'polarArea',
             data: {
                 labels: giocatori.map(g => g.name),
-                datasets: [{
-                    data: giocatori.map(g => Math.max(10, g.weekendToxicity)),
-                    backgroundColor: palette.map(c => c + '77'), borderColor: '#020204'
-                }]
+                datasets: [{ data: giocatori.map(g => Math.max(15, g.weekendToxicity)), backgroundColor: palette.map(c => c + '55') }]
             },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: '#fff', font:{size:8} } } }, scales: { r: { grid: { color: '#131318' }, ticks: { display: false } } } }
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { r: { grid: { color: '#121217' }, ticks: { display: false } } } }
         });
     }
 
-    // Polling automatico configurato a 4 secondi netti
     window.addEventListener('DOMContentLoaded', () => {
-        writeToTerminal("SYSTEM", "Avvio modulo di intercettazione flussi.");
+        writeToTerminal("BOOT_SEQUENCE", "Inizializzazione vettori FantaFumo completata con successo.");
         fetchAndProcessData();
         setInterval(fetchAndProcessData, 4000);
     });
