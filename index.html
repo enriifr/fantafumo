@@ -17,18 +17,24 @@
             display: flex; flex-direction: column; height: 100vh; box-sizing: border-box;
         }
         
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 20px; }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 15px; }
         h1 { margin: 0; font-size: 28px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-main); }
         
         .btn-link { padding: 10px 20px; background: #27272a; color: white; border: 1px dashed #52525b; font-size: 13px; font-weight: bold; border-radius: 6px; }
         .btn-link.connected { background: #14532d; border-color: var(--accent-green); color: var(--accent-green); }
+
+        /* Superlativi / Stats Cards */
+        .stats-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: var(--card-bg); border: 1px solid var(--border); padding: 12px 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 4px; }
+        .stat-label { font-size: 10px; color: #a1a1aa; text-transform: uppercase; font-weight: 900; letter-spacing: 0.5px; }
+        .stat-value { font-size: 16px; font-weight: 700; color: var(--text-main); text-transform: capitalize; }
 
         .leaderboard-grid { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; overflow-y: auto; padding-right: 10px; }
         
         .player-row { 
             display: flex; align-items: center; justify-content: space-between; 
             background: var(--card-bg); border: 1px solid var(--border); cursor: pointer;
-            padding: 15px 25px; border-radius: 8px; transition: transform 0.2s;
+            padding: 15px 25px; border-radius: 8px; transition: transform 0.2s, border-color 0.2s;
         }
         .player-row:hover { transform: translateX(5px); border-color: #52525b; }
         
@@ -39,8 +45,12 @@
         .player-row.status-W { border-left: 6px solid var(--accent-green) !important; background: linear-gradient(90deg, #143a1e 0%, var(--card-bg) 30%) !important; }
         .player-row.status-L { border-left: 6px solid #991b1b !important; background: linear-gradient(90deg, #3b1111 0%, var(--card-bg) 30%) !important; }
 
-        .left-info { display: flex; align-items: center; gap: 20px; }
-        .rank { font-size: 24px; font-weight: 900; color: #71717a; width: 40px; }
+        .left-info { display: flex; align-items: center; gap: 15px; }
+        .rank-zone { display: flex; align-items: center; gap: 8px; width: 65px; font-size: 22px; font-weight: 900; color: #71717a; }
+        .trend { font-size: 14px; font-weight: bold; }
+        .trend.up { color: var(--accent-green); }
+        .trend.down { color: var(--accent-red); }
+        .trend.stable { color: #52525b; }
         .player-name { font-size: 22px; font-weight: 700; text-transform: capitalize; }
         
         .score-zone { display: flex; align-items: center; gap: 15px; }
@@ -57,6 +67,29 @@
         .ticker-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; }
         .ticker-item { background: var(--card-bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
 
+        /* Papers Please Printer Notification */
+        #printer-container { position: fixed; bottom: 0; right: 40px; z-index: 999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+        .printed-ticket { 
+            background: #e4e4e7; color: #18181b; font-family: "Courier New", Courier, monospace;
+            padding: 15px; width: 280px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px dashed #a1a1aa; border-bottom: none; font-weight: bold;
+            transform: translateY(100%); animation: printSpit 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            pointer-events: auto; position: relative;
+        }
+        .printed-ticket::after {
+            content: ''; position: absolute; bottom: -8px; left: 0; right: 0; height: 8px;
+            background: linear-gradient(-45deg, transparent 4px, #e4e4e7 0), linear-gradient(45deg, transparent 4px, #e4e4e7 0);
+            background-size: 8px 8px;
+        }
+        @keyframes printSpit {
+            0% { transform: translateY(100%); }
+            40% { transform: translateY(50%); }
+            50% { transform: translateY(55%); } /* Piccolo scatto/rinculo meccanico */
+            100% { transform: translateY(0); }
+        }
+        .ticket-header { font-size: 11px; border-bottom: 1px dashed #71717a; padding-bottom: 5px; margin-bottom: 8px; letter-spacing: 1px; text-align: center; }
+
+        /* Modals */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(4px); }
         .modal-content { background: var(--card-bg); width: 90%; max-width: 600px; border-radius: 12px; border: 1px solid var(--border); padding: 25px; display: flex; flex-direction: column; gap: 20px; max-height: 85vh; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
@@ -77,6 +110,22 @@
         <div class="btn-link connected">🟢 Live Server Attivo</div>
     </div>
 
+    <!-- Sezione Record Storici -->
+    <div class="stats-bar">
+        <div class="stat-card" style="border-top: 3px solid var(--accent-gold);">
+            <div class="stat-label">🔥 Il Re del Fumo</div>
+            <div class="stat-value" id="stat-king">-</div>
+        </div>
+        <div class="stat-card" style="border-top: 3px solid var(--accent-red);">
+            <div class="stat-label">🚨 Più Multato</div>
+            <div class="stat-value" id="stat-villain">-</div>
+        </div>
+        <div class="stat-card" style="border-top: 3px solid #60a5fa;">
+            <div class="stat-label">📋 Record Infrazioni</div>
+            <div class="stat-value" id="stat-count">-</div>
+        </div>
+    </div>
+
     <div class="leaderboard-grid" id="leaderboard">
         <div style="color:gray; text-align:center; padding-top:50px; font-size:18px;">Attesa dati dal server (GitHub Pages)...</div>
     </div>
@@ -87,6 +136,9 @@
             <div style="color:gray; font-size:12px;">Nessun dato.</div>
         </div>
     </div>
+
+    <!-- Container per le ricevute stile Papers Please -->
+    <div id="printer-container"></div>
 
     <div class="modal-overlay" id="playerModal">
         <div class="modal-content">
@@ -106,19 +158,32 @@
     <script>
         let dbData = { players: [], events: [] };
         let playerChartInstance = null; 
+        let previousRanks = {}; // Salva l'ordine dei giocatori del check precedente per calcolare la freccia
+        let isFirstLoad = true;
 
         async function checkFileChanges() {
             try {
-                // Aggiungiamo un timestamp per distruggere la cache di GitHub Pages
                 const timestamp = new Date().getTime();
                 const response = await fetch(`./fantafumo_data.json?t=${timestamp}`, { cache: 'no-store' });
                 if (!response.ok) throw new Error('File non trovato');
                 
                 const newData = await response.json();
                 
+                // Rilevamento nuovi reati per la stampante Papers Please
+                if (!isFirstLoad && newData.events.length > dbData.events.length) {
+                    const diffCount = newData.events.length - dbData.events.length;
+                    // Prende gli ultimi X eventi inseriti nel JSON
+                    const newEvents = newData.events.slice(-diffCount);
+                    newEvents.forEach(ev => {
+                        const pName = newData.players.find(p => p.id === ev.playerId)?.name || "Ignoto";
+                        spitTicket(pName, ev.reason, ev.points);
+                    });
+                }
+
                 if (JSON.stringify(newData) !== JSON.stringify(dbData)) {
                     dbData = newData;
                     compilaClassifica();
+                    isFirstLoad = false;
                 }
             } catch (e) {
                 console.error("Errore nel recupero dati dal server:", e);
@@ -127,27 +192,59 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             checkFileChanges(); 
-            setInterval(checkFileChanges, 5000); // Polling ogni 5 secondi
+            setInterval(checkFileChanges, 5000); 
         });
+
+        function spitTicket(player, reason, points) {
+            const container = document.getElementById('printer-container');
+            const ticket = document.createElement('div');
+            ticket.className = 'printed-ticket';
+            
+            const formattedPoints = typeof points === 'number' ? (points > 0 ? `+${points}` : points) : points;
+            
+            ticket.innerHTML = `
+                <div class="ticket-header">🚨 REGISTRO REATI - NOTIFICA</div>
+                <div style="font-size:13px; margin-bottom:5px;">SOGGETTO: <span style="text-transform:uppercase;">${player}</span></div>
+                <div style="font-size:12px; color:#52525b; margin-bottom:10px;">MOTIVO: ${reason}</div>
+                <div style="font-size:16px; text-align:right; border-top:1px dashed #71717a; padding-top:5px;">SANC: <strong>${formattedPoints}</strong></div>
+            `;
+            
+            // Auto-distruzione stile scontrino letto dopo 7 secondi
+            ticket.onclick = () => ticket.remove();
+            setTimeout(() => {
+                ticket.style.opacity = '0';
+                ticket.style.transform = 'translateY(20px)';
+                ticket.style.transition = 'all 0.5s';
+                setTimeout(() => ticket.remove(), 500);
+            }, 7000);
+
+            container.appendChild(ticket);
+        }
 
         function compilaClassifica() {
             const container = document.getElementById('leaderboard');
             container.innerHTML = '';
 
-            const leaderboardData = dbData.players.map(player => {
+            // Calcolo punteggi correnti
+            let leaderboardData = dbData.players.map(player => {
                 let score = 0;
                 let status = null; 
+                let totalInfractions = 0;
 
                 const playerEvents = dbData.events.filter(e => e.playerId === player.id);
                 playerEvents.forEach(e => {
-                    if (typeof e.points === 'number') { score += e.points; } 
+                    if (typeof e.points === 'number') { 
+                        score += e.points; 
+                        if(e.points < 0) totalInfractions++;
+                    } 
                     else if (e.points === 'W') { status = 'W'; } 
                     else if (e.points === 'L') { status = 'L'; }
                 });
 
-                return { ...player, score, status };
+                return { ...player, score, status, totalInfractions };
             });
 
+            // Ordinamento classifica
             leaderboardData.sort((a, b) => {
                 if (a.status === 'W' && b.status !== 'W') return -1;
                 if (b.status === 'W' && a.status !== 'W') return 1;
@@ -156,6 +253,18 @@
                 return b.score - a.score;
             });
 
+            // Calcolo delle Stats globali (Record)
+            if (leaderboardData.length > 0) {
+                const king = [...leaderboardData].sort((a,b) => b.score - a.score)[0];
+                const villain = [...leaderboardData].sort((a,b) => a.score - b.score)[0];
+                const mostActive = [...leaderboardData].sort((a,b) => b.totalInfractions - a.totalInfractions)[0];
+
+                document.getElementById('stat-king').innerText = `${king.name} (${king.score} pt)`;
+                document.getElementById('stat-villain').innerText = `${villain.name} (${villain.score} pt)`;
+                document.getElementById('stat-count').innerText = `${mostActive.name} (${mostActive.totalInfractions}⨉)`;
+            }
+
+            // Generazione righe con calcolo Trend Arrow
             leaderboardData.forEach((player, index) => {
                 const row = document.createElement('div');
                 
@@ -164,6 +273,19 @@
 
                 row.className = `player-row ${extraClass}`;
                 row.onclick = () => openPlayerModal(player);
+
+                // Calcolo Trend Arrow
+                let trendHTML = '<span class="trend stable">◀▶</span>';
+                if (previousRanks[player.id] !== undefined) {
+                    const oldRank = previousRanks[player.id];
+                    if (index < oldRank) {
+                        trendHTML = '<span class="trend up">▲</span>';
+                    } else if (index > oldRank) {
+                        trendHTML = '<span class="trend down">▼</span>';
+                    }
+                }
+                // Salva il rank corrente per il prossimo polling loop
+                previousRanks[player.id] = index;
 
                 let badgeHTML = '';
                 let scoreClass = player.score >= 0 ? 'positive' : 'negative';
@@ -179,7 +301,10 @@
 
                 row.innerHTML = `
                     <div class="left-info">
-                        <div class="rank">#${index + 1}</div>
+                        <div class="rank-zone">
+                            <span>#${index + 1}</span>
+                            ${trendHTML}
+                        </div>
                         <div class="player-name">${player.name}</div>
                     </div>
                     <div class="score-zone">
@@ -190,6 +315,7 @@
                 container.appendChild(row);
             });
 
+            // Update Ticker inferiore
             const tickerContainer = document.getElementById('ticker');
             tickerContainer.innerHTML = '';
             
@@ -224,9 +350,7 @@
                 txListContainer.innerHTML = '<div style="color:gray; text-align:center; padding: 20px;">Nessuna transazione a registro.</div>';
             } else {
                 pEvents.forEach((ev, index) => {
-                    if (typeof ev.points === 'number') {
-                        currentScore += ev.points;
-                    }
+                    if (typeof ev.points === 'number') { currentScore += ev.points; }
                     chartLabels.push(`Ev #${index + 1}`);
                     chartData.push(currentScore);
 
@@ -289,10 +413,7 @@
             document.getElementById('playerModal').style.display = 'flex';
         }
 
-        function closeModal() {
-            document.getElementById('playerModal').style.display = 'none';
-        }
-
+        function closeModal() { document.getElementById('playerModal').style.display = 'none'; }
         window.onclick = function(event) {
             const modal = document.getElementById('playerModal');
             if (event.target === modal) { closeModal(); }
