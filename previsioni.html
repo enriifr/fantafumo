@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FantaFumo Analytics - Centro di Previsione Statistica</title>
+    <!-- Caricamento Chart.js per la gestione nativa dei grafici ad alte prestazioni -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-dark: #09090b; --card-bg: #18181b; --text-main: #fafafa;
+            --accent-blue: #3b82f6; --accent-green: #22c55e; --accent-red: #ef4444; 
+            --accent-gold: #eab308; --border: #27272a; --text-muted: #a1a1aa;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg-dark); color: var(--text-main); margin: 0; padding: 20px;
+            box-sizing: border-box;
+        }
+        .header { border-bottom: 2px solid var(--border); padding-bottom: 15px; margin-bottom: 25px; }
+        .header h1 { margin: 0; font-size: 26px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); }
+        .header p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 14px; }
+
+        /* KPI Cards Layout */
+        .kpi-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .kpi-card { background: var(--card-bg); border: 1px solid var(--border); padding: 15px; border-radius: 8px; }
+        .kpi-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .kpi-value { font-size: 22px; font-weight: bold; margin-top: 5px; color: var(--accent-gold); }
+
+        /* Main Dashboard Grid */
+        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px; }
+        @media (max-width: 1024px) { .dashboard-grid { grid-template-columns: 1fr; } }
+
+        .chart-box { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; min-height: 320px; }
+        .box-title { font-size: 14px; font-weight: bold; color: var(--text-main); text-transform: uppercase; margin-bottom: 15px; border-left: 3px solid var(--accent-blue); padding-left: 8px; }
+
+        /* Tabella di Intelligence */
+        .intel-table-box { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; overflow-x: auto; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th { padding: 12px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 11px; }
+        td { padding: 14px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        tr:hover { background: #222226; }
+
+        /* Profiling Cards dei Ragazzi */
+        .insights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .profile-card { background: var(--card-bg); border: 1px solid var(--border); padding: 20px; border-radius: 12px; border-top: 4px solid var(--accent-blue); }
+        .profile-name { font-size: 18px; font-weight: bold; text-transform: capitalize; margin-bottom: 10px; display: flex; justify-content: space-between; }
+        
+        .metric-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px dashed #27272a; }
+        .metric-row span { color: var(--text-muted); }
+        .metric-row strong { color: var(--text-main); }
+
+        .badge-prediction { font-size: 11px; padding: 3px 6px; border-radius: 4px; font-weight: bold; }
+        .badge-stabile { background: #1e3a8a; color: #93c5fd; }
+        .badge-rischio { background: #7f1d1d; color: #fca5a5; }
+        .badge-ascesa { background: #14532d; color: #86efac; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>📊 FantaFumo Predictive Intelligence</h1>
+        <p>Analisi quantitativa dei trend comportamentali, modelli di proiezione lineare e probabilità stocastiche di posizionamento.</p>
+    </div>
+
+    <!-- PANNELLO METRICHE MACRO -->
+    <div class="kpi-container">
+        <div class="kpi-card">
+            <div class="kpi-title">Stato Avanzamento Campionato</div>
+            <div class="kpi-value" id="kpiProgress">--%</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Volume Eventi Rilevati</div>
+            <div class="kpi-value" id="kpiTotalEvents">--</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Frequenza Media Registrazioni</div>
+            <div class="kpi-value" id="kpiFrequency">-- / Giorno</div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-title">Indice di Severità Medio (Malus)</div>
+            <div class="kpi-value" id="kpiSeverity" style="color:var(--accent-red)">-- pt</div>
+        </div>
+    </div>
+
+    <!-- SEZIONE GRAFICI PRINCIPALI -->
+    <div class="dashboard-grid">
+        <!-- 1. Traiettoria storica cumulativa dei punteggi -->
+        <div class="chart-box">
+            <div class="box-title">Linea di Tendenza Temporale (Punteggio Cumulativo)</div>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="trajectoryChart"></canvas>
+            </div>
+        </div>
+        <!-- 2. Distribuzione probabilistica vincitore -->
+        <div class="chart-box">
+            <div class="box-title">Modello Predittivo: Distribuzione Vittoria Finale (%)</div>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="probabilityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- TABELLA DI PROIEZIONE INTEGRATA -->
+    <div class="intel-table-box">
+        <div class="box-title">Tabella Matematica di Proiezione (Target: 14 Settembre 2026)</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Partecipante</th>
+                    <th>Punti Attuali</th>
+                    <th>Media Punti/Atto</th>
+                    <th>Volatilità (St. Dev.)</th>
+                    <th>Prossimo Atto Stimato</th>
+                    <th>Proiezione Punteggio Finale</th>
+                </tr>
+            </thead>
+            <tbody id="projectionTableBody">
+                <tr><td colspan="6" style="color: gray; text-align: center;">Elaborazione modelli in corso...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- SCHEDE DI PROFILING AVANZATO -->
+    <div class="box-title" style="margin-bottom: 15px;">Dossier Comportamentali Individuali (Analisi Predittiva)</div>
+    <div class="insights-grid" id="individualInsightsContainer"></div>
+
+    <script>
+        const DATA_URL = './fantafumo_data.json';
+        
+        // Date di riferimento fisse per il calcolo della proiezione temporale lineare
+        const FECHA_START = new Date('2026-03-01').getTime();
+        const FECHA_END = new Date('2026-09-14').getTime();
+        const FECHA_NOW = new Date().getTime(); // Rileva il tempo corrente reale (es. Giugno 2026)
+
+        let trajectoryChartInstance = null;
+        let probabilityChartInstance = null;
+
+        async function initDashboardEngine() {
+            try {
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${DATA_URL}?t=${timestamp}`, { cache: 'no-store' });
+                const data = await response.json();
+                
+                eseguiDataMining(data);
+            } catch (e) {
+                console.error("Errore critico durante l'esecuzione del motore analitico:", e);
+            }
+        }
+
+        function eseguiDataMining(data) {
+            const eventi = data.events || [];
+            const giocatori = data.players || [];
+
+            // -------------------------------------------------------------
+            // 1. STATISTICHE MACRO (KPI)
+            // -------------------------------------------------------------
+            const totalDays = (FECHA_END - FECHA_START) / (1000 * 60 * 60 * 24);
+            const elapsedDays = Math.max(1, (FECHA_NOW - FECHA_START) / (1000 * 60 * 60 * 24));
+            const progressPercent = Math.min(100, (elapsedDays / totalDays) * 100);
+            
+            document.getElementById('kpiProgress').innerText = `${progressPercent.toFixed(1)}%`;
+            document.getElementById('kpiTotalEvents').innerText = eventi.length;
+            document.getElementById('kpiFrequency').innerText = `${(eventi.length / elapsedDays).toFixed(2)} eventi`;
+
+            const malusEvents = eventi.filter(e => typeof e.points === 'number' && e.points < 0);
+            const avgSeverity = malusEvents.length > 0 ? (malusEvents.reduce((acc, c) => acc + Math.abs(c.points), 0) / malusEvents.length) : 0;
+            document.getElementById('kpiSeverity').innerText = `-${avgSeverity.toFixed(1)} pt`;
+
+            // -------------------------------------------------------------
+            // 2. ELABORAZIONE DEL RENDICONTO INDIVIDUALE E MATRICI PREDITTIVE
+            // -------------------------------------------------------------
+            let datasetTraiettoria = {}; // Struttura temporale per il grafico a linee
+            giocatori.forEach(g => datasetTraiettoria[g.id] = [0]);
+
+            let playerStats = giocatori.map(p => {
+                const pEvents = eventi.filter(e => e.playerId === p.id);
+                
+                let currentScore = 0;
+                let puntiArray = [];
+                let malusCount = 0;
+                let bonusCount = 0;
+                let status = null;
+
+                pEvents.forEach(e => {
+                    if (typeof e.points === 'number') {
+                        currentScore += e.points;
+                        puntiArray.push(e.points);
+                        if (e.points < 0) malusCount++; else if (e.points > 0) bonusCount++;
+                        
+                        // Memorizza lo storico progressivo per ogni giocatore
+                        datasetTraiettoria[p.id].push(currentScore);
+                    } else if (e.points === 'W') status = 'W';
+                    else if (e.points === 'L') status = 'L';
+                });
+
+                // Calcolo della deviazione standard (Volatilità di comportamento)
+                const n = puntiArray.length;
+                let volatility = 0;
+                let mean = n > 0 ? puntiArray.reduce((a,b)=>a+b, 0)/n : 0;
+                if (n > 1) {
+                    let variance = puntiArray.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / (n - 1);
+                    volatility = Math.sqrt(variance);
+                }
+
+                // Coefficiente di Proiezione Matematica Lineare verso la data di fine
+                // Se siamo al 60% del tempo, moltiplichiamo il rendimento attuale per il fattore correttivo mancante
+                let projectedScore = status ? currentScore : currentScore / (elapsedDays / totalDays);
+
+                return {
+                    ...p,
+                    score: currentScore,
+                    mean: mean,
+                    volatility: volatility,
+                    malusCount: malusCount,
+                    bonusCount: bonusCount,
+                    status: status,
+                    projectedScore: Math.round(projectedScore),
+                    totalEvents: pEvents.length
+                };
+            });
+
+            // -------------------------------------------------------------
+            // 3. MODELLO PREDITTIVO BAYESIANO: PROBABILITÀ DI VITTORIA FINALE
+            // -------------------------------------------------------------
+            const minProjected = Math.min(...playerStats.map(p => p.projectedScore), 0);
+            const shift = Math.abs(minProjected) + 15; // Evita anomalie causate da punteggi negativi duri
+
+            let sumWeights = 0;
+            playerStats.forEach(p => {
+                if (p.status === 'L') p.winProb = 0;
+                else if (p.status === 'W') p.winProb = 100;
+                else {
+                    // Peso calcolato integrando il punteggio previsto e la stabilità (meno volatilità = più controllo)
+                    let stabilityBonus = p.volatility > 0 ? (1 / p.volatility) * 5 : 1;
+                    p.weight = (p.projectedScore + shift) + stabilityBonus;
+                    if(p.weight < 1) p.weight = 1;
+                    sumWeights += p.weight;
+                }
+            });
+
+            playerStats.forEach(p => {
+                if (!p.status) {
+                    p.winProb = sumWeights > 0 ? ((p.weight / sumWeights) * 100) : (100 / giocatori.length);
+                }
+            });
+
+            // -------------------------------------------------------------
+            // 4. GENERAZIONE INTERFACCIA E TABELLE
+            // -------------------------------------------------------------
+            renderTableAndDossier(playerStats);
+            renderCharts(playerStats, datasetTraiettoria);
+        }
+
+        function renderTableAndDossier(playerStats) {
+            const tableBody = document.getElementById('projectionTableBody');
+            tableBody.innerHTML = '';
+
+            const dossierContainer = document.getElementById('individualInsightsContainer');
+            dossierContainer.innerHTML = '';
+
+            // Ordina la tabella per Punteggio Proiettato decrescente (Favorito ipotetico a fine anno)
+            const sortedByProjection = [...playerStats].sort((a,b) => b.projectedScore - a.projectedScore);
+
+            sortedByProjection.forEach(p => {
+                // Calcolo stringa di inferenza sul prossimo evento
+                let nextEventPrediction = "Invariato (Stabile)";
+                let trendBadge = `<span class="badge-prediction badge-stabile">Stabile</span>`;
+                
+                if(!p.status) {
+                    if (p.mean < -1) {
+                        nextEventPrediction = "⚠️ Rischio Malus Elevato";
+                        trendBadge = `<span class="badge-prediction badge-rischio">Rischio Crollo</span>`;
+                    } else if (p.mean > 1.5) {
+                        nextEventPrediction = "🚀 Trend Positivo Continuo";
+                        trendBadge = `<span class="badge-prediction badge-ascesa">In Ascesa</span>`;
+                    } else {
+                        nextEventPrediction = "📉 Deviazione Neutra Minima";
+                    }
+                } else {
+                    nextEventPrediction = p.status === 'W' ? '🏆 Campionato Concluso' : '💀 Squalificato';
+                    trendBadge = p.status === 'W' ? `<span class="badge-prediction badge-ascesa">Vincitore</span>` : `<span class="badge-prediction badge-rischio">Fuori</span>`;
+                }
+
+                // Popolamento Riga Tabella Analitica
+                tableBody.innerHTML += `
+                    <tr>
+                        <td style="font-weight: bold; text-transform: capitalize;">${p.name}</td>
+                        <td>${p.status ? p.status : p.score + ' pt'}</td>
+                        <td>${p.mean.toFixed(2)}</td>
+                        <td>${p.volatility.toFixed(2)}</td>
+                        <td style="font-size:12px; color: ${p.mean < -1 ? 'var(--accent-red)' : 'var(--text-main)'}">${nextEventPrediction}</td>
+                        <td style="font-weight: bold; color: var(--accent-gold); font-size: 16px;">${p.status ? p.score : p.projectedScore} pt</td>
+                    </tr>
+                `;
+
+                // Popolamento Dossier Individuale Approfondito
+                dossierContainer.innerHTML += `
+                    <div class="profile-card" style="border-top-color: ${p.mean < -0.5 ? 'var(--accent-red)' : 'var(--accent-green)'}">
+                        <div class="profile-name">
+                            <span style="text-transform: capitalize;">${p.name}</span>
+                            ${trendBadge}
+                        </div>
+                        <div class="metric-row"><span>Probabilità Matematica di Vittoria</span><strong>${p.winProb.toFixed(1)}%</strong></div>
+                        <div class="metric-row"><span>Frequenza Atti (Bonus / Malus)</span><strong>${p.bonusCount}B / ${p.malusCount}M</strong></div>
+                        <div class="metric-row"><span>Deviazione Comportamentale</span><strong>${p.volatility > 4 ? 'Alta Variabilità ⚡' : 'Regolare ⚖️'}</strong></div>
+                        <div class="metric-row"><span>Fattore d'Impatto Medio per Atto</span><strong>${p.mean.toFixed(1)} punti</strong></div>
+                        <p style="margin: 10px 0 0 0; font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+                            *L'algoritmo stima che, mantenendo l'attuale densità di azioni registrate nel tempo trascorso, il soggetto registrerà variazioni rilevanti entro i prossimi cicli di aggiornamento.
+                        </p>
+                    </div>
+                `;
+            });
+        }
+
+        // --- SEZIONE LIBRERIA CHART.JS PER INTERFACCE VISIVE ---
+
+        function renderCharts(playerStats, datasetTraiettoria) {
+            // Distruggi istanze precedenti in caso di live-polling attivo per evitare sfarfallii o memory leak
+            if (trajectoryChartInstance) trajectoryChartInstance.destroy();
+            if (probabilityChartInstance) probabilityChartInstance.destroy();
+
+            // 1. GRAFICO DELLE TRAIETTORIE STORICHE (LINE CHART)
+            const ctxLine = document.getElementById('trajectoryChart').getContext('2d');
+            
+            // Genera una serie di indici progressivi per l'asse X basandosi sul massimo numero di eventi registrati
+            const maxPoints = Math.max(...Object.values(datasetTraiettoria).map(arr => arr.length));
+            const labelsX = Array.from({length: maxPoints}, (_, i) => `Atto ${i}`);
+
+            const colorPalette = ['#3b82f6', '#22c55e', '#eab308', '#a855f7', '#f97316', '#ec4899', '#14b8a6'];
+            
+            const lineDatasets = playerStats.map((p, idx) => {
+                return {
+                    label: p.name,
+                    data: datasetTraiettoria[p.id],
+                    borderColor: colorPalette[idx % colorPalette.length],
+                    backgroundColor: 'transparent',
+                    borderWidth: 3,
+                    tension: 0.2,
+                    pointRadius: 2
+                };
+            });
+
+            trajectoryChartInstance = new Chart(ctxLine, {
+                type: 'line',
+                data: { labels: labelsX, datasets: lineDatasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#fafafa', font: { size: 11 } } } },
+                    scales: {
+                        x: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa', font: { size: 10 } } },
+                        y: { grid: { color: '#27272a' }, ticks: { color: '#a1a1aa' } }
+                    }
+                }
+            });
+
+            // 2. GRAFICO DELLE PROBABILITÀ DI VITTORIA FINALE (BAR/DONUT CHART)
+            const ctxBar = document.getElementById('probabilityChart').getContext('2d');
+            const sortedForProb = [...playerStats].sort((a,b) => b.winProb - a.winProb);
+
+            probabilityChartInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: sortedForProb.map(p => p.name),
+                    datasets: [{
+                        label: 'Probabilità (%)',
+                        data: sortedForProb.map(p => p.winProb),
+                        backgroundColor: sortedForProb.map((p, i) => p.status === 'L' ? '#7f1d1d' : `rgba(59, 130, 246, ${1 - (i * 0.15)})`),
+                        borderColor: '#3b82f6',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#a1a1aa', font: { size: 12, weight: 'bold' } }, grid: { display: false } },
+                        y: { min: 0, max: 100, ticks: { color: '#a1a1aa', callback: value => value + '%' }, grid: { color: '#27272a' } }
+                    }
+                }
+            });
+        }
+
+        // Avvio del motore con Polling Real-time ogni 10 secondi per aggiornare i trend live
+        window.addEventListener('DOMContentLoaded', () => {
+            initDashboardEngine();
+            setInterval(initDashboardEngine, 10000);
+        });
+    </script>
+</body>
+</html>
