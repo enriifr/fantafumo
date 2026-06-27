@@ -176,6 +176,12 @@
       "points": 0,
       "reason": "L'Indulto dei Disperati (Forza Maggiore) (Valore Base)",
       "date": "27 giu 2026, 20:20"
+    },
+    {
+      "playerId": "rom",
+      "points": "W",
+      "reason": "W-01: L'Ascensione (GAME OVER STATUS)",
+      "date": "27 giu 2026, 21:14"
     }
   ],
   "tariffs": [
