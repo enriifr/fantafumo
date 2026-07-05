@@ -182,6 +182,18 @@
       "points": 50,
       "reason": "Premio Ayrton Senna (Valore Base)",
       "date": "29 giu 2026, 00:32"
+    },
+    {
+      "playerId": "davide",
+      "points": 30,
+      "reason": "Il Rompighiaccio (Valore Base)",
+      "date": "05 lug 2026, 16:05"
+    },
+    {
+      "playerId": "davide",
+      "points": 30,
+      "reason": "Follower a Scrocco (Valore Base)",
+      "date": "05 lug 2026, 16:05"
     }
   ],
   "tariffs": [
