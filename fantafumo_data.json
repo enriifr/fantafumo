@@ -168,7 +168,7 @@
     {
       "playerId": "tommaso",
       "points": 0,
-      "reason": "Franchigia dei Vigliacchi (1° Pacco) (Valore Base)",
+      "reason": "Franchigia dei Vigliacchi (1Â° Pacco) (Valore Base)",
       "date": "27 giu 2026, 20:19"
     },
     {
@@ -200,6 +200,36 @@
       "points": 50,
       "reason": "Premio Ayrton Senna (Valore Base)",
       "date": "06 lug 2026, 12:28"
+    },
+    {
+      "playerId": "ryan",
+      "points": 20,
+      "reason": "Alchimista Low-Cost (Valore Base)",
+      "date": "10 lug 2026, 18:36"
+    },
+    {
+      "playerId": "ryan",
+      "points": 20,
+      "reason": "Alchimista Low-Cost (Valore Base)",
+      "date": "10 lug 2026, 18:37"
+    },
+    {
+      "playerId": "ryan",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "10 lug 2026, 18:37"
+    },
+    {
+      "playerId": "enri",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "10 lug 2026, 18:37"
+    },
+    {
+      "playerId": "abdul",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "10 lug 2026, 18:37"
     }
   ],
   "tariffs": [
@@ -373,7 +403,7 @@
           "p": 40
         },
         {
-          "n": "Lo Scimpanzé",
+          "n": "Lo ScimpanzÃ©",
           "p": 80
         },
         {
@@ -414,7 +444,7 @@
           "p": 50
         },
         {
-          "n": "Franchigia dei Vigliacchi (1° Pacco)",
+          "n": "Franchigia dei Vigliacchi (1Â° Pacco)",
           "p": 0
         },
         {
@@ -551,7 +581,7 @@
       ]
     },
     {
-      "cat": "Infamità e Vigliaccheria (Malus)",
+      "cat": "InfamitÃ  e Vigliaccheria (Malus)",
       "items": [
         {
           "n": "Il Giuda [CS]",
@@ -562,7 +592,7 @@
           "p": -150
         },
         {
-          "n": "Il Verme Seriale (2° Pacco)",
+          "n": "Il Verme Seriale (2Â° Pacco)",
           "p": -150
         }
       ]
