@@ -230,6 +230,12 @@
       "points": 25,
       "reason": "Bombolone Tattico (Valore Base)",
       "date": "10 lug 2026, 18:37"
+    },
+    {
+      "playerId": "hasa",
+      "points": 50,
+      "reason": "Premio Ayrton Senna (Valore Base)",
+      "date": "16 lug 2026, 01:28"
     }
   ],
   "tariffs": [
