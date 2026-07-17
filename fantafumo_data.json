@@ -168,7 +168,7 @@
     {
       "playerId": "tommaso",
       "points": 0,
-      "reason": "Franchigia dei Vigliacchi (1Â° Pacco) (Valore Base)",
+      "reason": "Franchigia dei Vigliacchi (1ÃÂ° Pacco) (Valore Base)",
       "date": "27 giu 2026, 20:19"
     },
     {
@@ -236,6 +236,36 @@
       "points": 50,
       "reason": "Premio Ayrton Senna (Valore Base)",
       "date": "16 lug 2026, 01:28"
+    },
+    {
+      "playerId": "davide",
+      "points": 50,
+      "reason": "Il Geometra (Valore Base)",
+      "date": "17 lug 2026, 23:09"
+    },
+    {
+      "playerId": "davide",
+      "points": 50,
+      "reason": "Il Geometra (Valore Base)",
+      "date": "17 lug 2026, 23:09"
+    },
+    {
+      "playerId": "hasa",
+      "points": 50,
+      "reason": "Il Geometra (Valore Base)",
+      "date": "17 lug 2026, 23:09"
+    },
+    {
+      "playerId": "hasa",
+      "points": 50,
+      "reason": "Il Geometra (Valore Base)",
+      "date": "17 lug 2026, 23:10"
+    },
+    {
+      "playerId": "rom",
+      "points": 100,
+      "reason": "Roulette Russa Telefonica (Vinta) (Valore Base)",
+      "date": "17 lug 2026, 23:10"
     }
   ],
   "tariffs": [
@@ -409,7 +439,7 @@
           "p": 40
         },
         {
-          "n": "Lo ScimpanzÃ©",
+          "n": "Lo ScimpanzÃÂ©",
           "p": 80
         },
         {
@@ -450,7 +480,7 @@
           "p": 50
         },
         {
-          "n": "Franchigia dei Vigliacchi (1Â° Pacco)",
+          "n": "Franchigia dei Vigliacchi (1ÃÂ° Pacco)",
           "p": 0
         },
         {
@@ -587,7 +617,7 @@
       ]
     },
     {
-      "cat": "InfamitÃ  e Vigliaccheria (Malus)",
+      "cat": "InfamitÃÂ  e Vigliaccheria (Malus)",
       "items": [
         {
           "n": "Il Giuda [CS]",
@@ -598,7 +628,7 @@
           "p": -150
         },
         {
-          "n": "Il Verme Seriale (2Â° Pacco)",
+          "n": "Il Verme Seriale (2ÃÂ° Pacco)",
           "p": -150
         }
       ]
