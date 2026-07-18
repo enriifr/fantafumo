@@ -272,6 +272,66 @@
       "points": 20,
       "reason": "Alchimista Low-Cost (Valore Base)",
       "date": "17 lug 2026, 23:13"
+    },
+    {
+      "playerId": "hasa",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "18 lug 2026, 15:29"
+    },
+    {
+      "playerId": "hasa",
+      "points": 30,
+      "reason": "Follower a Scrocco (Valore Base)",
+      "date": "18 lug 2026, 15:30"
+    },
+    {
+      "playerId": "enri",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "18 lug 2026, 15:30"
+    },
+    {
+      "playerId": "enri",
+      "points": 70,
+      "reason": "Il Randagio (Valore Base)",
+      "date": "18 lug 2026, 15:32"
+    },
+    {
+      "playerId": "abdul",
+      "points": 70,
+      "reason": "Il Randagio (Valore Base)",
+      "date": "18 lug 2026, 15:32"
+    },
+    {
+      "playerId": "abdul",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "18 lug 2026, 15:32"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "18 lug 2026, 15:32"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 70,
+      "reason": "Il Randagio (Valore Base)",
+      "date": "18 lug 2026, 15:32"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 17,
+      "reason": "DICIASSETTE (Ad Honorem)",
+      "date": "18 lug 2026, 15:32"
+    },
+    {
+      "playerId": "rom",
+      "points": 17,
+      "reason": "DICIASSETTE (Ad Honorem)",
+      "date": "18 lug 2026, 15:32"
     }
   ],
   "tariffs": [
