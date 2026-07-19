@@ -428,6 +428,30 @@
       "points": -15,
       "reason": "Mani di Pasta Frolla (Valore Base)",
       "date": "19 lug 2026, 15:58"
+    },
+    {
+      "playerId": "davide",
+      "points": 30,
+      "reason": "Cucina Espansiva (Ad Honorem)",
+      "date": "19 lug 2026, 16:30"
+    },
+    {
+      "playerId": "ryan",
+      "points": 30,
+      "reason": "Cucina Espansiva (Ad Honorem)",
+      "date": "19 lug 2026, 16:30"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 17,
+      "reason": "DICIASSETTE (Ad Honorem)",
+      "date": "17 lug 2026, 23:59"
+    },
+    {
+      "playerId": "rom",
+      "points": 17,
+      "reason": "DICIASSETTE (Ad Honorem)",
+      "date": "17 lug 2026, 23:59"
     }
   ],
   "tariffs": [
