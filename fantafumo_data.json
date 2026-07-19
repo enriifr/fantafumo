@@ -322,16 +322,112 @@
       "date": "18 lug 2026, 15:32"
     },
     {
+      "playerId": "rom",
+      "points": 40,
+      "reason": "Premio Cirrosi Epatica (Valore Base)",
+      "date": "19 lug 2026, 15:54"
+    },
+    {
       "playerId": "tommaso",
-      "points": 17,
-      "reason": "DICIASSETTE (Ad Honorem)",
-      "date": "18 lug 2026, 15:32"
+      "points": 70,
+      "reason": "Il Randagio (Valore Base)",
+      "date": "19 lug 2026, 15:55"
+    },
+    {
+      "playerId": "abdul",
+      "points": 70,
+      "reason": "Il Randagio (Valore Base)",
+      "date": "19 lug 2026, 15:55"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 60,
+      "reason": "Il Sommergibile (Valore Base)",
+      "date": "19 lug 2026, 15:55"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "19 lug 2026, 15:56"
+    },
+    {
+      "playerId": "enri",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "19 lug 2026, 15:56"
+    },
+    {
+      "playerId": "abdul",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "19 lug 2026, 15:56"
+    },
+    {
+      "playerId": "ryan",
+      "points": 25,
+      "reason": "Bombolone Tattico (Valore Base)",
+      "date": "19 lug 2026, 15:56"
+    },
+    {
+      "playerId": "ryan",
+      "points": 20,
+      "reason": "Alchimista Low-Cost (Valore Base)",
+      "date": "19 lug 2026, 15:56"
+    },
+    {
+      "playerId": "ryan",
+      "points": 100,
+      "reason": "Mutazione Genetica (Valore Base)",
+      "date": "19 lug 2026, 15:57"
+    },
+    {
+      "playerId": "abdul",
+      "points": 100,
+      "reason": "Mutazione Genetica (Valore Base)",
+      "date": "19 lug 2026, 15:57"
+    },
+    {
+      "playerId": "enri",
+      "points": 100,
+      "reason": "Mutazione Genetica (Valore Base)",
+      "date": "19 lug 2026, 15:57"
+    },
+    {
+      "playerId": "davide",
+      "points": 100,
+      "reason": "Mutazione Genetica (Valore Base)",
+      "date": "19 lug 2026, 15:57"
     },
     {
       "playerId": "rom",
-      "points": 17,
-      "reason": "DICIASSETTE (Ad Honorem)",
-      "date": "18 lug 2026, 15:32"
+      "points": 100,
+      "reason": "Mutazione Genetica (Valore Base)",
+      "date": "19 lug 2026, 15:58"
+    },
+    {
+      "playerId": "tommaso",
+      "points": 100,
+      "reason": "Mutazione Genetica (Valore Base)",
+      "date": "19 lug 2026, 15:58"
+    },
+    {
+      "playerId": "abdul",
+      "points": -15,
+      "reason": "Mani di Pasta Frolla (Valore Base)",
+      "date": "19 lug 2026, 15:58"
+    },
+    {
+      "playerId": "abdul",
+      "points": -15,
+      "reason": "Mani di Pasta Frolla (Valore Base)",
+      "date": "19 lug 2026, 15:58"
+    },
+    {
+      "playerId": "rom",
+      "points": -15,
+      "reason": "Mani di Pasta Frolla (Valore Base)",
+      "date": "19 lug 2026, 15:58"
     }
   ],
   "tariffs": [
